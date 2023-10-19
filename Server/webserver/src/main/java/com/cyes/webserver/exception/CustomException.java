@@ -3,7 +3,7 @@ package com.cyes.webserver.exception;
 import lombok.Getter;
 
 @Getter
-public class CustomException extends Exception {
+public class CustomException extends RuntimeException {
     private final CustomExceptionList exception;
 
     public CustomException(CustomExceptionList e) {
