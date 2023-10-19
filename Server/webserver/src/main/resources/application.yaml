@@ -1,0 +1,25 @@
+server:
+    port: 5000
+
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/cyesdb?autoReconnect=true&serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
+        username: ssafy
+        password: ssafy
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                format_sql: true
+    sql:
+        init:
+            mode: always
+
+logging:
+    level:
+        org:
+            hibernate:
+                SQL: debug
+                type: trace
