@@ -31,7 +31,7 @@ public class OauthController {
     private final ResponseService responseService;
     private final String SUCCESS = "success";
 
-    @Operation(summary = "카카오 로그인", description = "authrization 코드를 받아 카카오 로그인을 한다.")
+    @Operation(summary = "카카오 로그인", description = "authorization 코드를 받아 카카오 로그인을 한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = LoginResponse.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
