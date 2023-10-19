@@ -15,12 +15,12 @@ public class AuthTokensGenerator {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    public AuthTokens generate(Long userId) {
+    public AuthTokens generate(Long memberId) {
         long now = (new Date()).getTime();
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
 
-        String subject = userId.toString();
+        String subject = memberId.toString();
         String accessToken = jwtTokenProvider.generate(subject, accessTokenExpiredAt);
         String refreshToken = jwtTokenProvider.generate(subject, refreshTokenExpiredAt);
 
@@ -31,7 +31,7 @@ public class AuthTokensGenerator {
         return jwtTokenProvider.verifyToken(accessToken);
     }
 
-    public Long extractUserId(String accessToken) {
+    public Long extractMemberId(String accessToken) {
         return Long.valueOf(jwtTokenProvider.extractSubject(accessToken));
     }
 }

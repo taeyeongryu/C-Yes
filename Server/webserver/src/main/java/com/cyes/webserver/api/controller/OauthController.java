@@ -36,7 +36,7 @@ public class OauthController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = LoginResponse.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @Parameter(name = "userId", description = "조회할 사용자의 userId")
+    @Parameter(name = "memberId", description = "조회할 사용자의 memberId")
     @PostMapping("/login/kakao")
     public ResponseEntity<CommonResponse<LoginResponse>> loginKakao(@RequestBody KakaoLoginParams params) {
         return new ResponseEntity<>(
@@ -56,15 +56,15 @@ public class OauthController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = LoginResponse.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
-    @Parameter(name = "userId", description = "탈퇴할 사용자의 userId")
-    @DeleteMapping("/logout/{userId}")
-    public ResponseEntity<CommonResponse<Long>> logout(@PathVariable("userId") Long userId) {
+    @Parameter(name = "memberId", description = "탈퇴할 사용자의 memberId")
+    @DeleteMapping("/logout/{memberId}")
+    public ResponseEntity<CommonResponse<Long>> logout(@PathVariable("memberId") Long memberId) {
         return new ResponseEntity<>(
-                responseService.getResponse(oAuthLoginService.logout(userId)),
+                responseService.getResponse(oAuthLoginService.logout(memberId)),
                 HttpStatus.OK);
     }
 
-    @Operation(summary = "refresh 토큰 재발급", description = "userId와 refresh 토큰을 입력받아 access 토큰과 refresh 토큰을 재발급한다.")
+    @Operation(summary = "refresh 토큰 재발급", description = "memberId와 refresh 토큰을 입력받아 access 토큰과 refresh 토큰을 재발급한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = LoginResponse.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))

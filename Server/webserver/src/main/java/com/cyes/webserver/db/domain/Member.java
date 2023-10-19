@@ -12,13 +12,13 @@ import javax.persistence.*;
 @Entity //JPA Entity 임을 명시
 @Getter //Lombok 어노테이션으로 getter
 @Setter //Lombok 어노테이션으로 setter
-@Table(name = "user_tbl") //테이블 관련 설정 어노테이션
-public class User {
+@Table(name = "member_tbl") //테이블 관련 설정 어노테이션
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본 키 자동 생성
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "member_id")
+    private Long memberId;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -37,7 +37,7 @@ public class User {
 
 
     @Builder
-    public User(String email, String nickname, OAuthProvider oAuthProvider) {
+    public Member(String email, String nickname, OAuthProvider oAuthProvider) {
         this.email = email;
         this.nickname = nickname;
         this.oAuthProvider = oAuthProvider;

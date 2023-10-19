@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class RegenTokenReq {
 
-    Long userId;
+    Long memberId;
     String refreshToken;
 
 }
