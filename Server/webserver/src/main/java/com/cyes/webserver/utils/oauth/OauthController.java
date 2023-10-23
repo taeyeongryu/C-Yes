@@ -1,4 +1,4 @@
-package com.cyes.webserver.common.controller;
+package com.cyes.webserver.utils.oauth;
 
 import com.cyes.webserver.common.dto.common.CommonResponse;
 import com.cyes.webserver.common.service.ResponseService;
