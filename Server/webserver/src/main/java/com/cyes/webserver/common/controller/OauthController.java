@@ -1,7 +1,7 @@
-package com.cyes.webserver.api.controller;
+package com.cyes.webserver.common.controller;
 
-import com.cyes.webserver.api.dto.common.CommonResponse;
-import com.cyes.webserver.api.service.ResponseService;
+import com.cyes.webserver.common.dto.common.CommonResponse;
+import com.cyes.webserver.common.service.ResponseService;
 import com.cyes.webserver.exception.ExceptionResponse;
 import com.cyes.webserver.utils.oauth.request.KakaoLoginParams;
 import com.cyes.webserver.utils.oauth.request.NaverLoginParams;

@@ -1,4 +1,4 @@
-package com.cyes.webserver.db.domain.common;
+package com.cyes.webserver.common.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

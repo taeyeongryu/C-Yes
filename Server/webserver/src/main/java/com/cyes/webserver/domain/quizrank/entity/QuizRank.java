@@ -1,7 +1,7 @@
-package com.cyes.webserver.db.domain.quizrank;
+package com.cyes.webserver.domain.quizrank.entity;
 
-import com.cyes.webserver.db.domain.member.Member;
-import com.cyes.webserver.db.domain.quiz.Quiz;
+import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.quiz.entity.Quiz;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "quizrank")
+@Table(name = "quiz_rank")
 public class QuizRank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quizrank_id",nullable = false)
+    @Column(name = "quiz_rank_id",nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

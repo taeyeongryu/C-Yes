@@ -1,6 +1,6 @@
-package com.cyes.webserver.db.domain.quizproblem;
+package com.cyes.webserver.domain.quizproblem.entity;
 
-import com.cyes.webserver.db.domain.quiz.Quiz;
+import com.cyes.webserver.domain.quiz.entity.Quiz;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
