@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity //JPA Entity 임을 명시
 @Getter //Lombok 어노테이션으로 getter
 @Setter //Lombok 어노테이션으로 setter
-@Table(name = "member_tbl") //테이블 관련 설정 어노테이션
+@Table(name = "member") //테이블 관련 설정 어노테이션
 public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
 
     @Id
@@ -21,10 +21,10 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     @Column(name = "member_id")
     private Long memberId;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "member_email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "member_nickname", nullable = false)
     private String nickname;
 
     @Column(name = "refresh_token", nullable = true)

@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "quizrank")
+@Table(name = "quiz_rank")
 public class QuizRank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quizrank_id",nullable = false)
+    @Column(name = "quiz_rank_id",nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
