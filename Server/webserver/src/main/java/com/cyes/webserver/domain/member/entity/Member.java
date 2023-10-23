@@ -1,6 +1,6 @@
-package com.cyes.webserver.db.domain.member;
+package com.cyes.webserver.domain.member.entity;
 
-import com.cyes.webserver.db.domain.common.BaseEntity;
+import com.cyes.webserver.common.entity.BaseEntity;
 import com.cyes.webserver.utils.oauth.enums.OAuthProvider;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;

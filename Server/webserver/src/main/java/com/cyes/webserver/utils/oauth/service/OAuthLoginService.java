@@ -1,8 +1,8 @@
 package com.cyes.webserver.utils.oauth.service;
 
 
-import com.cyes.webserver.db.domain.member.Member;
-import com.cyes.webserver.db.repository.member.MemberRepository;
+import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import com.cyes.webserver.utils.jwt.AuthTokens;

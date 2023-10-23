@@ -1,7 +1,7 @@
-package com.cyes.webserver.db.domain.quizrank;
+package com.cyes.webserver.domain.quizrank.entity;
 
-import com.cyes.webserver.db.domain.member.Member;
-import com.cyes.webserver.db.domain.quiz.Quiz;
+import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.quiz.entity.Quiz;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
