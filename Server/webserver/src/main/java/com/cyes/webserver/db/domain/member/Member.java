@@ -1,5 +1,6 @@
-package com.cyes.webserver.db.domain;
+package com.cyes.webserver.db.domain.member;
 
+import com.cyes.webserver.db.domain.common.BaseEntity;
 import com.cyes.webserver.utils.oauth.enums.OAuthProvider;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter //Lombok 어노테이션으로 getter
 @Setter //Lombok 어노테이션으로 setter
 @Table(name = "member_tbl") //테이블 관련 설정 어노테이션
-public class Member {
+public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본 키 자동 생성
