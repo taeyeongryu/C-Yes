@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { exchangeCodeForToken, fetchUserProfile } from "../services/kakaoAPI";
+import { exchangeCodeForToken, fetchUserProfile } from "../services/OAuthAPI";
 
 export const useKakaoLogin = () => {
     const navigate = useNavigate();
@@ -12,7 +12,7 @@ export const useKakaoLogin = () => {
             console.log("코드가 없습니다.");
             return;
         } else {
-            console.log("코드가 있습니다: ", code);        
+            console.log("코드가 있습니다: ", code);
         }
 
         const authenticateWithKakao = async () => {

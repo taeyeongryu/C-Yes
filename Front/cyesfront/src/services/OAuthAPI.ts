@@ -1,7 +1,12 @@
 import axios from "axios";
- 
+
 // 백엔드 base URL
-const BASE_URL = "http://k9b103a.p.ssafy.io:8080/api/v1";
+const BASE_URL = process.env.REACT_APP_SPRING_URL;
+
+export const requestKakaoLoginInfo = async (authorizationCode: string) => {
+    const resp = await axios.post(`${BASE_URL}/api/oauth/login/kakao`, { authorizationCode });
+    console.log(resp);
+};
 
 export const exchangeCodeForToken = async (code: string) => {
     const response = await axios.get(`${BASE_URL}/oauth/token?code=${code}`);
