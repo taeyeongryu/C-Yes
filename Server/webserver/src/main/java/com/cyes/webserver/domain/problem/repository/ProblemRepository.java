@@ -13,13 +13,13 @@ import org.springframework.stereotype.Repository;
 
 //@EnableMongoRepositories
 public interface ProblemRepository extends MongoRepository<Problem,String> {
-    @Query("{ 'category' : ?0 }")
+    @Query("{ 'problem_category' : ?0 }")
     Page<Problem> findProblemByCategory(ProblemCategory category, Pageable pageable);
 
-    @Query("{ 'type' : ?0 }")
+    @Query("{ 'problem_type' : ?0 }")
     Page<Problem> findProblemByType(ProblemType type, Pageable pageable);
 
-    @Query("{ 'category' : ?0, 'type' : ?1 }")
+    @Query("{ 'problem_category' : ?0, 'problem_type' : ?1 }")
     Page<Problem> findProblemByCategoryAndType(ProblemCategory category, ProblemType type, Pageable pageable);
 
 }

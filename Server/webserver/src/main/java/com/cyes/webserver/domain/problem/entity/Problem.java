@@ -1,11 +1,13 @@
 package com.cyes.webserver.domain.problem.entity;
 
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.ProblemUpdateServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -29,10 +31,14 @@ public class Problem {
     private String answer;
 
     //카테고리(네트워크, 운영체제 등등)
+    //인덱싱으로 조회 성능 향상
+    @Indexed
     @Field(name = "problem_category")
     private String category;
 
     //문제유형 객관식, 단답형 등등
+    //인덱싱으로 조회 성능 향상
+    @Indexed
     @Field(name = "problem_type")
     private String type;
 
@@ -59,5 +65,13 @@ public class Problem {
                 .type(this.type)
                 .build();
         return problemResponse;
+    }
+
+    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+        this.content = problemUpdateServiceRequest.getContent();
+        this.answer = problemUpdateServiceRequest.getAnswer();
+        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());
+        this.type = String.valueOf(problemUpdateServiceRequest.getProblemType());
+        return;
     }
 }
