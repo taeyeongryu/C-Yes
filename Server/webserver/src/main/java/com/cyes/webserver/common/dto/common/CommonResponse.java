@@ -1,4 +1,4 @@
-package com.cyes.webserver.api.dto.common;
+package com.cyes.webserver.common.dto.common;
 
 
 import lombok.Getter;
