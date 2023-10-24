@@ -5,9 +5,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+  font-family: "Dovemayo_gothic";
+  font-weight: normal;
+  src: url("./font/Dovemayo_gothic.ttf") format("truetype");
+}
+
+body {
+  font-family: "Dovemayo_gothic";
 }
