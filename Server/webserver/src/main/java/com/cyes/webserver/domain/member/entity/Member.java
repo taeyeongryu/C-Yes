@@ -1,5 +1,6 @@
-package com.cyes.webserver.db.domain;
+package com.cyes.webserver.domain.member.entity;
 
+import com.cyes.webserver.common.entity.BaseEntity;
 import com.cyes.webserver.utils.oauth.enums.OAuthProvider;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -12,18 +13,18 @@ import javax.persistence.*;
 @Entity //JPA Entity 임을 명시
 @Getter //Lombok 어노테이션으로 getter
 @Setter //Lombok 어노테이션으로 setter
-@Table(name = "member_tbl") //테이블 관련 설정 어노테이션
-public class Member {
+@Table(name = "member") //테이블 관련 설정 어노테이션
+public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본 키 자동 생성
     @Column(name = "member_id")
     private Long memberId;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "member_email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "member_nickname", nullable = false)
     private String nickname;
 
     @Column(name = "refresh_token", nullable = true)

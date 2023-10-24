@@ -1,6 +1,6 @@
-package com.cyes.webserver.db.repository;
+package com.cyes.webserver.domain.member.repository;
 
-import com.cyes.webserver.db.domain.Member;
+import com.cyes.webserver.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
