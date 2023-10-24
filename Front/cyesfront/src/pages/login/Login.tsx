@@ -1,7 +1,6 @@
 import React from 'react';
 import './Login.css';
 import { useKakaoLogin } from '../../hooks/useKakaoLogin';
-import BottomNav from '../../components/BottomNav';
 
 // env로 변경
 const REST_API_KEY = "17a1b4d9fcc605cecc82fd7399c0717f"; 
@@ -23,7 +22,6 @@ const Login = () => {
             <img className='logo-img' src='/img/cyes_logo_img.png' alt='logo img'/>
             <button onClick={handleKakaoLogin} className="login-button kakao-login"/>
             <button onClick={naverLogin} className="login-button naver-login" />
-            <BottomNav></BottomNav>
         </div>
     );
 };
