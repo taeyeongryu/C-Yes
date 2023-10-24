@@ -14,7 +14,6 @@ function App() {
           <Route path='/login' element={<Login />}/>
           <Route path='/live' element={<Live />}/>
           <Route path='/quiz' element={<Quiz />}/>
->>>>>>> ba1c385989855cab81632473c31ea793d892f36f
         </Routes>
       </BrowserRouter>
     </div>
