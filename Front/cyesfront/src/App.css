@@ -3,7 +3,7 @@ html, body {
   padding: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   height: 100vh; /* 화면 전체 높이 */
   background-color: black; /* 선택적인 배경색 */
   overflow: hidden; /* 스크롤 방지 */
@@ -13,5 +13,5 @@ html, body {
   width: 360px;
   height: 800px;
   overflow: auto; /* 내용이 화면을 넘어가면 스크롤 허용 */
-  background-color: #ffffff; /* 앱 배경색 */
+  background-color: #FFF9F1; /* 앱 배경색 */
 }
