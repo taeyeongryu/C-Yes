@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
 import './App.css';
-import Login from './pages/Login';
 import Quiz from './pages/quiz/Quiz';
+import Login from './pages/login/Login'
 
 function App() {
   return (
@@ -12,7 +12,6 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path='/login' element={<Login />}/>
           <Route path='/quiz' element={<Quiz />}/>
-          
         </Routes>
       </BrowserRouter>
     </div>
