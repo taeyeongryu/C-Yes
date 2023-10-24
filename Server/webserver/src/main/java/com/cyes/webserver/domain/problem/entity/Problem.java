@@ -1,6 +1,7 @@
 package com.cyes.webserver.domain.problem.entity;
 
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.ProblemUpdateServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -64,5 +65,13 @@ public class Problem {
                 .type(this.type)
                 .build();
         return problemResponse;
+    }
+
+    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+        this.content = problemUpdateServiceRequest.getContent();
+        this.answer = problemUpdateServiceRequest.getAnswer();
+        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());
+        this.type = String.valueOf(problemUpdateServiceRequest.getProblemType());
+        return;
     }
 }
