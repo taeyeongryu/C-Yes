@@ -19,17 +19,15 @@ public class QuizController {
     private final QuizService quizService;
 
 
+    
+    /*
+    라이브 퀴즈쇼 정보 조회 API
+    */
     @GetMapping("/live/info")
     private ResponseEntity<QuizInfoResponse> getQuizInfo() {
 
-        try {
-            QuizInfoResponse quizInfoResponse = quizService.search();
-            return ResponseEntity.status(HttpStatus.OK).body(quizInfoResponse);
-        } catch (CustomException e) {
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.search());
 
-            return ResponseEntity.status(e.getException().getStatus()).body(null);
-
-        }
     }
 
 }

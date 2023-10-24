@@ -20,4 +20,14 @@ public class QuizInfoResponse {
         this.quizLink = quizLink;
     }
 
+    public QuizInfoResponse create(String title, String link) {
+        QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
+                .quizTitle(title)
+                .quizLink(link)
+                .build();
+
+        return quizInfoResponse;
+    }
+
+
 }

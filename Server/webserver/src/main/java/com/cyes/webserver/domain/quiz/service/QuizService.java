@@ -14,21 +14,18 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
 
+
+
     public QuizInfoResponse search() {
 
-        try {
-            Quiz quiz = quizRepository.findAllQuiz().orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
+        // 퀴즈 정보 조회
+        Quiz quiz = quizRepository.findLiveQuiz().orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
 
-            QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
-                    .quizTitle(quiz.getTitle())
-                    .quizLink(quiz.getLink())
-                    .build();
+        // Entity -> Dto
+        QuizInfoResponse quizInfoResponse = quiz.toQuizInfoResponse();
 
-            return quizInfoResponse;
+        return quizInfoResponse;
 
-        } catch (Exception e) {
-            throw new CustomException(CustomExceptionList.INTERNAL_SERVER_ERROR);
-        }
     }
 
 }

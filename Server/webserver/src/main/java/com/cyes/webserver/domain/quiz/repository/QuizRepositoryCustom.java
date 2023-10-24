@@ -8,5 +8,5 @@ import java.util.Optional;
 @Repository
 public interface QuizRepositoryCustom {
 
-    Optional<Quiz> findAllQuiz();
+    Optional<Quiz> findLiveQuiz();
 }
