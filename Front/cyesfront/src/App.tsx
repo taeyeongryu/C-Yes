@@ -12,7 +12,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path='/login' element={<Login />}/>
-<<<<<<< HEAD
           <Route path='/live' element={<Live />}/>
 =======
           <Route path='/quiz' element={<Quiz />}/>
