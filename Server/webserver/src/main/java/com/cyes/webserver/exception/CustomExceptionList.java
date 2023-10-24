@@ -12,7 +12,8 @@ public enum CustomExceptionList {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E002", "서버 에러 발생."),
     REFRESH_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "E003", "토큰이 일치하지 않습니다."),
     ACCESS_TOKEN_ERROR(HttpStatus.UNAUTHORIZED, "E004", "토큰이 일치하지 않습니다."),
-    MEMBER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND,"E005", "회원 정보를 찾을 수 없습니다.");
+    MEMBER_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND,"E005", "회원 정보를 찾을 수 없습니다."),
+    CATEGORY_OR_TYPE_MUST_REQUIRED(HttpStatus.BAD_REQUEST,"E006", "카테고리, 타입중 적어도 하나가 필요합니다.");
 
 
     private final HttpStatus status;
