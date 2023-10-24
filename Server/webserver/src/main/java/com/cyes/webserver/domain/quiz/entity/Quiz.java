@@ -2,6 +2,7 @@ package com.cyes.webserver.domain.quiz.entity;
 
 import com.cyes.webserver.common.entity.BaseEntity;
 import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,5 +42,14 @@ public class Quiz extends BaseEntity {
         this.title = title;
         this.startDateTime = startDateTime;
         this.link = link;
+    }
+
+    public QuizInfoResponse toQuizInfoResponse() {
+        QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
+                .quizTitle(this.title)
+                .quizLink(this.link)
+                .build();
+
+        return quizInfoResponse;
     }
 }
