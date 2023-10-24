@@ -1,5 +1,8 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
+import com.cyes.webserver.domain.stompSocket.dto.ChatMessage;
+import com.cyes.webserver.exception.CustomException;
+import com.cyes.webserver.exception.CustomExceptionList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,17 @@ public class RedisSubscriber implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
+        try {
+            String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
 
+            ChatMessage roomMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
+
+            if (roomMessage.getType().equals(ChatMessage.MessageType.TALK)) {
+                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getSessionId(), roomMessage);
+            }
+
+        } catch (Exception e) {
+            throw new CustomException(CustomExceptionList.MESSAGE_NOT_FOUND_ERROR);
+        }
     }
 }
