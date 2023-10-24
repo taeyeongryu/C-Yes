@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.problem.entity;
 
+import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,19 +21,19 @@ public class Problem {
     private String id;
 
     //내용
-//    @Field(name = "problem_content")
+    @Field(name = "problem_content")
     private String content;
 
     //정답
-//    @Field(name = "problem_answer")
+    @Field(name = "problem_answer")
     private String answer;
 
     //카테고리(네트워크, 운영체제 등등)
-//    @Field(name = "problem_category")
+    @Field(name = "problem_category")
     private String category;
 
     //문제유형 객관식, 단답형 등등
-//    @Field(name = "problem_type")
+    @Field(name = "problem_type")
     private String type;
 
     @Builder
@@ -48,5 +49,15 @@ public class Problem {
     }
     public ProblemType getType(){
         return ProblemType.valueOf(this.type);
+    }
+    public ProblemResponse toProblemResponse(){
+        ProblemResponse problemResponse = ProblemResponse.builder()
+                .id(this.id)
+                .content(this.content)
+                .answer(this.answer)
+                .category(this.category)
+                .type(this.type)
+                .build();
+        return problemResponse;
     }
 }
