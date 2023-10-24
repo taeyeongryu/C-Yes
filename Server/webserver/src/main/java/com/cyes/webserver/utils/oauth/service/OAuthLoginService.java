@@ -2,6 +2,7 @@ package com.cyes.webserver.utils.oauth.service;
 
 
 import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -58,8 +59,10 @@ public class OAuthLoginService {
         Member member = Member.builder()
                 .memberEmail(oAuthInfoResponse.getEmail())
                 .memberNickname(oAuthInfoResponse.getNickname())
+                .memberAuthority(MemberAuthority.USER)
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build();
+
         memberRepository.save(member);
 
         return member;

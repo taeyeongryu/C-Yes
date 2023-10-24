@@ -15,6 +15,7 @@ import javax.persistence.*;
 @Entity //JPA Entity 임을 명시
 @Getter //Lombok 어노테이션으로 getter
 @Setter //Lombok 어노테이션으로 setter
+@ToString
 @Table(name = "member") //테이블 관련 설정 어노테이션
 public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
 
