@@ -1,8 +1,9 @@
 package com.cyes.webserver.utils.oauth.service;
 
 
-import com.cyes.webserver.db.domain.Member;
-import com.cyes.webserver.db.repository.MemberRepository;
+import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.member.enums.MemberAuthority;
+import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import com.cyes.webserver.utils.jwt.AuthTokens;
@@ -49,17 +50,19 @@ public class OAuthLoginService {
     }
 
     private Member findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
-        return memberRepository.findByEmail(oAuthInfoResponse
+        return memberRepository.findByMemberEmail(oAuthInfoResponse
                         .getEmail())
                         .orElseGet(() -> newMember(oAuthInfoResponse));
     }
 
     private Member newMember(OAuthInfoResponse oAuthInfoResponse) {
         Member member = Member.builder()
-                .email(oAuthInfoResponse.getEmail())
-                .nickname(oAuthInfoResponse.getNickname())
+                .memberEmail(oAuthInfoResponse.getEmail())
+                .memberNickname(oAuthInfoResponse.getNickname())
+                .memberAuthority(MemberAuthority.USER)
                 .oAuthProvider(oAuthInfoResponse.getOAuthProvider())
                 .build();
+
         memberRepository.save(member);
 
         return member;
