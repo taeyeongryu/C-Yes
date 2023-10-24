@@ -8,7 +8,7 @@ const REDIRECT_URI = "http://localhost:3000/login/kakao/callback";
 const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 const Login = () => {
-    useKakaoLogin(); // 카카오 로그인 Hook 사용
+    // useKakaoLogin(); // 카카오 로그인 Hook 사용
 
     const handleKakaoLogin = () => {
         window.location.href = KAKAO_AUTH_URI;
@@ -27,4 +27,3 @@ const Login = () => {
 };
 
 export default Login;
-

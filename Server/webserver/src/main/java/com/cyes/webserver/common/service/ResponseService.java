@@ -1,6 +1,6 @@
-package com.cyes.webserver.api.service;
+package com.cyes.webserver.common.service;
 
-import com.cyes.webserver.api.dto.common.CommonResponse;
+import com.cyes.webserver.common.dto.common.CommonResponse;
 import org.springframework.stereotype.Service;
 
 @Service
