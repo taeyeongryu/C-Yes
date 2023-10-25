@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class SessionMessage {
     //참가한 세션 ID
     private String sessionId;
     //보내는 사람 ID

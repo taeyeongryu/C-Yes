@@ -1,8 +1,8 @@
 package com.cyes.webserver.domain.stompSocket.controller;
 
 import com.cyes.webserver.domain.member.repository.MemberRepository;
-import com.cyes.webserver.domain.stompSocket.dto.ChatMessage;
-import com.cyes.webserver.domain.stompSocket.service.ChatService;
+import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
+import com.cyes.webserver.domain.stompSocket.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final ChatService chatService;
+    private final MessageService messageService;
     private final MemberRepository memberRepository;
 
-    @MessageMapping("/chat/message")
+    @MessageMapping("/session/message")
     public void message(
-            ChatMessage message
+            SessionMessage message
     ) {
-        chatService.sendMessage(message);
+        messageService.sendMessage(message);
     }
 }

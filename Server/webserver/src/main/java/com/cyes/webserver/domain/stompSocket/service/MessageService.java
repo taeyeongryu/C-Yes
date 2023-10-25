@@ -1,6 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
-import com.cyes.webserver.domain.stompSocket.dto.ChatMessage;
+import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,17 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ChatService {
+public class MessageService {
 
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
 
     @Transactional
-    public void sendMessage(ChatMessage message) {
+    public void sendMessage(SessionMessage message) {
 
         String topic = channelTopic.getTopic();
 
-        if (message.getType() == ChatMessage.MessageType.TALK) {
+        if (message.getType() == SessionMessage.MessageType.TALK) {
             redisTemplate.convertAndSend(topic, message);
         }
     }
