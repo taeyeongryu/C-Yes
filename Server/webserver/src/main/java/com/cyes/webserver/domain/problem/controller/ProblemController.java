@@ -8,7 +8,6 @@ import com.cyes.webserver.domain.problem.dto.TrueOrFalseProblemSaveRequest;
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
 import com.cyes.webserver.domain.problem.entity.ProblemType;
 import com.cyes.webserver.domain.problem.service.ProblemService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,19 +27,21 @@ public class ProblemController {
     //문제 등록하는 메서드
     @PostMapping("/multiplechoice")
     public ResponseEntity<ProblemResponse> saveMultipleChoice(@RequestBody MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest){
-        System.out.println("multipleChoiceProblemSaveRequest = " + multipleChoiceProblemSaveRequest);
+        log.info("multipleChoiceProblemSaveRequest = {}",multipleChoiceProblemSaveRequest);
         ProblemResponse problemResponse = problemService.saveMultipleChoice(multipleChoiceProblemSaveRequest);
         return ResponseEntity.status(HttpStatus.OK).body(problemResponse);
     }
     //문제 등록하는 메서드
     @PostMapping("/trueorfalse")
     public ResponseEntity<ProblemResponse> saveTrueOrFalse(@RequestBody TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest){
+        log.info("trueOrFalseProblemSaveRequest = {}",trueOrFalseProblemSaveRequest);
         ProblemResponse problemResponse = problemService.saveTrueOrFalse(trueOrFalseProblemSaveRequest);
         return ResponseEntity.status(HttpStatus.OK).body(problemResponse);
     }
     //문제 등록하는 메서드
     @PostMapping("/shortanswer")
     public ResponseEntity<ProblemResponse> saveShortAnswer(@RequestBody ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest){
+        log.info("shortAnswerProblemSaveRequest = {}",shortAnswerProblemSaveRequest);
         ProblemResponse problemResponse = problemService.saveShortAnswer(shortAnswerProblemSaveRequest);
         return ResponseEntity.status(HttpStatus.OK).body(problemResponse);
     }
