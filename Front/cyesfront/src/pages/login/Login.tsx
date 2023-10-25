@@ -1,6 +1,5 @@
 import React from 'react';
 import './Login.css';
-import { useKakaoLogin } from '../../hooks/useKakaoLogin';
 
 // env로 변경
 const REST_API_KEY = "17a1b4d9fcc605cecc82fd7399c0717f"; 
@@ -8,7 +7,6 @@ const REDIRECT_URI = "http://localhost:3000/login/kakao/callback";
 const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 const Login = () => {
-    // useKakaoLogin(); // 카카오 로그인 Hook 사용
 
     const handleKakaoLogin = () => {
         window.location.href = KAKAO_AUTH_URI;
