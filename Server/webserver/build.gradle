@@ -43,6 +43,7 @@ dependencies {
 
 	//Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'junit:junit:4.13.1'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	//lombok
@@ -66,8 +67,9 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-//querydsl 추가 시작
+// (4) queryDSL 추가 : QueryDSL 빌드 옵션
 def querydslDir = "$buildDir/generated/querydsl"
+
 querydsl {
 	jpa = true
 	querydslSourcesDir = querydslDir
@@ -81,4 +83,4 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
-//querydsl 추가 끝
+// 여기까지

@@ -1,12 +1,17 @@
 import React from 'react'
-import BottomNav from '../../components/BottomNav'
+import BottomNav from '../../components/bottomnav/BottomNav'
+import './Live.css'
+
 
 type Props = {}
 
 const Live = (props: Props) => {
   return (
-    <div>
-        <BottomNav></BottomNav>
+    <div className="live-container">
+        <div className="content">
+          
+        </div>
+        <BottomNav />
     </div>
   )
 }
