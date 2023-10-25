@@ -46,7 +46,7 @@ public class QuizService {
     public QuizCreateResponse createQuiz(QuizCreateRequestToService quizCreateRequestToService) {
 
         // TODO 이메일 임시로 하드코딩. 로그인 정보에서 가져와야함.
-        Member member = memberRepository.findByEmail("jjhjjh1159@gmail.com").orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
+        Member member = memberRepository.findByMemberEmail("jjhjjh1159@gmail.com").orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
 
         // Dto -> Entity
         Quiz quiz = quizCreateRequestToService.toQuizEntity(member);
