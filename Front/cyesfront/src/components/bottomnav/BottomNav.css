@@ -1,24 +1,11 @@
 /* BottomNav.css */
 
 .bottom-nav-container {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    border-top: 1px solid #ccc;
-    width: 100%;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-}
-
-.button-cs,
-.button-live,
-.button-group {
-    background-color: transparent;
-    transition: background-color 0.3s ease;
-}
-
-.button-cs.selected,
-.button-live.selected,
-.button-group.selected {
-    background-color: #ddd;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  width: 100%;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
 }
