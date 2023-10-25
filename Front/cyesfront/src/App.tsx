@@ -1,24 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
+import { BrowserRouter, Routes, Route, Navigate  } from 'react-router-dom';
 import './App.css';
+import Quiz from './pages/quiz/Quiz';
+import Login from './pages/login/Login'
+import Live from './pages/live/Live';
+import LoginRedir from './pages/login/LoginRedir';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path='/login' element={<Login />}/>
+          <Route
+                        path="/login/kakao/callback"
+                        element={<LoginRedir />}
+                    />
+          <Route path='/live' element={<Live />}/>
+          <Route path='/quiz' element={<Quiz />}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

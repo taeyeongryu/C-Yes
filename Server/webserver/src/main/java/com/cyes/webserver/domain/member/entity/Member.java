@@ -1,18 +1,21 @@
 package com.cyes.webserver.domain.member.entity;
 
 import com.cyes.webserver.common.entity.BaseEntity;
+import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.utils.oauth.enums.OAuthProvider;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
-@NoArgsConstructor //기본 생성자 만들어줌
-@AllArgsConstructor //여기에 필드에 쓴 모든생성자만 만들어줌
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamicUpdate //update 할때 실제 값이 변경됨 컬럼으로만 update 쿼리를 만듬
 @Entity //JPA Entity 임을 명시
 @Getter //Lombok 어노테이션으로 getter
 @Setter //Lombok 어노테이션으로 setter
+@ToString
 @Table(name = "member") //테이블 관련 설정 어노테이션
 public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
 
@@ -22,10 +25,17 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     private Long memberId;
 
     @Column(name = "member_email", nullable = false, unique = true)
-    private String email;
+    private String memberEmail;
 
     @Column(name = "member_nickname", nullable = false)
-    private String nickname;
+    private String memberNickname;
+
+    @Column(name = "member_authority", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MemberAuthority memberAuthority;
+
+    @Column(name = "member_point", nullable = true)
+    private String memberPoint;
 
     @Column(name = "refresh_token", nullable = true)
     private String refreshToken;
@@ -34,15 +44,6 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     @Enumerated(EnumType.STRING)
     private OAuthProvider oAuthProvider;
 
-
-
-
-    @Builder
-    public Member(String email, String nickname, OAuthProvider oAuthProvider) {
-        this.email = email;
-        this.nickname = nickname;
-        this.oAuthProvider = oAuthProvider;
-    }
 }
 
 
