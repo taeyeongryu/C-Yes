@@ -22,22 +22,22 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("OPTIONS","GET","POST","PUT","DELETE");
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry interceptorRegistry) {
-
-        interceptorRegistry.addInterceptor(authInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/api/oauth/login/**",
-                        "/api/oauth/regen",
-                        "/api/sessions/**",
-                        "/gameroom/**",
-                        "/chatroom/**",
-                        "/gwh-websocket/**",
-                        "/v3/api-docs/**",  // Swagger JSON 경로
-                        "/swagger-resources/**",  // Swagger 리소스 경로
-                        "/swagger-ui/**",  // Swagger UI 경로,
-                        "/quiz/live/info"
-                );
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry interceptorRegistry) {
+//
+//        interceptorRegistry.addInterceptor(authInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(
+//                        "/api/oauth/login/**",
+//                        "/api/oauth/regen",
+//                        "/api/sessions/**",
+//                        "/gameroom/**",
+//                        "/chatroom/**",
+//                        "/gwh-websocket/**",
+//                        "/v3/api-docs/**",  // Swagger JSON 경로
+//                        "/swagger-resources/**",  // Swagger 리소스 경로
+//                        "/swagger-ui/**",  // Swagger UI 경로,
+//                        "/api/problem/**"
+//                );
+//    }
 }

@@ -35,7 +35,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                 .from(quiz)
                 .where(quiz.createdDateTime.between(todayStart, todayEnd))
                 .orderBy(quiz.createdDateTime.desc())
-                .fetchOne());
+                .fetchFirst());
 
     }
 }
