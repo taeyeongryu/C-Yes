@@ -35,7 +35,7 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     private MemberAuthority memberAuthority;
 
     @Column(name = "member_point", nullable = true)
-    private String memberPoint;
+    private Integer memberPoint;
 
     @Column(name = "refresh_token", nullable = true)
     private String refreshToken;

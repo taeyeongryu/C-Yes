@@ -36,7 +36,7 @@ public class OAuthLoginService {
         member.setRefreshToken(token.getRefreshToken());
         memberRepository.flush();
 
-        return new LoginResponse(token, member.getMemberId());
+        return new LoginResponse(token, member.getMemberId(), member.getMemberNickname(), member.getMemberPoint());
     }
 
     public Long logout(Long memberId) {
@@ -83,7 +83,7 @@ public class OAuthLoginService {
             member.setRefreshToken(token.getRefreshToken());
             memberRepository.save(member);
 
-            return new LoginResponse(token, member.getMemberId());
+            return new LoginResponse(token, member.getMemberId(), member.getMemberNickname(), member.getMemberPoint());
 
         } else {
             throw new CustomException(CustomExceptionList.REFRESH_TOKEN_ERROR);

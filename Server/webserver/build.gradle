@@ -41,6 +41,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
+	//websocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	//Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'junit:junit:4.13.1'
