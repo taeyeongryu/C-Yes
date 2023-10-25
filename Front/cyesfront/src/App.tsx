@@ -4,6 +4,7 @@ import './App.css';
 import Quiz from './pages/quiz/Quiz';
 import Login from './pages/login/Login'
 import Live from './pages/live/Live';
+import Answer from './pages/quiz/ConfirmQuiz';
 import LoginRedir from './pages/login/LoginRedir';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
                     />
           <Route path='/live' element={<Live />}/>
           <Route path='/quiz' element={<Quiz />}/>
+          <Route path='/answer' element={<Answer />}/>
         </Routes>
       </BrowserRouter>
     </div>

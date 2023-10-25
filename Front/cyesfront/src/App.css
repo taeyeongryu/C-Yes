@@ -12,6 +12,6 @@ html, body {
 .App {
   width: 360px;
   height: 800px;
-  overflow: auto; /* 내용이 화면을 넘어가면 스크롤 허용 */
+  overflow: false; /* 내용이 화면을 넘어가면 스크롤 허용 */
   background-color: #FFF9F1; /* 앱 배경색 */
 }
