@@ -14,4 +14,8 @@ public class LoginResponse {
     AuthTokens tokens;
     @Schema(description = "로그인 한 멤버 ID")
     Long memberId;
+    @Schema(description = "로그인 한 멤버 닉네임")
+    String memberNickname;
+    @Schema(description = "로그인 한 멤버 포인트")
+    Integer memberPoint;
 }
