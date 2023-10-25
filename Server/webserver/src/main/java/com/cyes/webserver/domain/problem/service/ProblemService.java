@@ -1,45 +1,88 @@
 package com.cyes.webserver.domain.problem.service;
 
+import com.cyes.webserver.domain.problem.dto.MultipleChoiceProblemSaveRequest;
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.dto.ProblemSaveServiceRequest;
-import com.cyes.webserver.domain.problem.dto.ProblemUpdateServiceRequest;
-import com.cyes.webserver.domain.problem.entity.Problem;
-import com.cyes.webserver.domain.problem.entity.ProblemCategory;
-import com.cyes.webserver.domain.problem.entity.ProblemType;
+import com.cyes.webserver.domain.problem.dto.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.entity.*;
+import com.cyes.webserver.domain.problem.repository.MultipleChoiceRepository;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
+import com.cyes.webserver.domain.problem.repository.ShortAnswerRepository;
+import com.cyes.webserver.domain.problem.repository.TrueOrFalseRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jdt.internal.compiler.lookup.ProblemMethodBinding;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProblemService {
-
     private final ProblemRepository problemRepository;
+    private final MultipleChoiceRepository multipleChoiceRepository;
+    private final ShortAnswerRepository shortAnswerRepository;
+    private final TrueOrFalseRepository trueOrFalseRepository;
 
-    //문제 저장
+
+    //객관식 문제 저장
     @Transactional
-    public ProblemResponse saveProblem(ProblemSaveServiceRequest problemSaveServiceRequest){
-        log.info("problemSaveServiceRequest = {}",problemSaveServiceRequest);
+    public ProblemResponse saveMultipleChoice(MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest){
+        log.info("multipleChoiceProblemSaveRequest = {}",multipleChoiceProblemSaveRequest);
+
         //Dto -> Entity
-        Problem problem = problemSaveServiceRequest.toEntity();
-        //DB 저장
+        Problem problem = multipleChoiceProblemSaveRequest.toEntity();
+
+        //Content DB 저장
+        multipleChoiceRepository.save((MultipleChoice) problem.getContent());
+
+        //Problem DB 저장
         problemRepository.save(problem);
+
+        //Entity -> Dto
+        ProblemResponse problemResponse = problem.toProblemResponse();
+
+        return problemResponse;
+    }
+    //단답형 문제 저장
+    @Transactional
+    public ProblemResponse saveShortAnswer(ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest){
+        log.info("shortAnswerProblemSaveRequest = {}",shortAnswerProblemSaveRequest);
+
+        //Dto -> Entity
+        Problem problem = shortAnswerProblemSaveRequest.toEntity();
+
+        //Content DB 저장
+        shortAnswerRepository.save((ShortAnswer) problem.getContent());
+
+        //Problem DB 저장
+        problemRepository.save(problem);
+
+        //Entity -> Dto
+        ProblemResponse problemResponse = problem.toProblemResponse();
+        return problemResponse;
+    }
+    //오엑스 문제 저장
+    @Transactional
+    public ProblemResponse saveTrueOrFalse(TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest){
+        log.info("trueOrFalseProblemSaveRequest = {}",trueOrFalseProblemSaveRequest);
+
+        //Dto -> Entity
+        Problem problem = trueOrFalseProblemSaveRequest.toEntity();
+
+        //Content DB 저장
+        trueOrFalseRepository.save((TrueOrFalse) problem.getContent());
+
+        //Problem DB 저장
+        problemRepository.save(problem);
+
         //Entity -> Dto
         ProblemResponse problemResponse = problem.toProblemResponse();
         return problemResponse;
@@ -66,18 +109,12 @@ public class ProblemService {
         //선택조건이 하나도 없다면
         if (problemCategory == null && problemType == null) {
             throw new CustomException(CustomExceptionList.CATEGORY_OR_TYPE_MUST_REQUIRED);
-        }
-
-        else if (problemCategory != null) {
-            problemPage = problemRepository.findProblemByCategory(problemCategory, pageable);
-        }
-
-        else if (problemType != null) {
-            problemPage = problemRepository.findProblemByType(problemType, pageable);
-        }
-
-        else {
+        } else if (problemCategory != null && problemType != null) {
             problemPage = problemRepository.findProblemByCategoryAndType(problemCategory, problemType, pageable);
+        } else if (problemType != null) {
+            problemPage = problemRepository.findProblemByType(problemType, pageable);
+        } else {
+            problemPage = problemRepository.findProblemByCategory(problemCategory, pageable);
         }
 
         //getContent 이용해서 문제 리스트 가져옴
@@ -90,22 +127,22 @@ public class ProblemService {
     }
 
     //문제 수정하는 메서드
-    @Transactional
-    public ProblemResponse updateProblem(ProblemUpdateServiceRequest problemUpdateServiceRequest){
-        //Problem id 값
-        String id = problemUpdateServiceRequest.getId();
-
-        //id값으로 문제를 먼저 찾는다.
-        //존재하지 않으면 예외 발생
-        Problem findProblem = problemRepository.findById(id).orElseThrow(() -> {
-            throw new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR);
-        });
-        //Entity 수정
-        findProblem.changeByUpdateDto(problemUpdateServiceRequest);
-
-        //Entity -> Dto
-        return findProblem.toProblemResponse();
-    }
+//    @Transactional
+//    public ProblemResponse updateProblem(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+//        //Problem id 값
+//        String id = problemUpdateServiceRequest.getId();
+//
+//        //id값으로 문제를 먼저 찾는다.
+//        //존재하지 않으면 예외 발생
+//        Problem findProblem = problemRepository.findById(id).orElseThrow(() -> {
+//            throw new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR);
+//        });
+//        //Entity 수정
+//        findProblem.changeByUpdateDto(problemUpdateServiceRequest);
+//
+//        //Entity -> Dto
+//        return findProblem.toProblemResponse();
+//    }
 
     //문제를 삭제한다.
     @Transactional

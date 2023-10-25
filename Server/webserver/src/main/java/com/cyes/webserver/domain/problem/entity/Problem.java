@@ -1,20 +1,20 @@
 package com.cyes.webserver.domain.problem.entity;
 
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.dto.ProblemUpdateServiceRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 
 
-@Document(collection = "problem")
 @Getter
+@Document(collection = "problem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Problem {
 
@@ -22,13 +22,9 @@ public class Problem {
     @Id
     private String id;
 
-    //내용
+    @DBRef
     @Field(name = "problem_content")
-    private String content;
-
-    //정답
-    @Field(name = "problem_answer")
-    private String answer;
+    private ProblemContent content;
 
     //카테고리(네트워크, 운영체제 등등)
     //인덱싱으로 조회 성능 향상
@@ -43,35 +39,37 @@ public class Problem {
     private String type;
 
     @Builder
-    public Problem(String id, String content, String answer, ProblemCategory problemCategory, ProblemType problemType) {
+    public Problem(String id, ProblemContent content, ProblemCategory category, ProblemType type) {
         this.id = id;
         this.content = content;
-        this.answer = answer;
-        this.category = String.valueOf(problemCategory);
-        this.type = String.valueOf(problemType);
+        this.category = String.valueOf(category);
+        this.type = String.valueOf(type);
     }
+
     public ProblemCategory getCategory(){
         return ProblemCategory.valueOf(this.category);
     }
     public ProblemType getType(){
         return ProblemType.valueOf(this.type);
     }
+
+
+
     public ProblemResponse toProblemResponse(){
         ProblemResponse problemResponse = ProblemResponse.builder()
                 .id(this.id)
-                .content(this.content)
-                .answer(this.answer)
+                .contentResponse(this.content.toProblemContentResponse())
                 .category(this.category)
                 .type(this.type)
                 .build();
         return problemResponse;
     }
 
-    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
-        this.content = problemUpdateServiceRequest.getContent();
-        this.answer = problemUpdateServiceRequest.getAnswer();
-        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());
-        this.type = String.valueOf(problemUpdateServiceRequest.getProblemType());
-        return;
-    }
+//    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+//        this.content = problemUpdateServiceRequest.getContent();
+//        this.answer = problemUpdateServiceRequest.getAnswer();
+//        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());
+//        this.type = String.valueOf(problemUpdateServiceRequest.getProblemType());
+//        return;
+//    }
 }

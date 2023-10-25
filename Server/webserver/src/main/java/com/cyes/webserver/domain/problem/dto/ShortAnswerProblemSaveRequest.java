@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.problem.dto;
 
+import com.cyes.webserver.domain.problem.dto.problemcontent.request.ShortAnswerProblemRequest;
 import com.cyes.webserver.domain.problem.entity.Problem;
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
 import com.cyes.webserver.domain.problem.entity.ProblemType;
@@ -10,26 +11,23 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProblemSaveServiceRequest {
-    private String content;
-    private String answer;
+public class ShortAnswerProblemSaveRequest {
+    private ShortAnswerProblemRequest shortAnswerProblemRequest;
     private ProblemCategory problemCategory;
     private ProblemType problemType;
 
     @Builder
-    public ProblemSaveServiceRequest(String content, String answer, ProblemCategory problemCategory, ProblemType problemType) {
-        this.content = content;
-        this.answer = answer;
+    public ShortAnswerProblemSaveRequest(ShortAnswerProblemRequest shortAnswerProblemRequest, ProblemCategory problemCategory, ProblemType problemType) {
+        this.shortAnswerProblemRequest = shortAnswerProblemRequest;
         this.problemCategory = problemCategory;
         this.problemType = problemType;
     }
 
     public Problem toEntity(){
         return Problem.builder()
-                .content(this.content)
-                .answer(this.answer)
-                .problemCategory(this.problemCategory)
-                .problemType(this.problemType)
+                .content(this.shortAnswerProblemRequest.toEntity())
+                .category(this.problemCategory)
+                .type(this.problemType)
                 .build();
     }
 }
