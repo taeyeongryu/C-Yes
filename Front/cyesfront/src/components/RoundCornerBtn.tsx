@@ -9,6 +9,8 @@ type Props = {
     bgHover?: string;
     fontSize?: string;
     fontColor?: string;
+    type?: "button" | "submit" | "reset"; // type 속성 추가
+    onClick?: () => void;
 };
 
 const StyledButton = styled.button<Props>`
@@ -17,7 +19,7 @@ const StyledButton = styled.button<Props>`
     background-color: ${(props) => props.bgColor || `#31a0eb`};
     font-size: ${(props) => props.fontSize || "12px"};
     color: ${(props) => props.fontColor || `#ffffff`};
-    border-radius: 10px;
+    border-radius: 18px;
     border: none;
 `;
 

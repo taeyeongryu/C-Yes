@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-// import { saveAnswer } from './redux/actions'; // Redux 액션 import
+import React, { useState, useEffect, useRef } from "react";
+import EndQuiz from "./EndQuiz";
 import "./Quiz.css";
-import RoundCornerBtn from "../../components/RoundCornerBtn"
-
+import RoundCornerBtn from "../../components/RoundCornerBtn";
+import { useNavigate } from "react-router-dom";
 const Quiz: React.FC = () => {
-  // const dispatch = useDispatch();
+
   const [questions, setQuestions] = useState([
-    { question: "프로그래밍에 집중한 유연한 개발 방식으로 상호작용, 소프트웨어, 협력, 변화 대응에 가치를 두는 이것은?", answer: "애자일" },
+    {
+      question:
+        "프로그래밍에 집중한 유연한 개발 방식으로 상호작용, 소프트웨어, 협력, 변화 대응에 가치를 두는 이것은?",
+      answer: "애자일",
+    },
     { question: "두 번째 질문", answer: "아보카도" },
     { question: "세 번째 질문", answer: "답3" },
   ]);
@@ -16,29 +19,45 @@ const Quiz: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [showEndPage, setShowEndPage] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  //
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const answerInput = useRef<HTMLTextAreaElement | null>(null);
 
-  const handleAnswerSubmit = () => {
+  const toggleSubmit = () => {
+    //여기서 backend랑 통신하면 댈듯
     if (!submitted) {
-      // 아직 제출되지 않았을 때만 처리
-      // dispatch(saveAnswer(userAnswer)); // Redux에 사용자의 답변 저장
       setSubmitted(true); // 제출 완료 상태로 설정
     }
   };
+
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (progress >= 100) {
         if (currentQuestion < questions.length - 1) {
-          setCurrentQuestion(currentQuestion + 1);
-          setProgress(0);
+   
+          setShowConfirmation(true);
+
+          setTimeout(() => {
+            setShowConfirmation(false);
+            // textarea 초기화
+            if (answerInput.current) {
+              answerInput.current.value = "";
+            }
+            // 문제 바뀌는 구간
+            setSubmitted(false);
+            setCurrentQuestion(currentQuestion + 1);
+            setProgress(0);
+          }, 3000); // 3초 후에 다음 문제로 이동
+
         } else {
           setShowEndPage(true);
-          clearInterval(timer);
+          // clearInterval(timer);
         }
       } else {
-        setProgress(progress + 0.1);
+        setProgress(progress + 20);
       }
-    }, 10); // 0.01초마다 업데이트
+    }, 1000); // 0.01초마다 업데이트 (1000 이 1초)
 
     return () => {
       clearInterval(timer);
@@ -53,34 +72,39 @@ const Quiz: React.FC = () => {
       {!showEndPage ? (
         <div className="form">
           <div className="form-group">
-            <div className="quiz">{questions[currentQuestion].question}</div>
+            <div className="quiz-container">
+              <div className="quiz">
+                <div className="quiz-content">
+                  {questions[currentQuestion].question}
+                </div>
+              </div>
+            </div>
+
             <div>
               <div className="answer-box" style={{ display: "flex" }}>
                 {Array.from({
                   length: questions[currentQuestion].answer.length,
                 }).map((_, index) => (
-                  <div key={index} className="square"></div>
+                  <div key={index} className="square">
+                    {showConfirmation
+                      ? questions[currentQuestion].answer[index]
+                      : null}
+                  </div>
                 ))}
               </div>
             </div>
+            
+            <div>
+              <textarea ref={answerInput} id="answer-input" name="content" />
+            </div>
 
-            <textarea id="answer-input" name="content" />
-            {/* <button
+            <RoundCornerBtn
               type="submit"
-              onClick={
-                () => handleAnswerSubmit()
-              }
-              disabled={submitted}
+              onClick={() => toggleSubmit()}
+              bgHover="black"
             >
-
               {submitted ? "제출 완료" : "제출"}
-            </button >
-               */}
-              <RoundCornerBtn
-                 >
-                {submitted ? "제출 완료" : "제출"} 
-              </RoundCornerBtn>
-               
+            </RoundCornerBtn>
           </div>
 
           <div>
@@ -88,14 +112,14 @@ const Quiz: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="end-page">퀴즈 종료 페이지</div>
+        <EndQuiz />
       )}
     </div>
   );
 };
 
 const ProgressBar: React.FC<{ progress: number }> = ({ progress }) => (
-  <div>
+  <div className="progress-bar">
     <div
       style={{
         width: `${progress}%`,
