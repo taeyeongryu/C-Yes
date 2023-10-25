@@ -21,12 +21,26 @@ const Quiz: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   //
   const [showConfirmation, setShowConfirmation] = useState(false);
+  // const [answerInput, setAnswerInput] = useState("");
   const answerInput = useRef<HTMLTextAreaElement | null>(null);
+  //
+  const [isTextareaEnabled, setIsTextareaEnabled] = useState(true);
+  const [textareaValue, setTextareaValue] = useState("");
+
+  const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(event.target.value);
+  };
+
+  const toggleTextarea = () => {
+    setIsTextareaEnabled(!isTextareaEnabled);
+  };
+
 
   const toggleSubmit = () => {
     //여기서 backend랑 통신하면 댈듯
     if (!submitted) {
       setSubmitted(true); // 제출 완료 상태로 설정
+      setIsTextareaEnabled(false); //textarea 비활성화
     }
   };
 
@@ -34,19 +48,23 @@ const Quiz: React.FC = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       if (progress >= 100) {
+        clearInterval(timer);
         if (currentQuestion < questions.length - 1) {
-   
+          
+          setIsTextareaEnabled(false);
           setShowConfirmation(true);
 
           setTimeout(() => {
             setShowConfirmation(false);
-            // textarea 초기화
-            if (answerInput.current) {
-              answerInput.current.value = "";
-            }
+    
             // 문제 바뀌는 구간
             setSubmitted(false);
             setCurrentQuestion(currentQuestion + 1);
+
+            //textarea 활성화
+            setIsTextareaEnabled(true)
+            setTextareaValue("");
+           
             setProgress(0);
           }, 3000); // 3초 후에 다음 문제로 이동
 
@@ -94,8 +112,20 @@ const Quiz: React.FC = () => {
               </div>
             </div>
             
-            <div>
-              <textarea ref={answerInput} id="answer-input" name="content" />
+            <div>       
+              <textarea
+                ref={answerInput}
+                id="answer-input"
+                name="content"
+                value={textareaValue}
+                onChange={handleTextareaChange}
+                disabled={!isTextareaEnabled} // 비활성화 상태 조절
+                style={{
+                  backgroundColor: isTextareaEnabled ? "white" : "lightgray", // 배경색 제어
+                  color: isTextareaEnabled ? "black" : "gray", // 텍스트 색상 제어
+                }}
+                placeholder={isTextareaEnabled ? "입력하세요" : " "} // placeholder 설정
+              />
             </div>
 
             <RoundCornerBtn
