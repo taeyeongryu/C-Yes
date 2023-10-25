@@ -19,7 +19,7 @@ export const requestKakaoLoginInfo = async (
             authorizationCode,
         })
         .then((resp) => {
-            return resp.data.body;
+            return resp.data;
         })
         .catch((err) => {
             console.log(err);
