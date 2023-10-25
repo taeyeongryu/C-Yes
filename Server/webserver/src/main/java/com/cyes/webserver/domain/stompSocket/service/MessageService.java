@@ -21,8 +21,6 @@ public class MessageService {
 
         String topic = channelTopic.getTopic();
 
-        if (message.getType() == SessionMessage.MessageType.TALK) {
-            redisTemplate.convertAndSend(topic, message);
-        }
+        redisTemplate.convertAndSend(topic, message);
     }
 }

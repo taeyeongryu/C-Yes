@@ -28,7 +28,7 @@ public class SessionMessage {
      * RPC : 서버 명령 메세지
      */
     public enum MessageType {
-        ENTER, TALK, EXIT, RPC
+        ENTER, TALK, EXIT, RPC, ANSWER
     }
 
 }
