@@ -10,5 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubmitBody {
+    Long memberId;
     String answer;
 }

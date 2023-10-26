@@ -35,9 +35,7 @@ public class RedisSubscriber implements MessageListener {
 
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
-            if (roomMessage.getType().equals(SessionMessage.MessageType.TALK)) {
-                messagingTemplate.convertAndSend("/sub/quiz/session" + roomMessage.getSessionId(), roomMessage);
-            }
+            messagingTemplate.convertAndSend("/sub/quiz/session" + roomMessage.getSessionId(), roomMessage);
 
         } catch (Exception e) {
             throw new CustomException(CustomExceptionList.MESSAGE_NOT_FOUND_ERROR);

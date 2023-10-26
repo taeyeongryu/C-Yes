@@ -47,6 +47,9 @@ dependencies {
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	// quartz(scheduling library)
+	implementation 'org.springframework.boot:spring-boot-starter-quartz:2.7.5'
+
 	//Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'junit:junit:4.13.1'
