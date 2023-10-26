@@ -24,11 +24,14 @@ public class QuizProblem {
     @Column(name = "problem_id", length = 50, nullable = false)
     private String problemId;
 
+    @Column(name = "problem_order", columnDefinition = "smallint")
+    private Integer problemOrder;
+
     @Builder
-    public QuizProblem(Long id, Quiz quiz, String problemId) {
+    public QuizProblem(Long id, Quiz quiz, String problemId, Integer problemOrder) {
         this.id = id;
         this.quiz = quiz;
         this.problemId = problemId;
+        this.problemOrder = problemOrder;
     }
-
 }

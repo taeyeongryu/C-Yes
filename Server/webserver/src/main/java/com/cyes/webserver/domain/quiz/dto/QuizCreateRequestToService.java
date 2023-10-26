@@ -37,10 +37,11 @@ public class QuizCreateRequestToService {
         return quiz;
     }
 
-    public QuizProblem toQuizProblemEntity(Quiz quiz, String problemId) {
+    public QuizProblem toQuizProblemEntity(Quiz quiz, String problemId,int problemNum) {
         QuizProblem quizProblem = QuizProblem.builder()
                 .quiz(quiz)
                 .problemId(problemId)
+                .problemOrder(problemNum)
                 .build();
         return quizProblem;
     }
