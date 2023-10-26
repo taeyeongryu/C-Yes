@@ -12,14 +12,14 @@ const Login = () => {
         window.location.href = KAKAO_AUTH_URI;
     };
 
-    const naverLogin = async () => {
-    };
+    // const naverLogin = async () => {
+    // };
 
     return (
         <div className='login-container'>
             <img className='logo-img' src='/img/cyes_logo_img.png' alt='logo img'/>
             <button onClick={handleKakaoLogin} className="login-button kakao-login"/>
-            <button onClick={naverLogin} className="login-button naver-login" />
+            {/* <button onClick={naverLogin} className="login-button naver-login" /> */}
         </div>
     );
 };
