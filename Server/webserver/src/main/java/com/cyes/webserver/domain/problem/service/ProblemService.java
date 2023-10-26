@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Slf4j
@@ -126,6 +127,16 @@ public class ProblemService {
         return new PageImpl<>(problemResponseList, problemPage.getPageable(), problemPage.getTotalElements());
     }
 
+    /*
+    * 특정 퀴즈의 문제pk를 list로 넘겨주면
+    * 그에 해당하는 problem들을 반환한다.
+    * */
+     public List<ProblemResponse> findAllProblemByQuiz(List<String> problemIdList){
+         Iterable<Problem> findProblems = problemRepository.findAllById(problemIdList);
+         List<ProblemResponse> problemResponseList = toProblemResponseList(findProblems);
+         return problemResponseList;
+     }
+
     //문제 수정하는 메서드
 //    @Transactional
 //    public ProblemResponse updateProblem(ProblemUpdateServiceRequest problemUpdateServiceRequest){
@@ -152,7 +163,7 @@ public class ProblemService {
 
     //문제 랜덤으로 정해진 갯수만큼 조회
     //문제 갯수, 카테고리, 입력받아서 랜덤으로 조회
-    private List<ProblemResponse> toProblemResponseList(List<Problem> problemList){
+    private List<ProblemResponse> toProblemResponseList(Iterable<Problem> problemList){
         List<ProblemResponse> list = new ArrayList<>();
         for (Problem problem : problemList) {
             list.add(problem.toProblemResponse());
