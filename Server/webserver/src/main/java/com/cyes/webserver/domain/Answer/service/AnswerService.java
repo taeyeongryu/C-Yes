@@ -4,6 +4,11 @@ import com.cyes.webserver.domain.Answer.dto.AnswerResponse;
 import com.cyes.webserver.domain.Answer.dto.AnswerSaveServiceRequest;
 import com.cyes.webserver.domain.Answer.entity.Answer;
 import com.cyes.webserver.domain.Answer.repository.AnswerRepository;
+import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.member.repository.MemberRepository;
+import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.repository.ProblemRepository;
+import com.cyes.webserver.domain.quiz.repository.QuizRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.cyes.webserver.exception.CustomExceptionList.QUIZ_NOT_FOUND_ERROR;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AnswerService{
-
+    private final MemberRepository memberRepository;
     private final AnswerRepository answerRepository;
+    private final QuizRepository quizRepository;
+    private final ProblemRepository problemRepository;
 
     /**답안을 제출하는 메서드
      * 같은 문항에 이미 답을 제출했는지 체크하고
@@ -33,6 +42,12 @@ public class AnswerService{
         Long memberId = answerSaveServiceRequest.getMemberId();
         Long quizId = answerSaveServiceRequest.getQuizId();
         Integer problemNumber = answerSaveServiceRequest.getProblemNumber();
+
+        //존재하는 멤버인지 확인
+//        memberRepository.findById(memberId).orElseThrow(()-> {throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR);});
+        //퀴즈 존재하는지 확인
+//        quizRepository.findById(quizId).orElseThrow(() -> {throw new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR);});
+
         //이미 답을 제출한 적 있는지 확인
         Optional<Answer> findOptionalAnswer = answerRepository.findAnswerByMemberIdAndQuizIdAndProblemNumber(memberId, quizId, problemNumber);
 
