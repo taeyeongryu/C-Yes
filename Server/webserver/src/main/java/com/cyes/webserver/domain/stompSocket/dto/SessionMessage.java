@@ -9,15 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionMessage {
-    //참가한 세션 ID
+public class SessionMessage<T> {
+    //세션 ID
     private String sessionId;
-    //보내는 사람 ID
-    private Long senderId;
-    //보내는 사람 닉네임
-    private String senderNickname;
     //내용
-    private String message;
+    private T body;
 
     private MessageType type;
 
@@ -28,7 +24,7 @@ public class SessionMessage {
      * RPC : 서버 명령 메세지
      */
     public enum MessageType {
-        ENTER, TALK, EXIT, RPC, ANSWER
+        ENTER, START, QUESTION, SUBMIT, ANSWER, END, RESULT, CHAT
     }
 
 }
