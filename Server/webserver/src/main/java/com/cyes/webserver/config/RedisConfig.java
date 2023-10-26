@@ -1,5 +1,6 @@
 package com.cyes.webserver.config;
 
+import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.stompSocket.service.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -79,6 +80,7 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ProblemResponse.class));
 
         return redisTemplate;
     }

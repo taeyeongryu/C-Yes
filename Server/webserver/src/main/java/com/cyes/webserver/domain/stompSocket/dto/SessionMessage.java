@@ -1,14 +1,11 @@
 package com.cyes.webserver.domain.stompSocket.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class SessionMessage<T> {
     //세션 ID
     private String sessionId;
@@ -27,4 +24,10 @@ public class SessionMessage<T> {
         ENTER, START, QUESTION, SUBMIT, ANSWER, END, RESULT, CHAT
     }
 
+    @Builder
+    public SessionMessage(String sessionId, T body, MessageType type) {
+        this.sessionId = sessionId;
+        this.body = body;
+        this.type = type;
+    }
 }

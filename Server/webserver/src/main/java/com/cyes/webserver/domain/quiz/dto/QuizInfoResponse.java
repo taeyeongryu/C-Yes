@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 @Builder
 public class QuizInfoResponse {
 
+    private Long quizId;
     private String quizTitle;
     private LocalDateTime quizStartDate;
 
     @Builder
-    public QuizInfoResponse(String quizTitle, LocalDateTime quizStartDate) {
+    public QuizInfoResponse(Long quizId, String quizTitle, LocalDateTime quizStartDate) {
+        this.quizId = quizId;
         this.quizTitle = quizTitle;
         this.quizStartDate = quizStartDate;
     }
-
-
 }
