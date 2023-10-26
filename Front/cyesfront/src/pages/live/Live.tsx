@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 import BottomNav from "../../components/bottomnav/BottomNav";
 import "./Live.css";
 import CountdownTimer from "../../components/CountdownTimer";
@@ -7,6 +8,12 @@ import RoundCornerBtn from "../../components/RoundCornerBtn";
 type Props = {};
 
 const Live = (props: Props) => {
+  const navigate = useNavigate();
+
+  const goToQuiz = () => {
+    navigate('/quiz');
+  };
+
   return (
     <div className="live-container">
       <div className="content">
@@ -22,6 +29,7 @@ const Live = (props: Props) => {
           bgColor="#FF5733"
           fontSize="16px"
           fontColor="#FFFFFF"
+          onClick={goToQuiz} // 여기에 goToQuiz 함수를 onClick으로 추가
         >
           대기실 입장
         </RoundCornerBtn>
