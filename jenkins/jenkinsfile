@@ -217,6 +217,7 @@ pipeline {
         stage('Deploy Shoot') {
             steps {
                 sh '''
+                    cd compose/
                     pwd
                     docker-compose up -d
                 '''
