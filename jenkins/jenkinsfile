@@ -149,7 +149,7 @@ pipeline {
             }
         }
 
-        stage('Move Image to Hub') {
+        stage('Move BE Image to Hub') {
             steps {
                 sh 'echo "Move Start"'
 
@@ -192,7 +192,7 @@ pipeline {
             }
         }
 
-        stage('Move Image to Hub'){
+        stage('Move FE Image to Hub'){
             steps {
                 sh 'echo "Move Start"'
 
