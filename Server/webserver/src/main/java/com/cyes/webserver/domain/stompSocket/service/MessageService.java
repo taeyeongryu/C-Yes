@@ -4,14 +4,18 @@ import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.service.QuizService;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
-import com.cyes.webserver.domain.stompSocket.dto.AnswerBody;
-import com.cyes.webserver.domain.stompSocket.dto.QuestionBody;
+
+import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
+import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Instanceof;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -29,26 +33,27 @@ import java.util.Optional;
 public class MessageService {
 
     private final ChannelTopic channelTopic;
-    private final RedisTemplate redisTemplate;
-    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplate<String,Object> redisTemplate;
     private final QuizProblemRepository quizProblemRepository;
     private final ProblemService problemService;
     private final QuizService quizService;
     private final ObjectMapper objectMapper;
 
+    //퀴즈가 종료될 때 0으로 초기화 해야함
     private int cnt;
 
     @Transactional
-    public void sendMessage(SessionMessage message) throws JsonProcessingException {
+    public void sendMessage(SessionMessage message){
 
         String topic = channelTopic.getTopic();
-
-        String jsonData = stringRedisTemplate.opsForValue().get(message.getBody());
-        SessionMessage sessionMessage = objectMapper.readValue(jsonData,SessionMessage.class);
-
-        if(sessionMessage.getType().equals(SessionMessage.MessageType.SUBMIT)) {
-
-        }
+//
+//        String jsonData = String.valueOf(redisTemplate.opsForValue().get(message.getBody()));
+//
+//        SessionMessage sessionMessage = objectMapper.readValue(jsonData,SessionMessage.class);
+//
+//        if(sessionMessage.getType().equals(SessionMessage.MessageType.SUBMIT)) {
+//
+//        }
 
         redisTemplate.convertAndSend(topic, message);
     }
@@ -76,24 +81,27 @@ public class MessageService {
                 // redis에서 문제 꺼내오기
                 String question = getDateFromRedis("ProblemAnswer", "question", cnt);
 
-                // body에 문제 넣기
-                message.setBody(QuestionBody.builder().question(question));
+                QuestionMessage questionMessage = QuestionMessage.builder()
+                        .type(SessionMessage.MessageType.QUESTION)
+                        .question(question)
+                        .build();
 
                 // 클라이언트한테 문제 보내기
-                redisTemplate.convertAndSend(topic, message);
+                redisTemplate.convertAndSend(topic, questionMessage);
                 break;
 
             case ANSWER:
                 // redis에서 문제 꺼내오기
                 String answer = getDateFromRedis("ProblemAnswer", "answer", cnt++);
 
-                // body에 정답 넣기
-                message.setBody(AnswerBody.builder().answer(answer));
+                AnswerMessage answerMessage = AnswerMessage.builder()
+                        .answer(answer)
+                        .build();
 
                 // 클라이언트한테 문제 보내기
-                redisTemplate.convertAndSend(topic, message);
+                redisTemplate.convertAndSend(topic, answerMessage);
                 break;
-                
+
             case END:
                 // 클라이언트한테 종료 신호 보내기
                 redisTemplate.convertAndSend(topic,message);
@@ -107,29 +115,26 @@ public class MessageService {
     }
 
     public String getDateFromRedis(String key, String what, int cnt) throws JsonProcessingException {
-        String jsonData = stringRedisTemplate.opsForValue().get(key);
+        Object jsonData = redisTemplate.opsForValue().get(key);
 
-        List<ProblemResponse> problemResponseList = objectMapper.readValue(jsonData, new TypeReference<List<ProblemResponse>>() {
-        });
-
-        switch (what) {
-            case "question" :
-                return problemResponseList.get(cnt).getContentResponse().getQuestion();
-
-            case "answer" :
-                return problemResponseList.get(cnt).getContentResponse().getAnswer();
-        }
+        System.out.println(jsonData);
+//        switch (what) {
+//            case "question" :
+//                return problemResponseList.get(cnt).getContentResponse().getQuestion();
+//
+//            case "answer" :
+//                return problemResponseList.get(cnt).getContentResponse().getAnswer();
+//        }
 
         return "";
     }
 
 
-    public void setDateExpire(String key, Object problemAnswerList, Duration duration) throws JsonProcessingException {
+    public void setDateExpire(String key, Object problemAnswerList, Duration duration) {
+        // Redis에 데이터 저장 (리스트 형식으로)
+        ValueOperations<String,Object> valueOperations = redisTemplate.opsForValue();
 
-        // Redis에 데이터 저장
-        ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
-        String jsonProblemAnswerList = objectMapper.writeValueAsString(problemAnswerList);
-        valueOperations.set(key, jsonProblemAnswerList, duration);
+        valueOperations.set(key,problemAnswerList,duration);
 
     }
 

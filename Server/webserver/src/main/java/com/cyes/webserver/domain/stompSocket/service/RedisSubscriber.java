@@ -33,13 +33,21 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
+            log.info("1");
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
-
+            log.info("2");
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
+            log.info("3");
+
+            log.info(publishMessage);
+            log.info(roomMessage.toString());
 
             if (roomMessage.getType().equals(SessionMessage.MessageType.QUESTION)) {
+                log.info("4");
                 roomMessage = objectMapper.readValue(publishMessage, QuestionMessage.class);
+                log.info("5");
             }
+
 
             messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getSessionId(), roomMessage);
 
