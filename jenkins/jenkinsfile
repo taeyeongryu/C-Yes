@@ -19,7 +19,7 @@ pipeline {
             }
         }
 
-        stage('Docker stop'){
+        stage('Container stop'){
             steps {
                 dir('BE'){
                     sh 'echo "Docker Container Stop"'
@@ -34,10 +34,10 @@ pipeline {
         }
 
         //백엔드
-        stage('RM be Docker'){
+        stage('RM BE Docker'){
             steps {
 
-                sh 'echo "Remove be Docker"'
+                sh 'echo "Remove BE Docker"'
 
                 //정지된 도커 컨테이너 찾아서 컨테이너 ID로 삭제함
                 sh '''
@@ -82,10 +82,10 @@ pipeline {
         }
 
         //프론트
-        stage('RM fe Docker'){
+        stage('RM FE Docker'){
             steps {
 
-                sh 'echo "Remove fe Docker"'
+                sh 'echo "Remove FE Docker"'
 
                 //정지된 도커 컨테이너 찾아서 컨테이너 ID로 삭제함
                 sh '''
@@ -129,5 +129,107 @@ pipeline {
             }
         }
 
+        // Build BE
+        stage('Build BE') {
+            steps {
+                sh '''
+                    pwd
+                    cd Server/webserver
+                    chmod +x ./gradlew
+                    ./gradlew clean build --exclude-task test
+                '''
+            }
+            post {
+                success {
+                    echo 'gradle backend build success'
+                } 
+                failure {
+                    echo 'gradle backend build failed'
+                }
+            }
+        }
+
+        stage('Move Image to Hub'){
+            steps{
+                sh 'echo "Move Start"'
+
+                // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
+                sh """
+                    cd Server/webserver
+                    docker build --no-cache -t cyes-back .
+                """ 
+        }
+        post {
+            // 이미지 전송 성공시
+            success {
+                sh 'echo "PUSH backend Docker Image Success"'
+            }
+            // 이미지 전송 실패시
+            failure {
+                sh 'echo "PUSH backend Docker Image Fail"'
+            }
+        } 
+
+
+        // Build FE
+        stage('Build FE') {
+            steps {
+                sh '''
+                    pwd
+                    cd Front/cyesfront
+                    chmod +x ./gradlew
+                    ./gradlew clean build --exclude-task test
+                '''
+            }
+            post {
+                success {
+                    echo 'gradle frontend build success'
+                } 
+                failure {
+                    echo 'gradle frontend build failed'
+                }
+            }
+        }
+
+        stage('Move Image to Hub'){
+            steps {
+                sh 'echo "Move Start"'
+
+                // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
+                sh """
+                    cd Front/cyesfront
+                    docker build --no-cache -t cyes-front .
+                """
+            }
+            post {
+                // 이미지 전송 성공시
+                success {
+                    sh 'echo "PUSH frontend Docker Image Success"'
+                }
+                // 이미지 전송 실패시
+                failure {
+                    sh 'echo "PUSH frontend Docker Image Fail"'
+                }
+            }
+        }
+
+        stage('Deploy Shoot') {
+            steps {
+                sh """
+                    pwd
+                    docker-compose up -d
+                """
+            } 
+            post {
+                // 실행 성공시
+                success {
+                    echo 'Deploy Success'
+                }
+                // 실행 실패시
+                failure {
+                    echo 'Deploy Failed'
+                }
+            }
+        }
     }
 }
