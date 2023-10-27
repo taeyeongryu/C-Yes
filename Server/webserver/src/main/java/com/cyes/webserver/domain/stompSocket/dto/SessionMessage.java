@@ -1,20 +1,16 @@
 package com.cyes.webserver.domain.stompSocket.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SessionMessage<T> {
+@ToString
+public class SessionMessage {
     //세션 ID
     private String sessionId;
     //내용
-    private T body;
-
     private MessageType type;
 
     /**

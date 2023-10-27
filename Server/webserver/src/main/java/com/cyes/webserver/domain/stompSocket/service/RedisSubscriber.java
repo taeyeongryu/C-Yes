@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
+import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -35,7 +36,11 @@ public class RedisSubscriber implements MessageListener {
 
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
-            messagingTemplate.convertAndSend("/sub/quiz/session" + roomMessage.getSessionId(), roomMessage);
+            if (roomMessage.getType().equals(SessionMessage.MessageType.QUESTION)) {
+                roomMessage = objectMapper.readValue(publishMessage, QuestionMessage.class);
+            }
+
+            messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getSessionId(), roomMessage);
 
         } catch (Exception e) {
             throw new CustomException(CustomExceptionList.MESSAGE_NOT_FOUND_ERROR);

@@ -11,11 +11,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuestionBody {
-    String question;
-    List<String> selections;
+public class ResultMessage extends SessionMessage{
 
-    public enum QuestionType {
-        SINGLE, FOUR, OX
-    }
+    List<String> memberNicknames;
+    Integer myRank;
+
 }

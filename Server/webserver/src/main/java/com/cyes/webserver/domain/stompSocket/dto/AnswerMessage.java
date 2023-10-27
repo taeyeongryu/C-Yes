@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmitBody {
-    Long memberId;
+public class AnswerMessage extends SessionMessage{
     String answer;
 }
