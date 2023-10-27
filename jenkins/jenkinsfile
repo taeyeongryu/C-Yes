@@ -1,0 +1,133 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'echo "Clonning Repository"'
+                git branch: 'release',
+                    url: 'https://lab.ssafy.com/s09-final/S09P31B103.git',
+                    credentialsId: 'a9977ae2-9a36-4b3c-8581-51257ce3358d'
+            }
+            post {
+                success {
+                     sh 'echo "Successfully Cloned Repository"'
+                 }
+                 failure {
+                     sh 'echo "Fail Cloned Repository"'
+                 }
+            }
+        }
+
+        stage('Docker stop'){
+            steps {
+                dir('BE'){
+                    sh 'echo "Docker Container Stop"'
+                    sh 'docker-compose -f /var/jenkins_home/workspace/cyes%20pipeline/docker-compose.yml down'
+                }
+            }
+            post {
+                 failure {
+                     sh 'echo "Docker Fail"'
+                }
+            }
+        }
+
+        //백엔드
+        stage('RM be Docker'){
+            steps {
+
+                sh 'echo "Remove be Docker"'
+
+                //정지된 도커 컨테이너 찾아서 컨테이너 ID로 삭제함
+                sh '''
+                    result=$( docker container ls -a --filter "name=*back" -q )
+                    if [ -n "$result" ]
+                        then
+                            docker rm $(docker container ls -a --filter "name=*back" -q)
+                        else
+                            echo "No such containers"
+                        fi
+                '''
+
+                //이미지 삭제 
+                sh '''
+                    result=$( docker images -f "reference=*back" -q )
+                    if [ -n "$result" ]
+                    then
+                        docker rmi -f $(docker images -f "reference=*back" -q)
+                    else
+                        echo "No such container images"
+                    fi
+                '''
+              
+                
+                // 안쓰는이미지 -> <none> 태그 이미지 찾아서 삭제함
+                sh '''
+                    result=$(docker images -f "dangling=true" -q)
+                    if [ -n "$result" ]
+                    then
+                        docker rmi -f $(docker images -f "dangling=true" -q)
+                    else
+                        echo "No such container images"
+                    fi
+                '''
+
+            }
+            post {
+                 failure {
+                     sh 'echo "Remove Backend Fail"'
+                }
+            }
+        }
+
+        //프론트
+        stage('RM fe Docker'){
+            steps {
+
+                sh 'echo "Remove fe Docker"'
+
+                //정지된 도커 컨테이너 찾아서 컨테이너 ID로 삭제함
+                sh '''
+                    result=$( docker container ls -a --filter "name=*front" -q )
+                    if [ -n "$result" ]
+                        then
+                            docker rm $(docker container ls -a --filter "name=*front" -q)
+                        else
+                            echo "No such containers"
+                        fi
+                '''
+
+                //이미지 삭제 
+                sh '''
+                    result=$( docker images -f "reference=*front" -q )
+                    if [ -n "$result" ]
+                    then
+                        docker rmi -f $(docker images -f "reference=*front" -q)
+                    else
+                        echo "No such container images"
+                    fi
+                '''
+              
+                
+                // 안쓰는이미지 -> <none> 태그 이미지 찾아서 삭제함
+                sh '''
+                    result=$(docker images -f "dangling=true" -q)
+                    if [ -n "$result" ]
+                    then
+                        docker rmi -f $(docker images -f "dangling=true" -q)
+                    else
+                        echo "No such container images"
+                    fi
+                '''
+
+            }
+            post {
+                 failure {
+                     sh 'echo "Remove Frontend Fail"'
+                }
+            }
+        }
+
+    }
+}
