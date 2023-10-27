@@ -7,7 +7,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class QuestionMessage extends SessionMessage{
     String question;
@@ -16,4 +15,13 @@ public class QuestionMessage extends SessionMessage{
     public enum QuestionType {
         SINGLE, FOUR, OX
     }
+
+
+    @Builder
+    public QuestionMessage(String sessionId, MessageType type, String question, List<String> selections) {
+        super(sessionId, type);
+        this.question = question;
+        this.selections = selections;
+    }
+
 }
