@@ -21,6 +21,7 @@ function App() {
           <Route path='/live' element={<Live />}/>
           <Route path='/quiz' element={<Quiz />}/>
           <Route path='/answer' element={<Answer />}/>
+ 
         </Routes>
       </BrowserRouter>
     </div>
