@@ -1,21 +1,23 @@
 package com.cyes.webserver.domain.stompSocket.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class QuestionBody {
     String question;
     List<String> selections;
 
     public enum QuestionType {
         SINGLE, FOUR, OX
+    }
+
+    @Builder
+    public QuestionBody(String question, List<String> selections) {
+        this.question = question;
+        this.selections = selections;
     }
 }

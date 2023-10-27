@@ -27,4 +27,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/quiz/session")
                 .setAllowedOriginPatterns("*").withSockJS();
     }
+
 }

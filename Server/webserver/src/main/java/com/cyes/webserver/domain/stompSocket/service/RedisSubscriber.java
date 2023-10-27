@@ -9,13 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 /**
  * onMessage 메소드는 리스너에 수신된 메시지를 각 비즈니스 로직을 거쳐
  * messagingTemplate을 이용해 WebSocket 구독자들에게 메시지를 전달하는 메소드이다.
- *
+ * <p>
  * Redis로부터 온 메시지를 역직렬화하여 SessionMessage DTO로 전환뒤
  * 필요한 정보와 함께 메시지를 전달한다.
  */
@@ -40,5 +41,15 @@ public class RedisSubscriber implements MessageListener {
         } catch (Exception e) {
             throw new CustomException(CustomExceptionList.MESSAGE_NOT_FOUND_ERROR);
         }
+    }
+
+
+    /*
+    스케줄러가 예약된 시점에 퀴즈 참여자들에게 publish
+    */
+    public void sendToUsers(SessionMessage message) {
+
+        messagingTemplate.convertAndSend("/sub/quiz/session" + message.getSessionId(), message);
+
     }
 }
