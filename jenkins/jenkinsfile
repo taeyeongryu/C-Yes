@@ -154,10 +154,10 @@ pipeline {
                 sh 'echo "Move Start"'
 
                 // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
-                sh """
+                sh '''
                     cd Server/webserver
                     docker build --no-cache -t cyes-back .
-                """ 
+                '''
         }
         post {
             // 이미지 전송 성공시
@@ -196,10 +196,10 @@ pipeline {
                 sh 'echo "Move Start"'
 
                 // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
-                sh """
+                sh '''
                     cd Front/cyesfront
                     docker build --no-cache -t cyes-front .
-                """
+                '''
             }
             post {
                 // 이미지 전송 성공시
@@ -215,10 +215,10 @@ pipeline {
 
         stage('Deploy Shoot') {
             steps {
-                sh """
+                sh '''
                     pwd
                     docker-compose up -d
-                """
+                '''
             } 
             post {
                 // 실행 성공시
