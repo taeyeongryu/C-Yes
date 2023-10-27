@@ -6,18 +6,14 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-public class QuestionBody {
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class QuestionMessage extends SessionMessage{
     String question;
     List<String> selections;
 
     public enum QuestionType {
         SINGLE, FOUR, OX
-    }
-
-    @Builder
-    public QuestionBody(String question, List<String> selections) {
-        this.question = question;
-        this.selections = selections;
     }
 }

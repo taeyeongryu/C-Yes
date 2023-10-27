@@ -5,15 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultBody {
-
-    List<String> memberNicknames;
-    Integer myRank;
-
+public class ChatMessage extends SessionMessage {
+    Long memberId;
+    String memberNickname;
+    String message;
 }

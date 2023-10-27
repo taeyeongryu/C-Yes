@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatBody {
+public class SubmitMessage extends SessionMessage{
     Long memberId;
-    String memberNickname;
-    String message;
+    String answer;
 }
