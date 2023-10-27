@@ -227,7 +227,8 @@ pipeline {
                 }
                 // 실행 실패시
                 failure {
-                    echo 'Deploy Failed'
+                        echo 'Deploy Failed'
+                    }
                 }
             }
         }
