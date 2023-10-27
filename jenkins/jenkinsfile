@@ -149,8 +149,8 @@ pipeline {
             }
         }
 
-        stage('Move Image to Hub'){
-            steps{
+        stage('Move Image to Hub') {
+            steps {
                 sh 'echo "Move Start"'
 
                 // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
@@ -158,15 +158,16 @@ pipeline {
                     cd Server/webserver
                     docker build --no-cache -t cyes-back .
                 '''
-        }
-        post {
-            // 이미지 전송 성공시
-            success {
-                sh 'echo "PUSH backend Docker Image Success"'
             }
-            // 이미지 전송 실패시
-            failure {
-                sh 'echo "PUSH backend Docker Image Fail"'
+            post {
+                // 이미지 전송 성공시
+                success {
+                    sh 'echo "PUSH backend Docker Image Success"'
+                }
+                // 이미지 전송 실패시
+                failure {
+                    sh 'echo "PUSH backend Docker Image Fail"'
+                }
             }
         } 
 
