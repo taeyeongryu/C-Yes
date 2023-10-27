@@ -1,6 +1,5 @@
 package com.cyes.webserver.config;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.stompSocket.service.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +13,6 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import java.util.List;
 
 @Configuration
 public class RedisConfig {
@@ -81,10 +78,8 @@ public class RedisConfig {
 
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ProblemResponse.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
         return redisTemplate;
     }
 
