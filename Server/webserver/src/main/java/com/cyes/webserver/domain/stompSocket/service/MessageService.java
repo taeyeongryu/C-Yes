@@ -62,7 +62,6 @@ public class MessageService {
                 setDateExpire("ProblemAnswer", problemAnswerList, Duration.ofMinutes(30));
 
                 // 클라이언트한테 시작 신호 보내기
-
                 redisTemplate.convertAndSend(topic, message);
                 break;
 
@@ -79,7 +78,7 @@ public class MessageService {
 
             case ANSWER:
                 // redis에서 문제 꺼내오기
-                String answer = getDateFromRedis("ProblemAnswer", "answer", cnt);
+                String answer = getDateFromRedis("ProblemAnswer", "answer", cnt++);
 
                 // body에 정답 넣기
                 message.setBody(AnswerBody.builder().answer(answer));
