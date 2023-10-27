@@ -39,9 +39,16 @@ public class MessageService {
     private int cnt;
 
     @Transactional
-    public void sendMessage(SessionMessage message) {
+    public void sendMessage(SessionMessage message) throws JsonProcessingException {
 
         String topic = channelTopic.getTopic();
+
+        String jsonData = stringRedisTemplate.opsForValue().get(message.getBody());
+        SessionMessage sessionMessage = objectMapper.readValue(jsonData,SessionMessage.class);
+
+        if(sessionMessage.getType().equals(SessionMessage.MessageType.SUBMIT)) {
+
+        }
 
         redisTemplate.convertAndSend(topic, message);
     }
@@ -86,6 +93,14 @@ public class MessageService {
                 // 클라이언트한테 문제 보내기
                 redisTemplate.convertAndSend(topic, message);
                 break;
+                
+            case END:
+                // 클라이언트한테 종료 신호 보내기
+                redisTemplate.convertAndSend(topic,message);
+                break;
+
+            case RESULT:
+
 
         }
 
