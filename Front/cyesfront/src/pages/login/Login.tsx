@@ -3,7 +3,7 @@ import './Login.css';
 
 // env로 변경
 const REST_API_KEY = "17a1b4d9fcc605cecc82fd7399c0717f"; 
-const REDIRECT_URI = "http://localhost:3000/login/kakao/callback"; 
+const REDIRECT_URI = "https://cyes.site/login/kakao/callback";
 const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 const Login = () => {
