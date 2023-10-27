@@ -54,10 +54,11 @@ public class QuizService {
         // Insert Quiz
         quizRepository.save(quiz);
 
+        int problemNum = 1;
         // QuizProblem
         for (String problemId : quizCreateRequestToService.getProblemList()) {
             // Dto -> Entity
-            QuizProblem quizProblem = quizCreateRequestToService.toQuizProblemEntity(quiz, problemId);
+            QuizProblem quizProblem = quizCreateRequestToService.toQuizProblemEntity(quiz, problemId,problemNum++);
             // Insert QuizProblem
             quizProblemRepository.save(quizProblem);
         }

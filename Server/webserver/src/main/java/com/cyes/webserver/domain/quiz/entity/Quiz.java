@@ -46,6 +46,7 @@ public class Quiz extends BaseEntity {
 
     public QuizInfoResponse toQuizInfoResponse() {
         QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
+                .quizId(this.id)
                 .quizTitle(this.title)
                 .quizStartDate(this.startDateTime)
                 .build();

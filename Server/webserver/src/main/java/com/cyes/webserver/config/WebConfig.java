@@ -38,6 +38,7 @@ public class WebConfig implements WebMvcConfigurer {
 //                        "/swagger-resources/**",  // Swagger 리소스 경로
 //                        "/swagger-ui/**",  // Swagger UI 경로,
 //                        "/api/problem/**"
+//
 //                );
 //    }
 }
