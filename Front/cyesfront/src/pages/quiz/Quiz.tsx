@@ -3,7 +3,8 @@ import EndQuiz from "./EndQuiz";
 import "./Quiz.css";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
 import { useNavigate } from "react-router-dom";
-import { Client } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 
 const Quiz: React.FC = () => {
     const [questions, setQuestions] = useState([
@@ -47,7 +48,7 @@ const Quiz: React.FC = () => {
     };
 
     // 웹소켓 연결
-    const [webSocket, setWebSocket] = useState<Client>();
+    const [webSocket, setWebSocket] = useState<Stomp.Client>();
     let sessionId: string;
     let memberId: number;
     let memberNickname: string;
@@ -57,46 +58,76 @@ const Quiz: React.FC = () => {
         sessionId = "0";
         memberId = 1;
         memberNickname = "고멤";
-        //
 
-        const ws = new Client({
-            brokerURL: `${process.env.REACT_APP_SPRING_URL}/quiz/session`,
-            debug(str) {
-                console.log(`debug`, str);
+        // const ws = new Client({
+        //     brokerURL: `ws://localhost:5000/quiz/session`,
+        //     debug(str) {
+        //         console.log(`debug`, str);
+        //     },
+        //     reconnectDelay: 5000,
+        //     connectionTimeout: 100000,
+        //     heartbeatIncoming: 4000,
+        //     heartbeatOutgoing: 4000,
+        // });
+
+        // ws.onConnect = (frame) => {
+        //     ws.subscribe("/sub/quiz/session/" + sessionId, (message) => {
+        //         // recv 콜백 함수
+        //         const recvData = JSON.parse(message.body);
+        //         console.log(recvData);
+        //         //TODO: 메세지 타입별로 처리
+        //     });
+
+        //     ws.publish({
+        //         destination: "/pub/session/message",
+        //         body: JSON.stringify({
+        //             type: "ENTER",
+        //             sessionId: sessionId,
+        //             senderId: memberId,
+        //             senderNickname: memberNickname,
+        //             message: "안녕하세요?",
+        //         }),
+        //     });
+        // };
+
+        // ws.onStompError = (frame) => {
+        //     console.log(`Broker reported Error`, frame.headers.message);
+        //     console.log(`Additional details:${frame.body}`);
+        // };
+
+        // ws.activate();
+
+        // setWebSocket(ws);
+
+        const sock = new SockJS(`http://localhost:5000/quiz/session`);
+        const ws = Stomp.over(sock);
+
+        ws.connect(
+            {},
+            (frame) => {
+                ws.subscribe("/sub/quiz/session/" + sessionId, (message) => {
+                    // recv 콜백 함수
+                    console.log("메세지 받았다");
+                    const recvData = JSON.parse(message.body);
+                    console.log(recvData);
+                    //TODO: 메세지 타입별로 처리
+                });
+                ws.send(
+                    "/pub/session/message/submit",
+                    {},
+                    JSON.stringify({
+                        type: "ENTER",
+                        sessionId: sessionId,
+                        senderId: memberId,
+                        senderNickname: memberNickname,
+                        message: "안녕하세요?",
+                    })
+                );
             },
-            reconnectDelay: 50000,
-            heartbeatIncoming: 4000,
-            heartbeatOutgoing: 4000,
-        });
-
-        ws.onConnect = (frame) => {
-            ws.subscribe("/sub/quiz/session/" + sessionId, (message) => {
-                // recv 콜백 함수
-                const recvData = JSON.parse(message.body);
-
-                //TODO: 메세지 타입별로 처리
-            });
-
-            ws.publish({
-                destination: "/pub/session/message",
-                body: JSON.stringify({
-                    type: "ENTER",
-                    sessionId: sessionId,
-                    senderId: memberId,
-                    senderNickname: memberNickname,
-                    message: "",
-                }),
-            });
-        };
-
-        ws.onStompError = (frame) => {
-            console.log(`Broker reported Error`, frame.headers.message);
-            console.log(`Additional details:${frame.body}`);
-        };
-
-        ws.activate();
-
-        setWebSocket(ws);
+            (err) => {
+                console.log(err);
+            }
+        );
     }, []);
 
     useEffect(() => {

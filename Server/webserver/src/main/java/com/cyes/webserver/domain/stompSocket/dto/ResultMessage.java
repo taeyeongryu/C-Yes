@@ -5,11 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmitBody {
-    Long memberId;
-    String answer;
+public class ResultMessage extends SessionMessage{
+
+    List<String> memberNicknames;
+    Integer myRank;
+
 }

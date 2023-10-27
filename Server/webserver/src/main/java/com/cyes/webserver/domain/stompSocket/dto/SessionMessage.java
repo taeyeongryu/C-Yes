@@ -5,13 +5,12 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
-public class SessionMessage<T> {
+@AllArgsConstructor
+@ToString
+public class SessionMessage {
     //세션 ID
     private String sessionId;
     //내용
-    private T body;
-
     private MessageType type;
 
     /**
@@ -24,10 +23,4 @@ public class SessionMessage<T> {
         ENTER, START, QUESTION, SUBMIT, ANSWER, END, RESULT, CHAT
     }
 
-    @Builder
-    public SessionMessage(String sessionId, T body, MessageType type) {
-        this.sessionId = sessionId;
-        this.body = body;
-        this.type = type;
-    }
 }
