@@ -23,7 +23,10 @@ pipeline {
             steps {
                 dir('BE'){
                     sh 'echo "Docker Container Stop"'
-                    sh 'docker-compose down --rmi all'
+                    sh '''
+                        pwd
+                        docker-compose down --rmi all
+                        '''
                 }
             }
             post {
