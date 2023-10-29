@@ -1,4 +1,4 @@
-package com.cyes.webserver.TestDomain;
+package com.cyes.webserver.redisListener;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -21,11 +22,14 @@ public class TestRedisService {
     private final ObjectMapper objectMapper;
     private final ChannelTopic channelTopic;
 
-    public void save(String key, Object object){
+    public void save(String key, Object object, Integer expireTime){
 
         ValueOperations<String, Object> op = redisTemplate.opsForValue();
 
-        op.set("me", object);
+        op.set(key, object);
+        redisTemplate.expire(key, Duration.ofSeconds(expireTime));
+
+        System.out.println(getObject(key, String.class));
     }
 
     public <T> T getObject(String key, Class<T> classType){
