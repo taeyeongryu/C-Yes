@@ -23,12 +23,12 @@ pipeline {
             steps {
                 dir('BE'){
                     sh 'echo "Docker Container Stop"'
-                    sh 'docker-compose -f /workspace/cyes%20pipeline/docker-compose.yml down'
+                    sh 'docker-compose down --rmi all'
                 }
             }
             post {
                  failure {
-                     sh 'echo "Docker Fail"'
+                     sh 'echo "Docker down Fail"'
                 }
             }
         }
