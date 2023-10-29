@@ -21,13 +21,13 @@ pipeline {
 
         stage('Container stop'){
             steps {
-               // dir('BE'){
+                dir('compose'){
                     sh 'echo "Docker Container Stop"'
                     sh '''
                         pwd
-                       
+                        docker-compose -f docker-compose.yml down
                         '''
-               // }
+                }
             }
             post {
                  failure {
