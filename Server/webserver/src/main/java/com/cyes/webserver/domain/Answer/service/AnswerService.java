@@ -2,13 +2,17 @@ package com.cyes.webserver.domain.Answer.service;
 
 import com.cyes.webserver.domain.Answer.dto.AnswerResponse;
 import com.cyes.webserver.domain.Answer.dto.AnswerSaveServiceRequest;
+import com.cyes.webserver.domain.Answer.dto.RankResult;
 import com.cyes.webserver.domain.Answer.entity.Answer;
 import com.cyes.webserver.domain.Answer.repository.AnswerRepository;
 import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
+import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.repository.QuizRepository;
+import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
+import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import javax.lang.model.element.ModuleElement;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static com.cyes.webserver.exception.CustomExceptionList.QUIZ_NOT_FOUND_ERROR;
 
@@ -32,13 +36,16 @@ public class AnswerService{
     private final AnswerRepository answerRepository;
     private final QuizRepository quizRepository;
     private final ProblemRepository problemRepository;
+    private final QuizProblemRepository quizProblemRepository;
+    private final ProblemService problemService;
 
     /**답안을 제출하는 메서드
      * 같은 문항에 이미 답을 제출했는지 체크하고
      * 제출하지 않았다면 저장한다.
+     * 문제 제출 시간과 답안 제출시간을 parameter로 받는다.
     */
     @Transactional
-    public AnswerResponse save(AnswerSaveServiceRequest answerSaveServiceRequest){
+    public AnswerResponse save(AnswerSaveServiceRequest answerSaveServiceRequest, LocalDateTime startTime, LocalDateTime submitTime){
         Long memberId = answerSaveServiceRequest.getMemberId();
         Long quizId = answerSaveServiceRequest.getQuizId();
         Integer problemNumber = answerSaveServiceRequest.getProblemNumber();
@@ -56,7 +63,7 @@ public class AnswerService{
         }
 
         //Dto -> Entity
-        Answer answer = answerSaveServiceRequest.toEntity();
+        Answer answer = answerSaveServiceRequest.toEntity(startTime, submitTime);
 
         //save
         answerRepository.save(answer);
@@ -66,8 +73,25 @@ public class AnswerService{
 
         return answerResponse;
     }
+    /**
+     * quizId를 parameter로 받아서 그 퀴즈의 랭커 3명의 닉네임을 반환한다.
+    */
+//    public RankResult getRank(Long quizId){
+//        //quidId로 problemId List 얻어온다.
+//        List<String> problemIdList = quizProblemRepository.findQuizProblems(quizId);
+//        //problemId List로 problem 가져온다.
+//        List<ProblemResponse> problemResponseList = problemService.findAllProblemByQuiz(problemIdList);
+//
+//        //퀴즈에 참여한 멤버를 Set으로 모두가져온다
+//        Set<Long> memberIdSet = new HashSet<>(answerRepository.findMemberIdsByQuizId(quizId));
+//
+//
+//
+//    }
 
-    //Sort정보를 Pageable에 넘겨줘야 한다.
+    /**
+     * 특정 유저가 특정 퀴즈에 제출한 답안을 반환한다.
+    */
     public List<AnswerResponse> findAnswerByMemberIdAndQuizId(Long memberId, Long quizId){
         //problem_number를 기준으로 오름차순 정렬을 해주는 Sort 객체 생성한다.
         Sort sort = Sort.by(Sort.Order.asc("problem_number"));
@@ -82,6 +106,9 @@ public class AnswerService{
         return answerResponseList;
     }
 
+    /**
+     * Entity를 Dto로 바꿔주는 private 메서드
+    */
     private List<AnswerResponse> toAnswerResponse(List<Answer> answerList){
 
         List<AnswerResponse> list = new ArrayList<>();
