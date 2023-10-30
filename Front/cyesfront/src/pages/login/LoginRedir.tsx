@@ -9,12 +9,15 @@ const LoginRedir = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("메롱")
     const Login = async () => {
       let data;
       if (oAuthState.oAuthType === 0) {
+        console.log("여기???");
         const code = new URL(window.location.href).searchParams.get("code");
         data = await requestKakaoLoginInfo(code);
       } else {
+        console.log("여기?");
         // TODO : NAVER LOGIN
       }
 
