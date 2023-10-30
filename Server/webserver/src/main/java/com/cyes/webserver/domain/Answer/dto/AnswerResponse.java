@@ -13,13 +13,15 @@ public class AnswerResponse {
     private Long quizId;
     private Integer problemNumber;
     private String submitContent;
+    private Long duringTime;
 
     @Builder
-    public AnswerResponse(String id, Long memberId, Long quizId, Integer problemNumber, String submitContent) {
+    public AnswerResponse(String id, Long memberId, Long quizId, Integer problemNumber, String submitContent, Long duringTime) {
         this.id = id;
         this.memberId = memberId;
         this.quizId = quizId;
         this.problemNumber = problemNumber;
         this.submitContent = submitContent;
+        this.duringTime = duringTime;
     }
 }
