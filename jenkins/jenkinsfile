@@ -55,7 +55,7 @@ pipeline {
                         sh '''
                             pwd
                             echo 'Frontend build'
-                        
+                            apt install npm
                             CI=false npm run build
                         '''
                     }
