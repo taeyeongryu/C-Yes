@@ -32,7 +32,7 @@ pipeline {
 
                     sh '''
                         pwd
-                        docker-compose down --rmi all
+                        docker-compose -f /var/jenkins_home/workspace/cyes_pipeline/compose/docker-compose.yml
                         '''
                 //}
             }
