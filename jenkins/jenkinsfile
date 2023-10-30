@@ -30,6 +30,14 @@ pipeline {
                      sh 'chmod -R 777 /usr/local/bin'
                      sh 'chmod +x /usr/local/bin/docker-compose'
 
+                    //도커 다운
+                    sh 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -'
+                    sh 'sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"'
+                    sh 'sudo apt-get update'
+                    sh 'sudo apt-get install -y docker-ce docker-ce-cli containerd.io'
+                    sh 'sudo usermod -aG docker $USER'
+
+
                     sh '''
                         pwd
                         docker-compose -f /var/jenkins_home/workspace/cyes_pipeline/compose/docker-compose.yml
