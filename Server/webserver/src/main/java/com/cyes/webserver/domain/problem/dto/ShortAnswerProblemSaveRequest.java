@@ -14,20 +14,19 @@ import lombok.NoArgsConstructor;
 public class ShortAnswerProblemSaveRequest {
     private ShortAnswerProblemRequest shortAnswerProblemRequest;
     private ProblemCategory problemCategory;
-    private ProblemType problemType;
+
 
     @Builder
-    public ShortAnswerProblemSaveRequest(ShortAnswerProblemRequest shortAnswerProblemRequest, ProblemCategory problemCategory, ProblemType problemType) {
+    public ShortAnswerProblemSaveRequest(ShortAnswerProblemRequest shortAnswerProblemRequest, ProblemCategory problemCategory) {
         this.shortAnswerProblemRequest = shortAnswerProblemRequest;
         this.problemCategory = problemCategory;
-        this.problemType = problemType;
     }
 
     public Problem toEntity(){
         return Problem.builder()
                 .content(this.shortAnswerProblemRequest.toEntity())
                 .category(this.problemCategory)
-                .type(this.problemType)
+                .type(ProblemType.SHORTANSWER)
                 .build();
     }
 }

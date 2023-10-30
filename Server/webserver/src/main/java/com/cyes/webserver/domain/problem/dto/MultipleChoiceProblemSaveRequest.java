@@ -11,13 +11,13 @@ import lombok.*;
 public class MultipleChoiceProblemSaveRequest {
     private MultipleChoiceProblemRequest multipleChoiceProblemRequest;
     private ProblemCategory problemCategory;
-    private ProblemType problemType;
+
 
     @Builder
-    public MultipleChoiceProblemSaveRequest(MultipleChoiceProblemRequest multipleChoiceProblemRequest, ProblemCategory problemCategory, ProblemType problemType) {
+    public MultipleChoiceProblemSaveRequest(MultipleChoiceProblemRequest multipleChoiceProblemRequest, ProblemCategory problemCategory) {
         this.multipleChoiceProblemRequest = multipleChoiceProblemRequest;
         this.problemCategory = problemCategory;
-        this.problemType = problemType;
+
     }
 
 
@@ -25,16 +25,7 @@ public class MultipleChoiceProblemSaveRequest {
         return Problem.builder()
                 .content(this.multipleChoiceProblemRequest.toEntity())
                 .category(this.problemCategory)
-                .type(this.problemType)
+                .type(ProblemType.MULTIPLECHOICE)
                 .build();
-    }
-
-    @Override
-    public String toString() {
-        return "MultipleChoiceProblemSaveRequest{" +
-                "multipleChoiceProblemRequest=" + multipleChoiceProblemRequest +
-                ", problemCategory=" + problemCategory +
-                ", problemType=" + problemType +
-                '}';
     }
 }
