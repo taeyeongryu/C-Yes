@@ -6,7 +6,6 @@ pipeline {
             steps {
                 //dir('compose'){
                     sh 'echo "Docker Container Stop"'
-                    sh 'sudo usermod -aG docker jenkins'
                     sh '''
                         pwd
                         docker compose -f /var/jenkins/workspace/cyes_pipeline/compose/docker-compose.yml down
