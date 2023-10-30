@@ -50,9 +50,9 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer
     (
-        RedisConnectionFactory connectionFactory,
-        MessageListenerAdapter listenerAdapter,
-        ChannelTopic channelTopic
+            RedisConnectionFactory connectionFactory,
+            MessageListenerAdapter listenerAdapter,
+            ChannelTopic channelTopic
     ){
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
@@ -90,6 +90,7 @@ public class RedisConfig {
 
     /**
      * Topic 공유를 위해 Channel Topic을 빈으로 등록해 단일화 시켜준다.
+     * Topic이라는 단어보다 Channel이 더 정확한 용어이다.
      */
     @Bean
     public ChannelTopic channelTopic(){

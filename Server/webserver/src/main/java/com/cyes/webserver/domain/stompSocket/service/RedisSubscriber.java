@@ -25,14 +25,19 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+//메시지를 수신하는 곳이라고 생각할 수 있다.
+//MessageListener를 구현해서 이벤트가 발생할 때 실행될 작업을 onMessage를 구현해서 할 수 있다.
 public class RedisSubscriber implements MessageListener {
     private final ObjectMapper objectMapper;
     private final RedisTemplate redisTemplate;
     private final SimpMessageSendingOperations messagingTemplate;
 
+    //Redis로부터 메시지가 도착했을 때 실행되는 메서드
     @Override
+    //publish된 메서드가 message를 통해서 들어온다.
     public void onMessage(Message message, byte[] pattern) {
         try {
+            //message.getBody()를 하면 byte형식 배열이 반환된다.
             log.info("1");
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             log.info("2");
@@ -48,7 +53,8 @@ public class RedisSubscriber implements MessageListener {
                 log.info("5");
             }
 
-
+            //stomp Message Broker로 보내는 메서드
+            //즉 client에게 보내는 메서드는 이곳이다. MessageService에서는 모두 Redis에 publish하는 것
             messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getSessionId(), roomMessage);
 
         } catch (Exception e) {
