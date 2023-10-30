@@ -15,4 +15,7 @@ public interface AnswerRepository extends MongoRepository<Answer,String> {
     @Query("{ 'member_id' : ?0, 'quiz_id' : ?1, 'problem_number' : ?2 }")
     Optional<Answer> findAnswerByMemberIdAndQuizIdAndProblemNumber(Long memberId, Long quizId, Integer problemNumber);
 
+    @Query(value="{ 'quiz_id' : ?0 }", fields="{ 'member_id' : 1}")
+    List<Long> findMemberIdsByQuizId(Long quizId);
+
 }

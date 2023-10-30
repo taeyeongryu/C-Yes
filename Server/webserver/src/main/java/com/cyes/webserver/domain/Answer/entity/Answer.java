@@ -38,13 +38,18 @@ public class Answer {
     @Field(name = "submit_content")
     private String submitContent;
 
+    //문제 제출시간과 답안 제출시간의 차이
+    @Field(name = "during_time")
+    private Long duringTime;
+
     @Builder
-    public Answer(String id, Long memberId, Long quizId, Integer problemNumber, String submitContent) {
+    public Answer(String id, Long memberId, Long quizId, Integer problemNumber, String submitContent, Long duringTime) {
         this.id = id;
         this.memberId = memberId;
         this.quizId = quizId;
         this.problemNumber = problemNumber;
         this.submitContent = submitContent;
+        this.duringTime = duringTime;
     }
 
     public AnswerResponse toAnswerResponse(){
@@ -54,6 +59,7 @@ public class Answer {
                 .quizId(this.quizId)
                 .problemNumber(this.problemNumber)
                 .submitContent(this.submitContent)
+                .duringTime(this.duringTime)
                 .build();
         return answerResponse;
     }

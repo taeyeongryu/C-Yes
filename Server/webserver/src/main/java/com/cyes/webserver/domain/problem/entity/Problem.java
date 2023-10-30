@@ -65,7 +65,16 @@ public class Problem {
         return problemResponse;
     }
 
-//    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "id='" + id + '\'' +
+                ", content=" + content +
+                ", category='" + category + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
+    //    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
 //        this.content = problemUpdateServiceRequest.getContent();
 //        this.answer = problemUpdateServiceRequest.getAnswer();
 //        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());

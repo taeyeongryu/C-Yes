@@ -36,4 +36,13 @@ public class ShortAnswer implements ProblemContent{
         this.question = question;
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "ShortAnswer{" +
+                "id='" + id + '\'' +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                '}';
+    }
 }

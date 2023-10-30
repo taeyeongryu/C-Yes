@@ -2,6 +2,8 @@ package com.cyes.webserver.domain.problem.dto.problemcontent.response;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 public class MultipleChoiceProblemContentResponse extends ProblemContentResponse{
     //보기
@@ -11,5 +13,14 @@ public class MultipleChoiceProblemContentResponse extends ProblemContentResponse
     public MultipleChoiceProblemContentResponse(String question, String answer, String[] choices) {
         super(question, answer);
         this.choices = choices;
+    }
+
+    @Override
+    public String toString() {
+        return "MultipleChoiceProblemContentResponse{" +
+                "choices=" + Arrays.toString(choices) +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                '}';
     }
 }

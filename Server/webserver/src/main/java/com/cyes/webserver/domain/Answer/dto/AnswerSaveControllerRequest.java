@@ -14,6 +14,7 @@ public class AnswerSaveControllerRequest {
     private Integer problemNumber;
     private String submitContent;
 
+
     @Builder
     public AnswerSaveControllerRequest(Long memberId, Long quizId, Integer problemNumber, String submitContent) {
         this.memberId = memberId;

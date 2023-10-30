@@ -41,4 +41,14 @@ public class ProblemResponse {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String toString() {
+        return "ProblemResponse{" +
+                "id='" + id + '\'' +
+                ", contentResponse=" + contentResponse +
+                ", category=" + category +
+                ", type=" + type +
+                '}';
+    }
 }
