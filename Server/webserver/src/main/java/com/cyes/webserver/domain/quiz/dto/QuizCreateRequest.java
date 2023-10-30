@@ -11,20 +11,18 @@ import java.util.List;
 public class QuizCreateRequest {
 
     private String quizTitle;
+    private Long memberId;
     private LocalDateTime quizStartDate;
     private List<String> problemList;
 
-    public QuizCreateRequestToService create() {
+    public QuizCreateRequestToServiceDto toServiceDto() {
 
-        QuizCreateRequestToService quizCreateRequestToService = QuizCreateRequestToService.builder()
+        return QuizCreateRequestToServiceDto.builder()
                 .quizTitle(this.quizTitle)
+                .memberId(this.memberId)
                 .quizStartDate(this.quizStartDate)
                 .problemList(this.problemList)
                 .build();
 
-        return quizCreateRequestToService;
-
     }
-
-
 }

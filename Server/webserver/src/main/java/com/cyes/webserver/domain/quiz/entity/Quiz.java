@@ -62,5 +62,4 @@ public class Quiz extends BaseEntity {
 
         return quizCreateResponseByService;
     }
-
 }

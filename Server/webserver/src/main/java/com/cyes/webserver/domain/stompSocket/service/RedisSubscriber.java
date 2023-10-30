@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
+import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
 import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.exception.CustomException;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -38,37 +38,25 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             //message.getBody()를 하면 byte형식 배열이 반환된다.
-            log.info("1");
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
-            log.info("2");
-            SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
-            log.info("3");
 
-            log.info(publishMessage);
-            log.info(roomMessage.toString());
+            SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
             if (roomMessage.getType().equals(SessionMessage.MessageType.QUESTION)) {
-                log.info("4");
                 roomMessage = objectMapper.readValue(publishMessage, QuestionMessage.class);
-                log.info("5");
+            } else if (roomMessage.getType().equals(SessionMessage.MessageType.ANSWER)) {
+                roomMessage = objectMapper.readValue(publishMessage, AnswerMessage.class);
             }
+
+            log.info(roomMessage.toString());
 
             //stomp Message Broker로 보내는 메서드
             //즉 client에게 보내는 메서드는 이곳이다. MessageService에서는 모두 Redis에 publish하는 것
-            messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getSessionId(), roomMessage);
+            messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getQuizId(), roomMessage);
 
         } catch (Exception e) {
             throw new CustomException(CustomExceptionList.MESSAGE_NOT_FOUND_ERROR);
         }
     }
 
-
-    /*
-    스케줄러가 예약된 시점에 퀴즈 참여자들에게 publish
-    */
-    public void sendToUsers(SessionMessage message) {
-
-        messagingTemplate.convertAndSend("/sub/quiz/session" + message.getSessionId(), message);
-
-    }
 }

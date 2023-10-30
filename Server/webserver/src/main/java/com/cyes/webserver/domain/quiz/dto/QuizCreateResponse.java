@@ -15,7 +15,4 @@ public class QuizCreateResponse {
         this.quizId = quizId;
         this.quizTitle = title;
     }
-
-
-
 }

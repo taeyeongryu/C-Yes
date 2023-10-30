@@ -3,8 +3,10 @@ package com.cyes.webserver.domain.problem.dto.problemcontent.response;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class ProblemContentResponse {
     //문제
     String question;

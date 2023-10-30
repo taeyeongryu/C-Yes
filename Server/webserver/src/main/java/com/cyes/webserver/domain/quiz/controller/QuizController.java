@@ -1,11 +1,11 @@
 package com.cyes.webserver.domain.quiz.controller;
 
-import com.cyes.webserver.domain.quiz.dto.*;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateRequest;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToServiceDto;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
+import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import com.cyes.webserver.domain.quiz.service.QuizService;
-import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.domain.stompSocket.service.MessageService;
-import com.cyes.webserver.exception.CustomException;
-import com.cyes.webserver.exception.CustomExceptionList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,9 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -41,28 +38,19 @@ public class QuizController {
     private ResponseEntity<QuizInfoResponse> getQuizInfo() {
 
         return ResponseEntity.status(HttpStatus.OK).body(quizService.searchQuiz());
-
     }
-
-    @GetMapping("/test")
-    private void getProblemAnswer() throws JsonProcessingException {
-        SessionMessage sessionMessage = new SessionMessage();
-        sessionMessage.setType(SessionMessage.MessageType.QUESTION);
-        messageService.sendToUsers(sessionMessage);
-    }
-
 
     /*
     라이브 퀴즈쇼 개설 APi
      */
     @PostMapping
-    private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) {
+    private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) throws JsonProcessingException {
 
         // service로 보내는 Dto로 변환
-        QuizCreateRequestToService quizCreateRequestToService = quizCreateRequest.create();
+        QuizCreateRequestToServiceDto serviceDto = quizCreateRequest.toServiceDto();
 
         // service 호출
-        QuizCreateResponse quizCreateResponse = quizService.createQuiz(quizCreateRequestToService);
+        QuizCreateResponse quizCreateResponse = quizService.createQuiz(serviceDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(quizCreateResponse);
     }
