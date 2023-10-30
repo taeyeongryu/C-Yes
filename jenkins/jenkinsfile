@@ -1,54 +1,53 @@
 pipeline {
     agent any
-
     stages {
-
-        //백엔드
-        stage('Springboot build') {
-            steps {
-                dir('Server/webserver'){
-                    sh '''
-                    pwd
-                    echo 'springboot build'
-                    chmod +x gradlew
-                    ./gradlew clean build
-                    '''
+      //백엔드
+            stage('Springboot build') {
+                steps {
+                    dir('Server/webserver'){
+                        sh '''
+                        pwd
+                        echo 'springboot build'
+                        chmod +x gradlew
+                        ./gradlew clean build
+                        '''
+                    }
                 }
             }
-        }
-        stage('Dockerimage build') {
-            steps {
-                dir('Server/webserver'){
-                    sh '''
-                    echo 'Dockerimage build'
-                    docker build -t docker-springboot:0.0.1 .
-                    '''
+            stage('Dockerimage build') {
+                steps {
+                    dir('Server/webserver'){
+                        sh '''
+                        echo 'Dockerimage build'
+                        docker build -t docker-springboot:0.0.1 .
+                        '''
+                    }
                 }
             }
-        }
-        stage('Deploy') {
-            steps {
-                dir('Server/webserver'){
+            stage('Deploy') {
+                steps {
+                    dir('Server/webserver'){
 
-                    sh '''
-                    echo 'Deploy'
+                        sh '''
+                        echo 'Deploy'
 
-                    result=$( docker container ls -a --filter "name=*back" -q )
-                    if [ -n "$result" ]
-                        then
-                            docker stop cyes_back
-                            docker rm cyes_back
-                           
-                        else
-                            echo "No such containers"
-                        fi
-                        
-                    docker run -d -p 127.0.0.1:5000:5000 --name cyes_back docker-springboot:0.0.1
-                    docker images -f "dangling=true" -q | xargs -r docker rmi
-                    '''
+                        result=$( docker container ls -a --filter "name=*back" -q )
+                        if [ -n "$result" ]
+                            then
+                                docker stop cyes_back
+                                docker rm cyes_back
+                            
+                            else
+                                echo "No such containers"
+                            fi
+                            
+                        docker run -d -p 127.0.0.1:5000:5000 --name cyes_back docker-springboot:0.0.1
+                        docker images -f "dangling=true" -q | xargs -r docker rmi
+                        '''
+                    }
                 }
             }
-        }
+      
 
         //프론트 엔드
           stage('FE build') {
@@ -99,232 +98,3 @@ pipeline {
 
     }
 }
-
-/*
-pipeline {
-    agent any
-
-    stages {
-        stage('Container stop'){
-            steps {
-                //dir('compose'){
-                    sh 'echo "Docker Container Stop"'
-                    sh '''
-                        pwd
-                        docker compose -f /var/jenkins_home/workspace/cyes_pipeline/compose/docker-compose.yml down
-                        '''
-                //}
-            }
-            post {
-                 failure {
-                     sh 'echo "Docker down Fail"'
-                }
-            }
-        }
-
-        //백엔드
-        stage('RM BE Docker'){
-            steps {
-
-                sh 'echo "Remove BE Docker"'
-
-                //정지된 도커 컨테이너 찾아서 컨테이너 ID로 삭제함
-                sh '''
-                    result=$( docker container ls -a --filter "name=*back" -q )
-                    if [ -n "$result" ]
-                        then
-                            docker rm $(docker container ls -a --filter "name=*back" -q)
-                        else
-                            echo "No such containers"
-                        fi
-                '''
-
-                //이미지 삭제 
-                sh '''
-                    result=$( docker images -f "reference=*back" -q )
-                    if [ -n "$result" ]
-                    then
-                        docker rmi -f $(docker images -f "reference=*back" -q)
-                    else
-                        echo "No such container images"
-                    fi
-                '''
-              
-                
-                // 안쓰는이미지 -> <none> 태그 이미지 찾아서 삭제함
-                sh '''
-                    result=$(docker images -f "dangling=true" -q)
-                    if [ -n "$result" ]
-                    then
-                        docker rmi -f $(docker images -f "dangling=true" -q)
-                    else
-                        echo "No such container images"
-                    fi
-                '''
-
-            }
-            post {
-                 failure {
-                     sh 'echo "Remove Backend Fail"'
-                }
-            }
-        }
-
-        //프론트
-        stage('RM FE Docker'){
-            steps {
-
-                sh 'echo "Remove FE Docker"'
-
-                //정지된 도커 컨테이너 찾아서 컨테이너 ID로 삭제함
-                sh '''
-                    result=$( docker container ls -a --filter "name=*front" -q )
-                    if [ -n "$result" ]
-                        then
-                            docker rm $(docker container ls -a --filter "name=*front" -q)
-                        else
-                            echo "No such containers"
-                        fi
-                '''
-
-                //이미지 삭제 
-                sh '''
-                    result=$( docker images -f "reference=*front" -q )
-                    if [ -n "$result" ]
-                    then
-                        docker rmi -f $(docker images -f "reference=*front" -q)
-                    else
-                        echo "No such container images"
-                    fi
-                '''
-              
-                
-                // 안쓰는이미지 -> <none> 태그 이미지 찾아서 삭제함
-                sh '''
-                    result=$(docker images -f "dangling=true" -q)
-                    if [ -n "$result" ]
-                    then
-                        docker rmi -f $(docker images -f "dangling=true" -q)
-                    else
-                        echo "No such container images"
-                    fi
-                '''
-
-            }
-            post {
-                 failure {
-                     sh 'echo "Remove Frontend Fail"'
-                }
-            }
-        }
-
-        // Build BE
-        stage('Build BE') {
-            steps {
-                sh '''
-                    pwd
-                    cd Server/webserver
-                    chmod +x ./gradlew
-                    ./gradlew clean build --exclude-task test
-                '''
-            }
-            post {
-                success {
-                    echo 'gradle backend build success'
-                } 
-                failure {
-                    echo 'gradle backend build failed'
-                }
-            }
-        }
-
-        stage('Move BE Image to Hub') {
-            steps {
-                sh 'echo "Move Start"'
-
-                // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
-                sh '''
-                    cd Server/webserver
-                    docker build --no-cache -t cyes-back .
-                '''
-            }
-            post {
-                // 이미지 전송 성공시
-                success {
-                    sh 'echo "PUSH backend Docker Image Success"'
-                }
-                // 이미지 전송 실패시
-                failure {
-                    sh 'echo "PUSH backend Docker Image Fail"'
-                }
-            }
-        } 
-
-
-        // Build FE
-        stage('Build FE') {
-            steps {
-                sh '''
-                    pwd
-                    cd Front/cyesfront
-                    apt install npm 2>/dev/null
-
-                    npm install
-                    CI=false npm run build
-                '''
-            }
-            post {
-                success {
-                    echo 'gradle frontend build success'
-                } 
-                failure {
-                    echo 'gradle frontend build failed'
-                }
-            }
-        }
-
-        stage('Move FE Image to Hub'){
-            steps {
-                sh 'echo "Move Start"'
-
-                // var/lib/jenkins에서 dockerfile이 있는 곳으로 경로 이동
-                sh '''
-                    cd Front/cyesfront
-                    docker build --no-cache -t cyes-front .
-                '''
-            }
-            post {
-                // 이미지 전송 성공시
-                success {
-                    sh 'echo "PUSH frontend Docker Image Success"'
-                }
-                // 이미지 전송 실패시
-                failure {
-                    sh 'echo "PUSH frontend Docker Image Fail"'
-                }
-            }
-        }
-
-        stage('Deploy Shoot') {
-            steps {
-                sh '''
-                    cd compose/
-                    pwd
-                    docker-compose up -d
-                '''
-            } 
-            post {
-                // 실행 성공시
-                success {
-                    echo 'Deploy Success'
-                }
-                // 실행 실패시
-                failure {
-                    echo 'Deploy Failed'
-                }
-            }
-        }
-    }
-}
-*/
-
