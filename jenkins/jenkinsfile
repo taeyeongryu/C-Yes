@@ -164,8 +164,8 @@ pipeline {
                 sh '''
                     pwd
                     cd Front/cyesfront
-                    chmod +x ./gradlew
-                    ./gradlew clean build --exclude-task test
+                    npm install
+                    CI=false npm run build
                 '''
             }
             post {
