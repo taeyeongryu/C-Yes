@@ -36,12 +36,13 @@ pipeline {
                         then
                             docker stop cyes_back
                             docker rm cyes_back
-                            docker run -d -p 127.0.0.1:5000:5000 --name cyes_back docker-springboot:0.0.1
-                            docker images -f "dangling=true" -q | xargs -r docker rmi
+                           
                         else
                             echo "No such containers"
                         fi
-
+                        
+                    docker run -d -p 127.0.0.1:5000:5000 --name cyes_back docker-springboot:0.0.1
+                    docker images -f "dangling=true" -q | xargs -r docker rmi
                     '''
                 }
             }
