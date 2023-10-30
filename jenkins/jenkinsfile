@@ -2,42 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Prepare') {
-            steps {
-                sh 'echo "Clonning Repository"'
-                git branch: 'release',
-                    url: 'https://lab.ssafy.com/s09-final/S09P31B103.git',
-                    credentialsId: 'a9977ae2-9a36-4b3c-8581-51257ce3358d'
-            }
-            post {
-                success {
-                     sh 'echo "Successfully Cloned Repository"'
-                 }
-                 failure {
-                     sh 'echo "Fail Cloned Repository"'
-                 }
-            }
-        }
-
         stage('Container stop'){
             steps {
                 //dir('compose'){
                     sh 'echo "Docker Container Stop"'
-                    
-                    //도커 컴포즈 다운
-                    sh 'curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose'
-                    // 해당 도커 컴포즈 다운한 경로로 권한 설정
-                     sh 'chmod -R 777 /usr/local/bin'
-                     sh 'chmod +x /usr/local/bin/docker-compose'
-
-                    //도커 다운
-          // Docker 설치
-                  
-                    sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
-                    sh 'sh get-docker.sh'
-                    sh 'usermod -aG docker $USER' // Jenkins 사용자를 Docker 그룹에 추가
-              
-
 
                     sh '''
                         pwd
