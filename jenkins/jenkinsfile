@@ -31,11 +31,11 @@ pipeline {
                      sh 'chmod +x /usr/local/bin/docker-compose'
 
                     //도커 다운
-                    sh 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'
-                    sh 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"'
-                    sh 'apt-get update'
-                    sh 'apt-get install -y docker-ce docker-ce-cli containerd.io'
-                    sh 'usermod -aG docker $USER'
+          // Docker 설치
+                    sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
+                    sh 'sh get-docker.sh'
+                    sh 'usermod -aG docker $USER' // Jenkins 사용자를 Docker 그룹에 추가
+              
 
 
                     sh '''
