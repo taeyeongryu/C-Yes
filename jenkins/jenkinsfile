@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
       //백엔드
-            stage('Springboot build') {
+            stage('BE build') {
                 steps {
                     dir('Server/webserver'){
                         sh '''
@@ -14,7 +14,7 @@ pipeline {
                     }
                 }
             }
-            stage('Dockerimage build') {
+            stage('BE Dockerimage build') {
                 steps {
                     dir('Server/webserver'){
                         sh '''
@@ -24,7 +24,7 @@ pipeline {
                     }
                 }
             }
-            stage('Deploy') {
+            stage('BE Deploy') {
                 steps {
                     dir('Server/webserver'){
 
@@ -61,7 +61,7 @@ pipeline {
                     }
                 }
             }
-            stage('Dockerimage build') {
+            stage('FE Dockerimage build') {
                 steps {
                     dir('Frontend/cyesfront'){
                         sh '''
