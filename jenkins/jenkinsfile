@@ -8,7 +8,7 @@ pipeline {
                     sh 'echo "Docker Container Stop"'
                     sh '''
                         pwd
-                        docker compose -f /var/jenkins/workspace/cyes_pipeline/compose/docker-compose.yml down
+                        docker compose -f /var/jenkins_home/workspace/cyes_pipeline/compose/docker-compose.yml down
                         '''
                 //}
             }
