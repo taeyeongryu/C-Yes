@@ -32,6 +32,7 @@ pipeline {
 
                     //도커 다운
           // Docker 설치
+                    sh 'sudo apt-get install sudo'
                     sh 'curl -fsSL https://get.docker.com -o get-docker.sh'
                     sh 'sh get-docker.sh'
                     sh 'sudo usermod -aG docker $USER' // Jenkins 사용자를 Docker 그룹에 추가
