@@ -26,8 +26,10 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String redisPassword;
 
-    private final String EXPIRATION_PATTERN = "__keyevent@*__:expired";
-
+    /**
+     * redis 연결을 설정
+     */
+    
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         final RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -62,7 +64,7 @@ public class RedisConfig {
     }
 
     /**
-     * MessageListenerAdaper에서는 RedisMessageListenerContainer로부터 메시지를 dispatch 받고,
+     * MessageListenerAdapter에서는 RedisMessageListenerContainer로부터 메시지를 dispatch 받고,
      * 실제 메시지를 처리하는 비즈니스 로직이 담긴 Subscriber Bean을 추가해준다.
      */
     @Bean
