@@ -52,8 +52,10 @@ public class MessageService {
 
     public List<ProblemResponse> startSession(Long quizId) {
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
+        System.out.println("list = " + list);
         // (문제, 정답) 리스트 조회
         List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
+        System.out.println("problemAnswerList = " + problemAnswerList);
         // 클라이언트한테 시작 신호 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
 
@@ -63,7 +65,7 @@ public class MessageService {
     public void sendQuestion(Long quizId, ProblemResponse problem) {
         QuestionMessage questionMessage = QuestionMessage.builder()
                 .sessionId(quizId)
-                .type(SessionMessage.MessageType.QUESTION)
+                .type(SessionMessage.MessageType.PROBLEM)
                 .question(problem.getContentResponse().getQuestion())
                 .build();
 
@@ -114,12 +116,12 @@ public class MessageService {
                 redisTemplate.convertAndSend(topic, message);
                 break;
 
-            case QUESTION:
+            case PROBLEM:
                 // redis에서 문제 꺼내오기
                 String question = getDataFromRedis("ProblemAnswer", "question", cnt);
 
                 QuestionMessage questionMessage = QuestionMessage.builder()
-                        .type(SessionMessage.MessageType.QUESTION)
+                        .type(SessionMessage.MessageType.PROBLEM)
                         .question("아이우에오")
                         .build();
 

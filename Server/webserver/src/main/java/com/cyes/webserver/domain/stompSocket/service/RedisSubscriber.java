@@ -42,7 +42,7 @@ public class RedisSubscriber implements MessageListener {
 
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
-            if (roomMessage.getType().equals(SessionMessage.MessageType.QUESTION)) {
+            if (roomMessage.getType().equals(SessionMessage.MessageType.PROBLEM)) {
                 roomMessage = objectMapper.readValue(publishMessage, QuestionMessage.class);
             } else if (roomMessage.getType().equals(SessionMessage.MessageType.ANSWER)) {
                 roomMessage = objectMapper.readValue(publishMessage, AnswerMessage.class);
