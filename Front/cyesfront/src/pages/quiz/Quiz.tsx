@@ -144,7 +144,7 @@ const Quiz: React.FC = () => {
           // clearInterval(timer);
         }
       } else if (isQuizStarted ) {
-        setProgress(progress + 0.02);
+        setProgress(progress + 0.05);
       }
     }, 0.5); // 0.01초마다 업데이트 (1000 이 1초)
 
