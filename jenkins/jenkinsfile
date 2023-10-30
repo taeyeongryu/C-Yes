@@ -9,7 +9,7 @@ pipeline {
 
                     sh '''
                         pwd
-                        docker-compose -f /var/jenkins/workspace/cyes_pipeline/compose/docker-compose.yml
+                        docker compose -f /var/jenkins/workspace/cyes_pipeline/compose/docker-compose.yml down
                         '''
                 //}
             }
