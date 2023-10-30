@@ -66,7 +66,7 @@ pipeline {
                     dir('Frontend/cyesfront'){
                         sh '''
                             echo 'Dockerimage build'
-                            docker build --no-cache -t cyes_front .
+                            docker build --no-cache -t cyes_front:0.0.1 .
                         '''
                     }
                 }
@@ -87,7 +87,7 @@ pipeline {
                                 echo "No such containers"
                             fi
                             
-                        docker run -d -p 127.0.0.1:9510:80 --name cyes_front 
+                        docker run -d -p 127.0.0.1:9510:80 --name cyes_front cyes_front:0.0.1
                         docker images -f "dangling=true" -q | xargs -r docker rmi
                         '''
                     }
