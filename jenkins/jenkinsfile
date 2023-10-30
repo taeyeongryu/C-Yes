@@ -31,11 +31,10 @@ pipeline {
                         sh '''
                         echo 'Deploy'
 
-                        result=$( docker container ls -a --filter "name=*back" -q )
-                        if [ -n "$result" ]
-                            then
-                                docker stop cyes_back
-                                docker rm cyes_back
+                        result=$( docker container ls -a --filter "name=cyes_back" -q )
+                        if [ -n "$result" ]; then
+                                docker stop $result
+                                docker rm $result
                             
                             else
                                 echo "No such containers"
