@@ -37,30 +37,4 @@ public class ScheduledTaskFactory {
         messageService.endSolve(quizId);
         messageService.sendResult(quizId);
     }
-
-    public void 세션_시작(String quizId){
-        // START
-        log.info("세션 시작 : " + quizId);
-    }
-
-    public void 문제_전송(String quizId, int num){
-        // QUESTION
-        log.info("문제 전송 : {}, 문제 번호 : {} ", quizId, num);
-    }
-
-    public void 답_전송(String quiz, int num){
-        // ANSWER
-        log.info("답 전송 : {}, 문제 번호 : {} ", quiz, num);
-    }
-
-    public void 문제_종료_및_대기(String quiz){
-        // END
-        log.info("문제 종료 및 대기 : {}", quiz);
-    }
-
-    public void 결과_전송(String quiz) throws InterruptedException {
-        //RESULT
-        log.info("결과 전송 : {}", quiz);
-    }
-
 }

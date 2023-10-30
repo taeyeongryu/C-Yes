@@ -52,10 +52,8 @@ public class MessageService {
 
     public List<ProblemResponse> startSession(Long quizId) {
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
-
         // (문제, 정답) 리스트 조회
         List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
-
         // 클라이언트한테 시작 신호 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
 

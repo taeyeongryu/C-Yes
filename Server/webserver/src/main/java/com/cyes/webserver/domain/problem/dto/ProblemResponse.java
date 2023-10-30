@@ -5,15 +5,13 @@ import com.cyes.webserver.domain.problem.dto.problemcontent.response.ProblemCont
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
 import com.cyes.webserver.domain.problem.entity.ProblemType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.IOException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class ProblemResponse {
 
     private String id;

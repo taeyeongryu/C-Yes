@@ -27,8 +27,7 @@ public class ScheduleReserveService {
         String quizIdStr = objectMapper.writeValueAsString(quizId);
         op.set(quizIdStr, "");
 
-        LocalDateTime fiveMinutesBefore = expireTime.minusMinutes(5);
-        Duration expireDuration = Duration.between(LocalDateTime.now(), fiveMinutesBefore);
+        Duration expireDuration = Duration.between(LocalDateTime.now(), expireTime);
 
         stringRedisTemplate.expire(quizIdStr, expireDuration);
     }

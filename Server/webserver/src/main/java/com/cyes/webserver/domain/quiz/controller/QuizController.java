@@ -1,7 +1,7 @@
 package com.cyes.webserver.domain.quiz.controller;
 
 import com.cyes.webserver.domain.quiz.dto.QuizCreateRequest;
-import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToService;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToServiceDto;
 import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import com.cyes.webserver.domain.quiz.service.QuizService;
@@ -31,7 +31,6 @@ public class QuizController {
     private ResponseEntity<QuizInfoResponse> getQuizInfo() {
 
         return ResponseEntity.status(HttpStatus.OK).body(quizService.searchQuiz());
-
     }
 
     /*
@@ -41,10 +40,10 @@ public class QuizController {
     private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) throws JsonProcessingException {
 
         // service로 보내는 Dto로 변환
-        QuizCreateRequestToService quizCreateRequestToService = quizCreateRequest.create();
+        QuizCreateRequestToServiceDto serviceDto = quizCreateRequest.toServiceDto();
 
         // service 호출
-        QuizCreateResponse quizCreateResponse = quizService.createQuiz(quizCreateRequestToService);
+        QuizCreateResponse quizCreateResponse = quizService.createQuiz(serviceDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(quizCreateResponse);
     }
