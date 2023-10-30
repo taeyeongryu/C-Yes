@@ -4,20 +4,14 @@ import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.service.QuizService;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
-
 import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
 import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Instanceof;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
@@ -25,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -83,7 +76,7 @@ public class MessageService {
 
                 QuestionMessage questionMessage = QuestionMessage.builder()
                         .type(SessionMessage.MessageType.QUESTION)
-                        .question(question)
+                        .question("아이우에오")
                         .build();
 
                 // 클라이언트한테 문제 보내기
