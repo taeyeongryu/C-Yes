@@ -14,6 +14,8 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.List;
+
 @Configuration
 public class RedisConfig {
 
@@ -83,6 +85,7 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
         return redisTemplate;
     }
 
