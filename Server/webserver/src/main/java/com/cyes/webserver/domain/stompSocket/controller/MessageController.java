@@ -16,6 +16,9 @@ public class MessageController {
     private final MessageService messageService;
     private final MemberRepository memberRepository;
 
+    /**
+     * 유저 입장 핸들링
+     */
     @MessageMapping("/session/message/enter")
     public void enter(
             SessionMessage message
@@ -23,6 +26,9 @@ public class MessageController {
         messageService.handleEnter(message);
     }
 
+    /**
+     * 유저 정답 제출 핸들링
+     */
     @MessageMapping("/session/message/submit")
     public void submit(
             SubmitMessage message
@@ -30,6 +36,9 @@ public class MessageController {
         messageService.handleSubmit(message);
     }
 
+    /**
+     * 유저 채팅 핸들링
+     */
     @MessageMapping("/session/message/chat")
     public void chat(
             ChatMessage message
