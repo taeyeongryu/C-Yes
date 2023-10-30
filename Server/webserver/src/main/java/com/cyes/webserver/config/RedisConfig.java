@@ -1,7 +1,6 @@
 package com.cyes.webserver.config;
 
 import com.cyes.webserver.domain.stompSocket.service.RedisSubscriber;
-import com.cyes.webserver.redisListener.ExpirationListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +9,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -52,7 +50,6 @@ public class RedisConfig {
     (
         RedisConnectionFactory connectionFactory,
         MessageListenerAdapter listenerAdapter,
-        ExpirationListener expirationListener,
         ChannelTopic channelTopic
     ){
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
@@ -60,8 +57,6 @@ public class RedisConfig {
         container.setConnectionFactory(connectionFactory);
         // 채널 리스너 (소켓 메세지)
         container.addMessageListener(listenerAdapter, channelTopic);
-        // 패턴 리스너 (레디스 expire 패턴)
-        container.addMessageListener(expirationListener, new PatternTopic(EXPIRATION_PATTERN));
 
         return container;
     }

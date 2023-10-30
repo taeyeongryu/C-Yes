@@ -29,6 +29,7 @@ public class TestRedisService {
         op.set(key, object);
         redisTemplate.expire(key, Duration.ofSeconds(expireTime));
 
+
         System.out.println(getObject(key, String.class));
     }
 
