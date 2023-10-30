@@ -4,9 +4,7 @@ import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.service.QuizService;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
-import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
-import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
-import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
+import com.cyes.webserver.domain.stompSocket.dto.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +25,7 @@ import java.util.List;
 public class MessageService {
 
     private final ChannelTopic channelTopic;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final StringRedisTemplate StringRedisTemplate;
     private final QuizProblemRepository quizProblemRepository;
     private final ProblemService problemService;
@@ -51,18 +49,12 @@ public class MessageService {
     }
 
     public List<ProblemResponse> startSession(Long quizId) {
-        log.info("1");
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
-        System.out.println("list = " + list);
         // (문제, 정답) 리스트 조회
-        log.info("2");
-        log.info(list.toString());
         List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
-        System.out.println("problemAnswerList = " + problemAnswerList);
         // 클라이언트한테 시작 신호 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
 
-        log.info(problemAnswerList.toString());
         return problemAnswerList;
     }
 
@@ -99,6 +91,18 @@ public class MessageService {
         SessionMessage resultMessage = new SessionMessage(quizId, SessionMessage.MessageType.RESULT);
 
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
+    }
+
+    public void handleEnter(SessionMessage message) {
+
+    }
+
+    public void handleSubmit(SubmitMessage message){
+
+    }
+
+    public void handleChat(ChatMessage message){
+
     }
 
     public void sendToUsers(SessionMessage message) throws JsonProcessingException {
@@ -151,8 +155,6 @@ public class MessageService {
             case RESULT:
                 redisTemplate.convertAndSend(topic, message);
                 break;
-
-
         }
 
     }
