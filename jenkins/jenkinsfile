@@ -51,7 +51,7 @@ pipeline {
             //프론트 엔드
             stage('FE build') {
                 steps {
-                    dir('Frontend/cyesfront'){
+                    dir('Front/cyesfront'){
                         sh '''
                             pwd
                             echo 'Frontend build'
@@ -65,7 +65,7 @@ pipeline {
             }
             stage('FE Dockerimage build') {
                 steps {
-                    dir('Frontend/cyesfront'){
+                    dir('Front/cyesfront'){
                         sh '''
                             echo 'Dockerimage build'
                             docker build --no-cache -t cyes_front:0.0.1 .
@@ -75,7 +75,7 @@ pipeline {
             }
             stage('FE Deploy') {
                 steps {
-                    dir('Frontend/cyesfront'){
+                    dir('Front/cyesfront'){
 
                         sh '''
                             echo 'FE Deploy'
