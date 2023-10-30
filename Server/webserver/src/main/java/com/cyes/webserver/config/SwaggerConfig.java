@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /*
  * Swagger Address
- * http://{address}:5000/swagger-ui/index.html
+ * http://{address}:5000/api/swagger-ui/index.html
  */
 
 @Configuration
