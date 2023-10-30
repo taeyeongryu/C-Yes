@@ -23,6 +23,11 @@ function Modal(props: ModalProps) {
     // 랭킹 산정 완료 버튼을 클릭하면 랭킹내용 표시
   };
 
+  // showModal이 false일 경우 null 반환
+  if (!showModal) {
+    return null;
+  }
+
   return (
     showModal && (
       <div className="modal">
