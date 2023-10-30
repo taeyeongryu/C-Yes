@@ -47,7 +47,7 @@ pipeline {
                 }
             }
       
-/*
+
         //프론트 엔드
           stage('FE build') {
             steps {
@@ -78,22 +78,21 @@ pipeline {
                     sh '''
                         echo 'FE Deploy'
 
-                        result=$( docker container ls -a --filter "name=*front" -q )
-                        if [ -n "$result" ]
-                            then
-                                docker stop cyes_front
-                                docker rm cyes_front
+                        result=$( docker container ls -a --filter "name=cyes_front" -q )
+                        if [ -n "$result" ]; then
+                                docker stop $result
+                                docker rm $result
                             
                             else
                                 echo "No such containers"
                             fi
                             
-                        docker run -d -p 127.0.0.1:9510:9510 --name cyes_front 
+                        docker run -d -p 127.0.0.1:9510:80 --name cyes_front 
                         docker images -f "dangling=true" -q | xargs -r docker rmi
                     '''
                 }
             }
         }
- */
+ 
     }
 }
