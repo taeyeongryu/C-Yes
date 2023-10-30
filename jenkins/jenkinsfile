@@ -164,7 +164,8 @@ pipeline {
                 sh '''
                     pwd
                     cd Front/cyesfront
-                    apt install npm
+                    apt install npm 2>/dev/null
+
                     npm install
                     CI=false npm run build
                 '''
