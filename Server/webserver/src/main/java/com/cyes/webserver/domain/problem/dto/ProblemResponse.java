@@ -11,7 +11,6 @@ import java.io.IOException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class ProblemResponse {
 
     private String id;
