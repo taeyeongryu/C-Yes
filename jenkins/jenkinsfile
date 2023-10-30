@@ -48,7 +48,7 @@ pipeline {
                 }
             }
       
-
+/*
         //프론트 엔드
           stage('FE build') {
             steps {
@@ -95,6 +95,6 @@ pipeline {
                 }
             }
         }
-
+ */
     }
 }
