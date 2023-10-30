@@ -51,12 +51,14 @@ public class MessageService {
     }
 
     public List<ProblemResponse> startSession(Long quizId) {
+
+        // 퀴즈 문제pk 조회
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
         // (문제, 정답) 리스트 조회
         List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
         // 클라이언트한테 시작 신호 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
-
+        
         return problemAnswerList;
     }
 
@@ -86,12 +88,14 @@ public class MessageService {
 
         SessionMessage endMessage = new SessionMessage(quizId, SessionMessage.MessageType.END);
 
+        // 클라이언트한테 종료 신호 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), endMessage);
     }
 
     public void sendResult(Long quizId) {
         SessionMessage resultMessage = new SessionMessage(quizId, SessionMessage.MessageType.RESULT);
 
+        // 클라이언트한테 결과 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
     }
 
@@ -145,7 +149,6 @@ public class MessageService {
             case RESULT:
                 redisTemplate.convertAndSend(topic, message);
                 break;
-
 
         }
 
