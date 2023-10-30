@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 //MessageListener를 구현해서 이벤트가 발생할 때 실행될 작업을 onMessage를 구현해서 할 수 있다.
 public class RedisSubscriber implements MessageListener {
     private final ObjectMapper objectMapper;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final SimpMessageSendingOperations messagingTemplate;
 
     //Redis로부터 메시지가 도착했을 때 실행되는 메서드
@@ -42,7 +42,7 @@ public class RedisSubscriber implements MessageListener {
 
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
-            if (roomMessage.getType().equals(SessionMessage.MessageType.QUESTION)) {
+            if (roomMessage.getType().equals(SessionMessage.MessageType.PROBLEM)) {
                 roomMessage = objectMapper.readValue(publishMessage, QuestionMessage.class);
             } else if (roomMessage.getType().equals(SessionMessage.MessageType.ANSWER)) {
                 roomMessage = objectMapper.readValue(publishMessage, AnswerMessage.class);

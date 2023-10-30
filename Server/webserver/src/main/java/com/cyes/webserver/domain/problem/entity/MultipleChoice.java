@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Arrays;
+
 @Getter
 @Document
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,5 +36,15 @@ public class MultipleChoice implements ProblemContent{
         this.question = question;
         this.choices = choices;
         this.answer = answer;
+    }
+
+    @Override
+    public String toString() {
+        return "MultipleChoice{" +
+                "id='" + id + '\'' +
+                ", question='" + question + '\'' +
+                ", choices=" + Arrays.toString(choices) +
+                ", answer='" + answer + '\'' +
+                '}';
     }
 }

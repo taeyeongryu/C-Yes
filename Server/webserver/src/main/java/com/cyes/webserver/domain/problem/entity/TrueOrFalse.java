@@ -35,5 +35,12 @@ public class TrueOrFalse implements ProblemContent{
         this.answer = answer;
     }
 
-
+    @Override
+    public String toString() {
+        return "TrueOrFalse{" +
+                "id='" + id + '\'' +
+                ", question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                '}';
+    }
 }

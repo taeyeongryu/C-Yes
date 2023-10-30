@@ -22,6 +22,7 @@ public class ScheduledTaskFactory {
         Long solvableTime = 10000L; // 기본 10초
 
         problems = messageService.startSession(quizId);
+        System.out.println("problems = " + problems);
         Thread.sleep(1000);
 
         for (ProblemResponse problem : problems) {

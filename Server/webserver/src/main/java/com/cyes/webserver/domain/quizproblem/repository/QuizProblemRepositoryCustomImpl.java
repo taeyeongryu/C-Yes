@@ -24,6 +24,7 @@ public class QuizProblemRepositoryCustomImpl implements QuizProblemRepositoryCus
         return jpaQueryFactory
                 .select(qQuizProblem.problemId)
                 .from(qQuizProblem)
+                .where(qQuizProblem.quiz.id.eq(quizId))
                 .fetch();
     }
 }

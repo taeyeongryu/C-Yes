@@ -11,7 +11,6 @@ import java.io.IOException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class ProblemResponse {
 
     private String id;
@@ -40,5 +39,15 @@ public class ProblemResponse {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ProblemResponse{" +
+                "id='" + id + '\'' +
+                ", contentResponse=" + contentResponse +
+                ", category=" + category +
+                ", type=" + type +
+                '}';
     }
 }

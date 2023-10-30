@@ -4,9 +4,7 @@ import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.service.QuizService;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
-import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
-import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
-import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
+import com.cyes.webserver.domain.stompSocket.dto.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +25,7 @@ import java.util.List;
 public class MessageService {
 
     private final ChannelTopic channelTopic;
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final StringRedisTemplate StringRedisTemplate;
     private final QuizProblemRepository quizProblemRepository;
     private final ProblemService problemService;
@@ -63,7 +61,7 @@ public class MessageService {
     public void sendQuestion(Long quizId, ProblemResponse problem) {
         QuestionMessage questionMessage = QuestionMessage.builder()
                 .sessionId(quizId)
-                .type(SessionMessage.MessageType.QUESTION)
+                .type(SessionMessage.MessageType.PROBLEM)
                 .question(problem.getContentResponse().getQuestion())
                 .build();
 
@@ -95,6 +93,18 @@ public class MessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
     }
 
+    public void handleEnter(SessionMessage message) {
+
+    }
+
+    public void handleSubmit(SubmitMessage message){
+
+    }
+
+    public void handleChat(ChatMessage message){
+
+    }
+
     public void sendToUsers(SessionMessage message) throws JsonProcessingException {
 
         String topic = channelTopic.getTopic();
@@ -114,12 +124,12 @@ public class MessageService {
                 redisTemplate.convertAndSend(topic, message);
                 break;
 
-            case QUESTION:
+            case PROBLEM:
                 // redis에서 문제 꺼내오기
                 String question = getDataFromRedis("ProblemAnswer", "question", cnt);
 
                 QuestionMessage questionMessage = QuestionMessage.builder()
-                        .type(SessionMessage.MessageType.QUESTION)
+                        .type(SessionMessage.MessageType.PROBLEM)
                         .question("아이우에오")
                         .build();
 
@@ -145,8 +155,6 @@ public class MessageService {
             case RESULT:
                 redisTemplate.convertAndSend(topic, message);
                 break;
-
-
         }
 
     }
