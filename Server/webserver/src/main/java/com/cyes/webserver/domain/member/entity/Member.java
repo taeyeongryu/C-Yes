@@ -4,6 +4,7 @@ import com.cyes.webserver.common.entity.BaseEntity;
 import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.utils.oauth.enums.OAuthProvider;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -35,7 +36,8 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     private MemberAuthority memberAuthority;
 
     @Column(name = "member_point", nullable = true)
-    private String memberPoint;
+    @ColumnDefault("0")
+    private Integer memberPoint;
 
     @Column(name = "refresh_token", nullable = true)
     private String refreshToken;

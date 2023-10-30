@@ -2,6 +2,7 @@ package com.cyes.webserver.domain.quiz.entity;
 
 import com.cyes.webserver.common.entity.BaseEntity;
 import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,24 +33,33 @@ public class Quiz extends BaseEntity {
     @Column(name = "quiz_start_date", nullable = false)
     private LocalDateTime startDateTime;
 
-    @Column(name = "quiz_link", nullable = false)
-    private String link;
+
 
     @Builder
-    public Quiz(Long id, Member member, String title, LocalDateTime startDateTime, String link) {
+    public Quiz(Long id, Member member, String title, LocalDateTime startDateTime) {
         this.id = id;
         this.member = member;
         this.title = title;
         this.startDateTime = startDateTime;
-        this.link = link;
     }
+
 
     public QuizInfoResponse toQuizInfoResponse() {
         QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
+                .quizId(this.id)
                 .quizTitle(this.title)
-                .quizLink(this.link)
+                .quizStartDate(this.startDateTime)
                 .build();
 
         return quizInfoResponse;
+    }
+
+    public QuizCreateResponse toQuizCreateResponse() {
+        QuizCreateResponse quizCreateResponseByService = QuizCreateResponse.builder()
+                .quizId(this.id)
+                .quizTitle(this.title)
+                .build();
+
+        return quizCreateResponseByService;
     }
 }

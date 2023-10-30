@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -11,23 +12,14 @@ import java.time.LocalDateTime;
 @Builder
 public class QuizInfoResponse {
 
+    private Long quizId;
     private String quizTitle;
-    private String quizLink;
+    private LocalDateTime quizStartDate;
 
     @Builder
-    public QuizInfoResponse(String quizTitle, String quizLink) {
+    public QuizInfoResponse(Long quizId, String quizTitle, LocalDateTime quizStartDate) {
+        this.quizId = quizId;
         this.quizTitle = quizTitle;
-        this.quizLink = quizLink;
+        this.quizStartDate = quizStartDate;
     }
-
-    public QuizInfoResponse create(String title, String link) {
-        QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
-                .quizTitle(title)
-                .quizLink(link)
-                .build();
-
-        return quizInfoResponse;
-    }
-
-
 }
