@@ -20,7 +20,7 @@
 //import static org.assertj.core.api.Assertions.assertThat;
 //
 //
-////@SpringBootTest
+//@SpringBootTest
 //@DataMongoTest
 //class ProblemRepositoryTest {
 //    @Autowired
@@ -31,6 +31,8 @@
 //    private ShortAnswerRepository shortAnswerRepository;
 //    @Autowired
 //    private TrueOrFalseRepository trueOrFalseRepository;
+//
+//
 //
 //    @AfterEach
 //    void tearDown() {
@@ -87,14 +89,14 @@
 //        // given
 //        insertProblemContent();
 //        Pageable pageable1 = PageRequest.of(0, 3); // page는 0-based index입니다.
-////        Pageable pageable2 = PageRequest.of(1, 3); // page는 0-based index입니다.
-////        Pageable pageable3 = PageRequest.of(2, 3); // page는 0-based index입니다.
-////        Pageable pageable4 = PageRequest.of(3, 3); // page는 0-based index입니다.
+//        Pageable pageable2 = PageRequest.of(1, 3); // page는 0-based index입니다.
+//        Pageable pageable3 = PageRequest.of(2, 3); // page는 0-based index입니다.
+//        Pageable pageable4 = PageRequest.of(3, 3); // page는 0-based index입니다.
 //        // when
 //        Page<Problem> problemByCategory1 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable1);
-////        Page<Problem> problemByCategory2 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable2);
-////        Page<Problem> problemByCategory3 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable3);
-////        Page<Problem> problemByCategory4 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable4);
+//        Page<Problem> problemByCategory2 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable2);
+//        Page<Problem> problemByCategory3 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable3);
+//        Page<Problem> problemByCategory4 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable4);
 //        // then
 //        assertThat(problemByCategory1.getContent()).hasSize(3)
 //                .extracting(problem -> problem.getContent(),
@@ -109,99 +111,99 @@
 //
 //    }
 //
-////    @Test
-////    @DisplayName("타입, Pabeable를 조건으로 DB에서 조회한다.")
-////    void findProblemByType() {
-////        // given
-////        insertProblem();
-////        Pageable pageable1 = PageRequest.of(0, 3); // page는 0-based index입니다.
-////        Pageable pageable2 = PageRequest.of(1, 3); // page는 0-based index입니다.
-////        Pageable pageable3 = PageRequest.of(2, 3); // page는 0-based index입니다.
-////        Pageable pageable4 = PageRequest.of(3, 3); // page는 0-based index입니다.
-////        // when
-////        Page<Problem> problemByCategory1 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable1);
-////        Page<Problem> problemByCategory2 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable2);
-////        Page<Problem> problemByCategory3 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable3);
-////        Page<Problem> problemByCategory4 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable4);
-////
-////
-////        // then
-////        assertThat(problemByCategory1.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용0", "문제 답안0", ProblemCategory.DB,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용1", "문제 답안1", ProblemCategory.DB,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용2", "문제 답안2", ProblemCategory.DB,ProblemType.SHORTANSWER)
-////                );
-////        assertThat(problemByCategory2.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용3", "문제 답안3", ProblemCategory.DB,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용4", "문제 답안4", ProblemCategory.DB,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용5", "문제 답안5", ProblemCategory.DB,ProblemType.SHORTANSWER)
-////                );
-////
-////        assertThat(problemByCategory3.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용6", "문제 답안6", ProblemCategory.DB,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용7", "문제 답안7", ProblemCategory.DB,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용8", "문제 답안8", ProblemCategory.DB,ProblemType.SHORTANSWER)
-////                );
-////        assertThat(problemByCategory4.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용9", "문제 답안9", ProblemCategory.DB,ProblemType.SHORTANSWER)
-////                        ,Tuple.tuple("문제 내용20", "문제 답안20", ProblemCategory.OS,ProblemType.SHORTANSWER)
-////                        ,Tuple.tuple("문제 내용21", "문제 답안21", ProblemCategory.OS,ProblemType.SHORTANSWER)
-////                );
-////    }
-////
-////    @Test
-////    @DisplayName("카테고리, 타입, Pabeable를 조건으로 DB에서 조회한다.")
-////    void findProblemByCategoryAndType() {
-////        // given
-////        insertProblemContent();
-////        Pageable pageable1 = PageRequest.of(0, 3); // page는 0-based index입니다.
-////        Pageable pageable2 = PageRequest.of(1, 3); // page는 0-based index입니다.
-////        Pageable pageable3 = PageRequest.of(2, 3); // page는 0-based index입니다.
-////        Pageable pageable4 = PageRequest.of(3, 3); // page는 0-based index입니다.
-////        // when
-////        Page<Problem> problemByCategory1 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable1);
-////        Page<Problem> problemByCategory2 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable2);
-////        Page<Problem> problemByCategory3 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable3);
-////        Page<Problem> problemByCategory4 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable4);
-////
-////
-////        // then
-////        assertThat(problemByCategory1.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용20", "문제 답안20", ProblemCategory.OS,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용21", "문제 답안21", ProblemCategory.OS,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용22", "문제 답안22", ProblemCategory.OS,ProblemType.SHORTANSWER)
-////                );
-////        assertThat(problemByCategory2.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용23", "문제 답안23", ProblemCategory.OS,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용24", "문제 답안24", ProblemCategory.OS,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용25", "문제 답안25", ProblemCategory.OS,ProblemType.SHORTANSWER)
-////                );
-////
-////        assertThat(problemByCategory3.getContent()).hasSize(3)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용26", "문제 답안26", ProblemCategory.OS,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용27", "문제 답안27", ProblemCategory.OS,ProblemType.SHORTANSWER),
-////                        Tuple.tuple("문제 내용28", "문제 답안28", ProblemCategory.OS,ProblemType.SHORTANSWER)
-////                );
-////        assertThat(problemByCategory4.getContent()).hasSize(1)
-////                .extracting("content", "answer", "category","type")
-////                .containsExactlyInAnyOrder(
-////                        Tuple.tuple("문제 내용29", "문제 답안29", ProblemCategory.OS,ProblemType.SHORTANSWER)
-////                );
-////    }
+//    @Test
+//    @DisplayName("타입, Pabeable를 조건으로 DB에서 조회한다.")
+//    void findProblemByType() {
+//        // given
+//        insertProblem();
+//        Pageable pageable1 = PageRequest.of(0, 3); // page는 0-based index입니다.
+//        Pageable pageable2 = PageRequest.of(1, 3); // page는 0-based index입니다.
+//        Pageable pageable3 = PageRequest.of(2, 3); // page는 0-based index입니다.
+//        Pageable pageable4 = PageRequest.of(3, 3); // page는 0-based index입니다.
+//        // when
+//        Page<Problem> problemByCategory1 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable1);
+//        Page<Problem> problemByCategory2 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable2);
+//        Page<Problem> problemByCategory3 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable3);
+//        Page<Problem> problemByCategory4 = problemRepository.findProblemByType(ProblemType.SHORTANSWER, pageable4);
+//
+//
+//        // then
+//        assertThat(problemByCategory1.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용0", "문제 답안0", ProblemCategory.DB,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용1", "문제 답안1", ProblemCategory.DB,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용2", "문제 답안2", ProblemCategory.DB,ProblemType.SHORTANSWER)
+//                );
+//        assertThat(problemByCategory2.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용3", "문제 답안3", ProblemCategory.DB,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용4", "문제 답안4", ProblemCategory.DB,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용5", "문제 답안5", ProblemCategory.DB,ProblemType.SHORTANSWER)
+//                );
+//
+//        assertThat(problemByCategory3.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용6", "문제 답안6", ProblemCategory.DB,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용7", "문제 답안7", ProblemCategory.DB,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용8", "문제 답안8", ProblemCategory.DB,ProblemType.SHORTANSWER)
+//                );
+//        assertThat(problemByCategory4.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용9", "문제 답안9", ProblemCategory.DB,ProblemType.SHORTANSWER)
+//                        ,Tuple.tuple("문제 내용20", "문제 답안20", ProblemCategory.OS,ProblemType.SHORTANSWER)
+//                        ,Tuple.tuple("문제 내용21", "문제 답안21", ProblemCategory.OS,ProblemType.SHORTANSWER)
+//                );
+//    }
+//
+//    @Test
+//    @DisplayName("카테고리, 타입, Pabeable를 조건으로 DB에서 조회한다.")
+//    void findProblemByCategoryAndType() {
+//        // given
+//        insertProblemContent();
+//        Pageable pageable1 = PageRequest.of(0, 3); // page는 0-based index입니다.
+//        Pageable pageable2 = PageRequest.of(1, 3); // page는 0-based index입니다.
+//        Pageable pageable3 = PageRequest.of(2, 3); // page는 0-based index입니다.
+//        Pageable pageable4 = PageRequest.of(3, 3); // page는 0-based index입니다.
+//        // when
+//        Page<Problem> problemByCategory1 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable1);
+//        Page<Problem> problemByCategory2 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable2);
+//        Page<Problem> problemByCategory3 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable3);
+//        Page<Problem> problemByCategory4 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.SHORTANSWER, pageable4);
+//
+//
+//        // then
+//        assertThat(problemByCategory1.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용20", "문제 답안20", ProblemCategory.OS,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용21", "문제 답안21", ProblemCategory.OS,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용22", "문제 답안22", ProblemCategory.OS,ProblemType.SHORTANSWER)
+//                );
+//        assertThat(problemByCategory2.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용23", "문제 답안23", ProblemCategory.OS,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용24", "문제 답안24", ProblemCategory.OS,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용25", "문제 답안25", ProblemCategory.OS,ProblemType.SHORTANSWER)
+//                );
+//
+//        assertThat(problemByCategory3.getContent()).hasSize(3)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용26", "문제 답안26", ProblemCategory.OS,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용27", "문제 답안27", ProblemCategory.OS,ProblemType.SHORTANSWER),
+//                        Tuple.tuple("문제 내용28", "문제 답안28", ProblemCategory.OS,ProblemType.SHORTANSWER)
+//                );
+//        assertThat(problemByCategory4.getContent()).hasSize(1)
+//                .extracting("content", "answer", "category","type")
+//                .containsExactlyInAnyOrder(
+//                        Tuple.tuple("문제 내용29", "문제 답안29", ProblemCategory.OS,ProblemType.SHORTANSWER)
+//                );
+//    }
 //
 //    private void insertProblemContent(){
 //        for (int i = 1; i <=10 ; i++) {
