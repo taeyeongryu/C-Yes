@@ -3,10 +3,18 @@ import BottomNav from "../../components/bottomnav/BottomNav";
 import "./Live.css";
 import CountdownTimer from "../../components/CountdownTimer";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const Live = (props: Props) => {
+  const navigate = useNavigate();
+
+  const enterRoom = () => {
+    // 다른 페이지로 이동
+    navigate("/quiz");
+  };
+
   return (
     <div className="live-container">
       <div className="content">
@@ -20,8 +28,11 @@ const Live = (props: Props) => {
           width="150px"
           height="45px"
           bgColor="#FF5733"
+          bgHover="#853828"
           fontSize="16px"
           fontColor="#FFFFFF"
+          onClick={enterRoom}
+          
         >
           대기실 입장
         </RoundCornerBtn>

@@ -5,12 +5,14 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
+@ToString
 public class AnswerMessage extends SessionMessage{
     String answer;
 
     @Builder
-    public AnswerMessage(String answer) {
+    public AnswerMessage(Long sessionId, MessageType type, String answer) {
+        super(sessionId, type);
         this.answer = answer;
     }
+
 }

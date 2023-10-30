@@ -14,20 +14,20 @@ import lombok.NoArgsConstructor;
 public class TrueOrFalseProblemSaveRequest {
     private TrueOrFalseProblemRequest trueOrFalseProblemRequest;
     private ProblemCategory problemCategory;
-    private ProblemType problemType;
+
 
     @Builder
-    public TrueOrFalseProblemSaveRequest(TrueOrFalseProblemRequest trueOrFalseProblemRequest, ProblemCategory problemCategory, ProblemType problemType) {
+    public TrueOrFalseProblemSaveRequest(TrueOrFalseProblemRequest trueOrFalseProblemRequest, ProblemCategory problemCategory) {
         this.trueOrFalseProblemRequest = trueOrFalseProblemRequest;
         this.problemCategory = problemCategory;
-        this.problemType = problemType;
+
     }
 
     public Problem toEntity(){
         return Problem.builder()
                 .content(this.trueOrFalseProblemRequest.toEntity())
                 .category(this.problemCategory)
-                .type(this.problemType)
+                .type(ProblemType.TRUEORFALSE)
                 .build();
     }
 }

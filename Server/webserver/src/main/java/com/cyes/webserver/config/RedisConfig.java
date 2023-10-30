@@ -1,6 +1,5 @@
 package com.cyes.webserver.config;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.stompSocket.service.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +28,10 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String redisPassword;
 
+    /**
+     * redis 연결을 설정
+     */
+    
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         final RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -49,20 +52,21 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer
     (
-        RedisConnectionFactory connectionFactory,
-        MessageListenerAdapter listenerAdapter,
-        ChannelTopic channelTopic
+            RedisConnectionFactory connectionFactory,
+            MessageListenerAdapter listenerAdapter,
+            ChannelTopic channelTopic
     ){
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
         container.setConnectionFactory(connectionFactory);
+        // 채널 리스너 (소켓 메세지)
         container.addMessageListener(listenerAdapter, channelTopic);
 
         return container;
     }
 
     /**
-     * MessageListenerAdaper에서는 RedisMessageListenerContainer로부터 메시지를 dispatch 받고,
+     * MessageListenerAdapter에서는 RedisMessageListenerContainer로부터 메시지를 dispatch 받고,
      * 실제 메시지를 처리하는 비즈니스 로직이 담긴 Subscriber Bean을 추가해준다.
      */
     @Bean
@@ -81,8 +85,7 @@ public class RedisConfig {
 
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(ProblemResponse.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
 
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
         return redisTemplate;
@@ -90,6 +93,7 @@ public class RedisConfig {
 
     /**
      * Topic 공유를 위해 Channel Topic을 빈으로 등록해 단일화 시켜준다.
+     * Topic이라는 단어보다 Channel이 더 정확한 용어이다.
      */
     @Bean
     public ChannelTopic channelTopic(){

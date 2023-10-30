@@ -13,28 +13,28 @@ import java.util.List;
 @Data
 @Getter
 @Builder
-public class QuizCreateRequestToService {
+public class QuizCreateRequestToServiceDto {
 
     private String quizTitle;
+    private Long memberId;
     private LocalDateTime quizStartDate;
     private List<String> problemList;
 
     @Builder
-    public QuizCreateRequestToService(String quizTitle,LocalDateTime quizStartDate, List<String> problemList) {
+    public QuizCreateRequestToServiceDto(String quizTitle, Long memberId, LocalDateTime quizStartDate, List<String> problemList) {
         this.quizTitle = quizTitle;
+        this.memberId = memberId;
         this.quizStartDate = quizStartDate;
         this.problemList = problemList;
     }
 
     public Quiz toQuizEntity(Member member) {
 
-        Quiz quiz = Quiz.builder()
+        return Quiz.builder()
                 .title(this.quizTitle)
                 .member(member)
                 .startDateTime(this.quizStartDate)
                 .build();
-
-        return quiz;
     }
 
     public QuizProblem toQuizProblemEntity(Quiz quiz, String problemId,int problemNum) {
