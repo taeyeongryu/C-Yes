@@ -1,19 +1,16 @@
 package com.cyes.webserver.domain.quiz.controller;
 
-import com.cyes.webserver.domain.quiz.dto.*;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateRequest;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToService;
+import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
+import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import com.cyes.webserver.domain.quiz.service.QuizService;
-import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.domain.stompSocket.service.MessageService;
-import com.cyes.webserver.exception.CustomException;
-import com.cyes.webserver.exception.CustomExceptionList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -37,31 +34,11 @@ public class QuizController {
 
     }
 
-    @GetMapping("/test/{type}")
-    private void getProblemAnswer(@PathVariable("type") String type) throws JsonProcessingException {
-        SessionMessage sessionMessage = new SessionMessage();
-
-        if(type.equals("START")) {
-            sessionMessage.setType(SessionMessage.MessageType.START);
-        } else if(type.equals("QUESTION")) {
-            sessionMessage.setType(SessionMessage.MessageType.QUESTION);
-        } else if(type.equals("ANSWER")) {
-            sessionMessage.setType(SessionMessage.MessageType.ANSWER);
-        } else if(type.equals("END")){
-            sessionMessage.setType(SessionMessage.MessageType.END);
-        } else if(type.equals("RESULT")) {
-            sessionMessage.setType(SessionMessage.MessageType.RESULT);
-        }
-
-        messageService.sendToUsers(sessionMessage);
-    }
-
-
     /*
     라이브 퀴즈쇼 개설 APi
      */
     @PostMapping
-    private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) {
+    private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) throws JsonProcessingException {
 
         // service로 보내는 Dto로 변환
         QuizCreateRequestToService quizCreateRequestToService = quizCreateRequest.create();

@@ -35,7 +35,7 @@ public class ExpirationListener extends KeyExpirationEventMessageListener {
     public void onMessage(Message message, byte[] pattern) {
         // 예약된 메소드 실행
         try {
-            scheduledTaskFactory.sessionTask(message.toString());
+            scheduledTaskFactory.sessionTask(Long.parseLong(message.toString()));
         } catch (InterruptedException e) {
             throw new CustomException(CustomExceptionList.SCHEDULE_EXE_FAIL_ERROR);
         }

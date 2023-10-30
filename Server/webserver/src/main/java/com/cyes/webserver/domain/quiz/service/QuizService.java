@@ -11,6 +11,8 @@ import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
+import com.cyes.webserver.redisListener.ScheduleReserveService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuizProblemRepository quizProblemRepository;
     private final MemberRepository memberRepository;
+    private final ScheduleReserveService scheduleReserveService;
 
 
     /* 
@@ -43,10 +46,10 @@ public class QuizService {
     /*
     퀴즈 개설
      */
-    public QuizCreateResponse createQuiz(QuizCreateRequestToService quizCreateRequestToService) {
+    public QuizCreateResponse createQuiz(QuizCreateRequestToService quizCreateRequestToService) throws JsonProcessingException {
 
         // TODO 이메일 임시로 하드코딩. 로그인 정보에서 가져와야함.
-        Member member = memberRepository.findByMemberEmail("jjhjjh1159@gmail.com").orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
+        Member member = memberRepository.findByMemberEmail("dntmdqls0912@naver.com").orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
 
         // Dto -> Entity
         Quiz quiz = quizCreateRequestToService.toQuizEntity(member);
@@ -62,6 +65,8 @@ public class QuizService {
             // Insert QuizProblem
             quizProblemRepository.save(quizProblem);
         }
+
+        scheduleReserveService.save(quiz.getId(), quiz.getStartDateTime());
 
         // Entity -> Response Dto
         QuizCreateResponse quizCreateResponse = quiz.toQuizCreateResponse();

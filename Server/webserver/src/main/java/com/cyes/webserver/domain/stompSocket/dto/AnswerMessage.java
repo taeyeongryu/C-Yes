@@ -10,7 +10,7 @@ public class AnswerMessage extends SessionMessage{
     String answer;
 
     @Builder
-    public AnswerMessage(String sessionId, MessageType type, String answer) {
+    public AnswerMessage(Long sessionId, MessageType type, String answer) {
         super(sessionId, type);
         this.answer = answer;
     }

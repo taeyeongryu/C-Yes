@@ -50,6 +50,53 @@ public class MessageService {
         redisTemplate.convertAndSend(topic, message);
     }
 
+    public List<ProblemResponse> startSession(Long quizId) {
+        List<String> list = quizProblemRepository.findQuizProblems(quizId);
+
+        // (문제, 정답) 리스트 조회
+        List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
+
+        // 클라이언트한테 시작 신호 보내기
+        redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
+
+        return problemAnswerList;
+    }
+
+    public void sendQuestion(Long quizId, ProblemResponse problem) {
+        QuestionMessage questionMessage = QuestionMessage.builder()
+                .sessionId(quizId)
+                .type(SessionMessage.MessageType.QUESTION)
+                .question(problem.getContentResponse().getQuestion())
+                .build();
+
+        // 클라이언트한테 문제 보내기
+        redisTemplate.convertAndSend(channelTopic.getTopic(), questionMessage);
+    }
+    
+    public void sendAnswer(Long quizId, ProblemResponse problem) {
+        AnswerMessage answerMessage = AnswerMessage.builder()
+                .sessionId(quizId)
+                .type(SessionMessage.MessageType.ANSWER)
+                .answer(problem.getContentResponse().getAnswer())
+                .build();
+
+        // 클라이언트한테 답 보내기
+        redisTemplate.convertAndSend(channelTopic.getTopic(), answerMessage);
+    }
+
+    public void endSolve(Long quizId){
+
+        SessionMessage endMessage = new SessionMessage(quizId, SessionMessage.MessageType.END);
+
+        redisTemplate.convertAndSend(channelTopic.getTopic(), endMessage);
+    }
+
+    public void sendResult(Long quizId) {
+        SessionMessage resultMessage = new SessionMessage(quizId, SessionMessage.MessageType.RESULT);
+
+        redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
+    }
+
     public void sendToUsers(SessionMessage message) throws JsonProcessingException {
 
         String topic = channelTopic.getTopic();
@@ -71,7 +118,7 @@ public class MessageService {
 
             case QUESTION:
                 // redis에서 문제 꺼내오기
-                String question = getDateFromRedis("ProblemAnswer", "question", cnt);
+                String question = getDataFromRedis("ProblemAnswer", "question", cnt);
 
                 QuestionMessage questionMessage = QuestionMessage.builder()
                         .type(SessionMessage.MessageType.QUESTION)
@@ -84,7 +131,7 @@ public class MessageService {
 
             case ANSWER:
                 // redis에서 문제 꺼내오기
-                String answer = getDateFromRedis("ProblemAnswer", "answer", cnt++);
+                String answer = getDataFromRedis("ProblemAnswer", "answer", cnt++);
 
                 AnswerMessage answerMessage = AnswerMessage.builder()
                         .type(SessionMessage.MessageType.ANSWER)
@@ -106,7 +153,7 @@ public class MessageService {
 
     }
 
-    public String getDateFromRedis(String key, String what, int cnt) throws JsonProcessingException {
+    public String getDataFromRedis(String key, String what, int cnt) throws JsonProcessingException {
 
         String data = StringRedisTemplate.opsForValue().get(key);
         List<ProblemResponse> problemResponseList = objectMapper.readValue(data, new TypeReference<List<ProblemResponse>>() {

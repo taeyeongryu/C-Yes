@@ -1,11 +1,11 @@
 package com.cyes.webserver.redisListener;
 
-import com.cyes.webserver.domain.problem.entity.Problem;
+import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.stompSocket.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -13,26 +13,29 @@ import java.util.List;
 @Slf4j
 public class ScheduledTaskFactory {
 
-    public void sessionTask(String quizId) throws InterruptedException {
+    private final MessageService messageService;
 
-        List<Problem> problems = new ArrayList<>(); // 문제 찾아오기
+
+    public void sessionTask(Long quizId) throws InterruptedException {
+
+        List<ProblemResponse> problems; // 문제 찾아오기
         Long solvableTime = 10000L; // 기본 10초
 
-        세션_시작(quizId);
+        problems = messageService.startSession(quizId);
         Thread.sleep(1000);
 
-        for (Problem problem : problems) {
-            문제_전송(quizId, i);
+        for (ProblemResponse problem : problems) {
+            messageService.sendQuestion(quizId, problem);
             Thread.sleep(solvableTime);
 
-            답_전송(quizId, i);
+            messageService.sendAnswer(quizId, problem);
             Thread.sleep(3000);
         }
 
-        문제_종료_및_대기(quizId);
-        Thread.sleep(1000);
 
-        결과_전송(quizId);
+        Thread.sleep(1000);
+        messageService.endSolve(quizId);
+        messageService.sendResult(quizId);
     }
 
     public void 세션_시작(String quizId){

@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,7 @@ public class RedisSubscriber implements MessageListener {
 
             //stomp Message Broker로 보내는 메서드
             //즉 client에게 보내는 메서드는 이곳이다. MessageService에서는 모두 Redis에 publish하는 것
-            messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getSessionId(), roomMessage);
+            messagingTemplate.convertAndSend("/sub/quiz/session/" + roomMessage.getQuizId(), roomMessage);
 
         } catch (Exception e) {
             throw new CustomException(CustomExceptionList.MESSAGE_NOT_FOUND_ERROR);
