@@ -6,6 +6,7 @@ stages {
         steps {
             dir('Server/webserver'){
                 sh '''
+                pwd
                 echo 'springboot build'
                 chmod +x gradlew
                 ./gradlew clean build
