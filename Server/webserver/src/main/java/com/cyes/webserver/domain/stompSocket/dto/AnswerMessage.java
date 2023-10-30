@@ -14,5 +14,4 @@ public class AnswerMessage extends SessionMessage{
         super(sessionId, type);
         this.answer = answer;
     }
-
 }

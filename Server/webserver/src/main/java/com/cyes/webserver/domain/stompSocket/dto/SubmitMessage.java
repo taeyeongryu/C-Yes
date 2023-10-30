@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SubmitMessage extends SessionMessage{
     Long memberId;
-    String answer;
+    String submit;
 }
