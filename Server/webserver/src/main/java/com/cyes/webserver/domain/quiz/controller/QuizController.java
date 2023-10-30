@@ -37,10 +37,22 @@ public class QuizController {
 
     }
 
-    @GetMapping("/test")
-    private void getProblemAnswer() throws JsonProcessingException {
+    @GetMapping("/test/{type}")
+    private void getProblemAnswer(@PathVariable("type") String type) throws JsonProcessingException {
         SessionMessage sessionMessage = new SessionMessage();
-        sessionMessage.setType(SessionMessage.MessageType.QUESTION);
+
+        if(type.equals("START")) {
+            sessionMessage.setType(SessionMessage.MessageType.START);
+        } else if(type.equals("QUESTION")) {
+            sessionMessage.setType(SessionMessage.MessageType.QUESTION);
+        } else if(type.equals("ANSWER")) {
+            sessionMessage.setType(SessionMessage.MessageType.ANSWER);
+        } else if(type.equals("END")){
+            sessionMessage.setType(SessionMessage.MessageType.END);
+        } else if(type.equals("RESULT")) {
+            sessionMessage.setType(SessionMessage.MessageType.RESULT);
+        }
+
         messageService.sendToUsers(sessionMessage);
     }
 

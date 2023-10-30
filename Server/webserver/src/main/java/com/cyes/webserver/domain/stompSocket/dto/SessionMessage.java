@@ -13,6 +13,7 @@ public class SessionMessage {
     //내용
     private MessageType type;
 
+
     /**
      * ENTER : 세션 접속 메세지
      * TALK : 채팅 메시지
