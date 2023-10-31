@@ -5,6 +5,7 @@ import com.cyes.webserver.domain.stompSocket.dto.ChatMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SubmitMessage;
 import com.cyes.webserver.domain.stompSocket.service.MessageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +28,12 @@ public class MessageController {
     }
 
     /**
-     * 유저 정답 제출 핸들링
+     * 유저 답안 제출 핸들링
      */
     @MessageMapping("/session/message/submit")
     public void submit(
             SubmitMessage message
-    ) {
+    ) throws JsonProcessingException {
         messageService.handleSubmit(message);
     }
 

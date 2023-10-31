@@ -2,6 +2,7 @@ package com.cyes.webserver.redisListener;
 
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -51,7 +52,12 @@ public class ExpirationListener extends KeyExpirationEventMessageListener {
         try {
             scheduledTaskFactory.sessionTask(Long.parseLong(quizId));
         } catch (InterruptedException e) {
+
             throw new CustomException(CustomExceptionList.SCHEDULE_CREATE_FAIL_ERROR);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+
         }
     }
 }
