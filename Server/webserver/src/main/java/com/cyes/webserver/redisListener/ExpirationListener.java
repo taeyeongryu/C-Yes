@@ -45,6 +45,8 @@ public class ExpirationListener extends KeyExpirationEventMessageListener {
     public void onMessage(Message message, byte[] pattern) {
         String key = message.toString();
 
+        System.out.println(key);
+
         if (!key.contains(SCHEDULE_PREFIX)) return;
 
         String quizId = key.replace(SCHEDULE_PREFIX, "");

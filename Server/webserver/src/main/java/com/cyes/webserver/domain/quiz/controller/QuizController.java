@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/quiz")
+@RequestMapping("/api/quiz")
 @RequiredArgsConstructor
 @Tag(name = "퀴즈", description = "퀴즈에 관한 API")
 public class QuizController {
