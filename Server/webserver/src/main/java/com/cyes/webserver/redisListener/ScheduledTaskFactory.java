@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -35,7 +36,7 @@ public class ScheduledTaskFactory {
 
 
         Thread.sleep(1000);
-        messageService.endSolve(quizId);
+        messageService.sendEnd(quizId);
         messageService.sendResult(quizId);
     }
 }
