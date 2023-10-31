@@ -32,7 +32,7 @@ public class Answer {
 
     //퀴즈 내에서 문제 번호
     @Field(name = "problem_number")
-    private Integer problemNumber;
+    private int problemNumber;
 
     //제출 답안
     @Field(name = "submit_content")
@@ -43,7 +43,7 @@ public class Answer {
     private Long duringTime;
 
     @Builder
-    public Answer(String id, Long memberId, Long quizId, Integer problemNumber, String submitContent, Long duringTime) {
+    public Answer(String id, Long memberId, Long quizId, int problemNumber, String submitContent, Long duringTime) {
         this.id = id;
         this.memberId = memberId;
         this.quizId = quizId;
