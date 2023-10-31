@@ -14,10 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path='/login' element={<Login />}/>
-          <Route
-                        path="/login/kakao/callback"
-                        element={<LoginRedir />}
-                    />
+          <Route path="/login/kakao/callback"element={<LoginRedir />}/>
           <Route path='/live' element={<Live />}/>
           <Route path='/quiz' element={<Quiz />}/>
           <Route path='/answer' element={<Answer />}/>
