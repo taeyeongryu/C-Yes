@@ -1,4 +1,4 @@
-export const saveMember = (memberId: number, memberNickname: string, memberAuthority: number) => {
+export const saveMember = (memberId: number, memberNickname: string, memberAuthority: string) => {
     return {
         type: "MEMBER_SAVE",
         payload: {
