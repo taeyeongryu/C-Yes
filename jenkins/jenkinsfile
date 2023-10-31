@@ -58,7 +58,7 @@ pipeline {
                              DEBIAN_FRONTEND=noninteractive apt install -y npm
 
                             npm install
-                            npm run build
+                            CI=false npm run build
                         '''
                     }
                 }
