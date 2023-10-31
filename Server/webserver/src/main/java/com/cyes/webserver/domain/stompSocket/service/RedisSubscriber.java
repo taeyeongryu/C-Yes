@@ -1,7 +1,7 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
 import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
-import com.cyes.webserver.domain.stompSocket.dto.QuestionMessage;
+import com.cyes.webserver.domain.stompSocket.dto.ProblemMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -43,7 +43,7 @@ public class RedisSubscriber implements MessageListener {
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
             if (roomMessage.getType().equals(SessionMessage.MessageType.PROBLEM)) {
-                roomMessage = objectMapper.readValue(publishMessage, QuestionMessage.class);
+                roomMessage = objectMapper.readValue(publishMessage, ProblemMessage.class);
             } else if (roomMessage.getType().equals(SessionMessage.MessageType.ANSWER)) {
                 roomMessage = objectMapper.readValue(publishMessage, AnswerMessage.class);
             }

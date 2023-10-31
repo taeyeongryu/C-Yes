@@ -56,9 +56,19 @@ public class Problem {
 
 
     public ProblemResponse toProblemResponse(){
+        return ProblemResponse.builder()
+                .id(this.id)
+                .contentResponse(this.content.toProblemContentResponse())
+                .category(this.category)
+                .type(this.type)
+                .build();
+    }
+
+    public ProblemResponse toProblemResponse(int problemOrder){
         ProblemResponse problemResponse = ProblemResponse.builder()
                 .id(this.id)
                 .contentResponse(this.content.toProblemContentResponse())
+                .problemOrder(problemOrder)
                 .category(this.category)
                 .type(this.type)
                 .build();
