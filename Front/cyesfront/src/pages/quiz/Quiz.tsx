@@ -131,25 +131,85 @@ const Quiz: React.FC = () => {
     setShowConfirmation(true);
 
     if (currentQuestion < questions.length - 1) {
-        setTimeout(() => {
-          setShowConfirmation(false);
-    
-          // 문제 바뀌는 구간
-          setSubmitted(false);
-          setCurrentQuestion(currentQuestion + 1);
-    
-          // textarea 활성화
-          setIsTextareaEnabled(true);
-          setTextareaValue("");
-    
-          setIsThisQuestionStarted(false);
-          setProgress(0);
-        }, 3000); // 3초 후에 다음 문제로 이동
-      }
+      setTimeout(() => {
+        setShowConfirmation(false);
+
+        // 문제 바뀌는 구간
+        setSubmitted(false);
+        setCurrentQuestion(currentQuestion + 1);
+
+        // textarea 활성화
+        setIsTextareaEnabled(true);
+        setTextareaValue("");
+
+        setIsThisQuestionStarted(false);
+        setProgress(0);
+      }, 3000); // 3초 후에 다음 문제로 이동
+    }
   };
 
   // 웹소켓 연결
+
   const [webSocket, setWebSocket] = useState<Stomp.Client>();
+
+  // redux 에서 가져오기
+  const quizState = useSelector((state: any) => state.quiz.quiz);
+  // console.log("리덕스에서 가져온 quiz: ", quizState);
+  const quizId = quizState.quizId;
+  const submit = quizState.submit;
+  const answer = quizState.answer;
+
+  const memberState = useSelector((state: any) => state.member.member);
+  const memberId = memberState.memberId;
+  //const memberId
+
+  // 메세지 받았을 시 컨트롤 함수
+  const messageHandler = (recv: any) => {
+    switch (recv.type) {
+      case "START":
+        // 문제 받을 준비
+        return;
+
+      case "PROBLEM":
+        // 문제랑 답 숫자를 state에 저장
+        // 문제 출력
+        return;
+
+      case "ANSWER":
+        // 답을 answer redux state에 저장
+        // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
+        return;
+
+      case "END":
+        // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
+        // 계산만 해놓고 기다리기 모달 띄우기
+        return;
+
+      case "RESULT":
+        // 결과를 받아와서 띄우기
+        // 내 총점도 띄우기
+        // 모든 처리 완료 하면
+        webSocket?.disconnect(() => {});
+        return;
+
+      default:
+      // 이건 와서는 안됨. 에러 처리
+    }
+  };
+
+  // 답안 제출 웹소켓 전송
+  const sendSubmit = (data: any) => {
+    webSocket?.send(
+      "/pub/session/message/submit",
+      {},
+      JSON.stringify({
+        quizId: quizId,
+        type: "SUBMIT",
+        memberId: memberId,
+        submit: data,
+      })
+    );
+  };
 
   useEffect(() => {
     // 리덕스 연결해서 정보 가져오면 지워버리세요
@@ -193,21 +253,17 @@ const Quiz: React.FC = () => {
 
     // setWebSocket(ws);
 
-    const sock = new SockJS(`http://localhost:5000/quiz/session`);
+    const sock = new SockJS(`${process.env.REACT_APP_CLIENT_URI}/quiz/session`);
     const ws = Stomp.over(sock);
-
-    const quizId = useSelector((state: any) => state.quiz);
-    
 
     ws.connect(
       {},
       (frame) => {
-        ws.subscribe("/sub/quiz/session/" + sessionId, (message) => {
+        ws.subscribe("/sub/quiz/session/" + quizId, (message) => {
           // recv 콜백 함수
           console.log("메세지 받았다");
           const recvData = JSON.parse(message.body);
           console.log(recvData);
-          //TODO: 메세지 타입별로 처리
           messageHandler(recvData);
         });
         ws.send(
@@ -215,7 +271,7 @@ const Quiz: React.FC = () => {
           {},
           JSON.stringify({
             type: "ENTER",
-            quizId : quizId.current
+            quizId: quizId.current,
           })
         );
         setWebSocket(ws);
@@ -227,8 +283,7 @@ const Quiz: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() =>{
-      console.log(isThisQuestionStarted);
+    const timer = setInterval(() => {
       if (isQuizStarted && progress >= 100) {
         clearInterval(timer);
         if (currentQuestion < questions.length - 1) {
