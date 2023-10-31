@@ -2,8 +2,8 @@ import axios from "axios";
 import setAxiosInterceptor from "./ApiConfig";
 
 const loginApi = axios.create({
-    baseURL: process.env.REACT_APP_SPRING_URL,
-    headers: { "cotent-type": "application/json" },
+    baseURL: process.env.REACT_APP_SPRING_URI,
+    headers: { "content-type": "application/json" },
     timeout: 3000,
 });
 
@@ -15,7 +15,7 @@ export const requestKakaoLoginInfo = async (
     authorizationCode: string | null
 ) => {
     const data = await loginApi
-        .post(`/api/oauth/login/kakao`, {
+        .post(`/oauth/login/kakao`, {
             authorizationCode,
         })
         .then((resp) => {
