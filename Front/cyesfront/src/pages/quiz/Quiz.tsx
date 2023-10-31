@@ -267,7 +267,7 @@ const Quiz: React.FC = () => {
           messageHandler(recvData);
         });
         ws.send(
-          "/pub/session/message/submit",
+          "/pub/session/message/enter",
           {},
           JSON.stringify({
             type: "ENTER",
