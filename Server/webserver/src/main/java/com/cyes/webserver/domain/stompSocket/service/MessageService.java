@@ -101,15 +101,23 @@ public class MessageService {
     }
 
     //client에게 최종 순위를 보내주는 메서드
-    public void sendResult(Long quizId) {
+    public void sendResult(Long quizId, List<ProblemResponse> problemResponseList) {
 
         // Redis에서 해당 퀴즈번호로 제출된 답안 조회
         List<SubmitRedis> list = redisRepository.findByQuizId(quizId);
 
-        SessionMessage resultMessage = new SessionMessage(quizId, SessionMessage.MessageType.RESULT);
+        //채점을 완료해서 순서를 매긴 값의 리스트 이다.
+        List<GradingResult> gradingResultList = getGradingResultList(list, problemResponseList);
 
+        //채점 결과를 담고있는 메시지양
+        SessionMessage resultMessage = ResultMessage.builder()
+                .quizId(quizId)
+                .gradingResultList(gradingResultList)
+                .type(SessionMessage.MessageType.RESULT)
+                .build();
+
+        //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
-
     }
 
 
@@ -157,12 +165,12 @@ public class MessageService {
 
     }
 
-    public List<GradingResult> getGradingResultList(List<Answer> answerList, List<ProblemResponse> problemList) {
+    public List<GradingResult> getGradingResultList(List<SubmitRedis> answerList, List<ProblemResponse> problemList) {
         //key : memgerId, value : 채점 결과
         Map<Long, GradingResult> resultMap = new HashMap<>();
 
         for (int i = 0; i < answerList.size(); i++) {
-            Answer answer = answerList.get(i);
+            SubmitRedis answer = answerList.get(i);
             //제출 답안
             String submit = answer.getSubmitContent();
 
@@ -171,7 +179,7 @@ public class MessageService {
 
 
             //문제 번호
-            Integer problemNumber = answer.getProblemNumber();
+            Integer problemNumber = answer.getProblemOrder();
 
             //문제의 정답
             String problemAnswer = problemList.get(problemNumber - 1).getContentResponse().getAnswer();

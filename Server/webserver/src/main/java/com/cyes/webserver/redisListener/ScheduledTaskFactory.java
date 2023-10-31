@@ -38,6 +38,6 @@ public class ScheduledTaskFactory {
 
         Thread.sleep(1000);
         messageService.sendEnd(quizId);
-        messageService.sendResult(quizId);
+        messageService.sendResult(quizId,problems);
     }
 }

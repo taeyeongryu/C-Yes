@@ -1,19 +1,19 @@
 package com.cyes.webserver.domain.stompSocket.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.cyes.webserver.domain.rank.dto.GradingResult;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResultMessage extends SessionMessage{
 
-    List<String> memberNicknames;
-    Integer myRank;
+    private List<GradingResult> gradingResultList;
 
+    @Builder
+    public ResultMessage(Long quizId, MessageType type, List<GradingResult> gradingResultList) {
+        super(quizId, type);
+        this.gradingResultList = gradingResultList;
+    }
 }
