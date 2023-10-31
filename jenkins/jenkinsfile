@@ -57,7 +57,7 @@ pipeline {
                             echo 'Frontend build'
                              DEBIAN_FRONTEND=noninteractive apt install -y npm
 
-                            npm ci
+                            npm install
                             npm run build
                         '''
                     }
