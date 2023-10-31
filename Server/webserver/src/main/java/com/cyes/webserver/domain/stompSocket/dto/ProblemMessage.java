@@ -8,8 +8,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @ToString
-public class QuestionMessage extends SessionMessage{
+public class ProblemMessage extends SessionMessage{
     String question;
+    Integer order;
     List<String> selections;
 
     public enum QuestionType {
@@ -18,7 +19,7 @@ public class QuestionMessage extends SessionMessage{
 
 
     @Builder
-    public QuestionMessage(Long sessionId, MessageType type, String question, List<String> selections) {
+    public ProblemMessage(Long sessionId, MessageType type, String question, List<String> selections) {
         super(sessionId, type);
         this.question = question;
         this.selections = selections;
