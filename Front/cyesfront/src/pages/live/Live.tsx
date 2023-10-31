@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BottomNav from "../../components/bottomnav/BottomNav";
 import "./Live.css";
 import CountdownTimer from "../../components/CountdownTimer";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux"; 
 
 type Props = {};
 
 const Live = (props: Props) => {
   const navigate = useNavigate();
+  const memberInfo = useSelector((state: any) => state.member);
+
+  useEffect(() => {
+    console.log("redux체크", memberInfo)
+  })
 
   const enterRoom = () => {
     // 다른 페이지로 이동
@@ -32,7 +38,6 @@ const Live = (props: Props) => {
           fontSize="16px"
           fontColor="#FFFFFF"
           onClick={enterRoom}
-          
         >
           대기실 입장
         </RoundCornerBtn>
