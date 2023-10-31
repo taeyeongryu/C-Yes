@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
+import { AxiosInstance } from "axios";
 
 const setAxiosInterceptor = (httpRequest: AxiosInstance) => {
     // TODO : Request Interceptor 설정
@@ -9,7 +9,7 @@ const setAxiosInterceptor = (httpRequest: AxiosInstance) => {
     httpRequest.interceptors.response.use();
 };
 
-async function refreshToken() {}
+// async function refreshToken() {}
 
 // 예전 코드
 // async function refreshToken() {

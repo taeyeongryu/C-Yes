@@ -92,7 +92,7 @@ const Quiz: React.FC = () => {
     const [showModalContent, setShowModalContent] = useState(false);
     const [isQuizStarted, setIsQuizStarted] = useState(false);
 
-    const [isThisQuestionStarted, setIsThisQuestionStarted] = useState(false);;
+    // const [isThisQuestionStarted, setIsThisQuestionStarted] = useState(false);;
 
 
     const handleTextareaChange = (
@@ -125,7 +125,7 @@ const Quiz: React.FC = () => {
 
 
     // 웹소켓 연결
-    const [webSocket, setWebSocket] = useState<Stomp.Client>();
+    // const [webSocket, setWebSocket] = useState<Stomp.Client>();
     let sessionId: string;
     let memberId: number;
     let memberNickname: string;
