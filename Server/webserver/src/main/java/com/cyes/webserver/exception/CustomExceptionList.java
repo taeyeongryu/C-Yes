@@ -18,7 +18,9 @@ public enum CustomExceptionList {
     CATEGORY_OR_TYPE_MUST_REQUIRED(HttpStatus.BAD_REQUEST,"E007", "카테고리, 타입중 적어도 하나가 필요합니다."),
     ALREADY_SUBMIT(HttpStatus.BAD_REQUEST, "E008", "이미 정답을 제출했습니다."),
     PROBLEM_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND,"E009","PROBLEM을 찾을 수 없습니다."),
-    SCHEDULE_EXE_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E010", "스케줄링 작업 테스크를 생성하지 못했습니다.");
+    SCHEDULE_CREATE_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E010", "스케줄링 작업 테스크를 생성하지 못했습니다."),
+    SCHEDULE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E011", "스케줄링 작업 테스크를 찾을 수 없습니다."),
+    SCHEDULE_START_TIME_TOO_EARLY_ERROR(HttpStatus.TOO_EARLY, "E012", "스케줄링 시작 시간이 너무 이릅니다.");
 
 
     private final HttpStatus status;

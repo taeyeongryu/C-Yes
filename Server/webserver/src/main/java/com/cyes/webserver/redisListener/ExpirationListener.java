@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 public class ExpirationListener extends KeyExpirationEventMessageListener {
 
     private final ScheduledTaskFactory scheduledTaskFactory;
+    private final String SCHEDULE_PREFIX = "ScheduledQuizSession_";
 
     /**
      * Creates new {@link MessageListener} for {@code __keyevent@*__:expired} messages.
@@ -31,13 +32,26 @@ public class ExpirationListener extends KeyExpirationEventMessageListener {
         this.scheduledTaskFactory = scheduledTaskFactory;
     }
 
+    /**
+     * Redis의 ExpiredEvent 발생시 실행하는 함수
+     * expired된 객체의 key를 메세지로 받아 quizId를 추출하고, 해당 quizId에 대한
+     * QuizTask를 실행한다.
+     *
+     * @param message message must not be {@literal null}.
+     * @param pattern pattern matching the channel (if specified) - can be {@literal null}.
+     */
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        // 예약된 메소드 실행
+        String key = message.toString();
+
+        if (!key.contains(SCHEDULE_PREFIX)) return;
+
+        String quizId = key.replace(SCHEDULE_PREFIX, "");
+
         try {
-            scheduledTaskFactory.sessionTask(Long.parseLong(message.toString()));
+            scheduledTaskFactory.sessionTask(Long.parseLong(quizId));
         } catch (InterruptedException e) {
-            throw new CustomException(CustomExceptionList.SCHEDULE_EXE_FAIL_ERROR);
+            throw new CustomException(CustomExceptionList.SCHEDULE_CREATE_FAIL_ERROR);
         }
     }
 }

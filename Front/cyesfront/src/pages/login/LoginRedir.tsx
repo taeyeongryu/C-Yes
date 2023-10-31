@@ -1,31 +1,36 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { requestKakaoLoginInfo } from "../../api/LoginAPI";
+import { saveMember } from "../../redux/actions/MemberAction";
+import { useNavigate } from "react-router";
 
 const LoginRedir = () => {
-  const memberState = useSelector((state: any) => state.member);
   const oAuthState = useSelector((state: any) => state.oauth);
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("메롱")
     const Login = async () => {
       let data;
       if (oAuthState.oAuthType === 0) {
-        console.log("여기???");
         const code = new URL(window.location.href).searchParams.get("code");
         data = await requestKakaoLoginInfo(code);
+
+        if (data) {
+          dispatch(saveMember(data.memberId, data.memberNickname, "USER"));
+          navigate('/live');
+        } else {
+          // 데이터가 없거나 에러 발생 시
+          navigate('/');
+        }
+
       } else {
-        console.log("여기?");
         // TODO : NAVER LOGIN
       }
-
-      console.log(data);
     };
 
     Login();
-  }, []);
+  }, [oAuthState, dispatch, navigate]);
 
   return <div>로그인 중 입니다!</div>;
 };

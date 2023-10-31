@@ -2,7 +2,7 @@ interface MemberState {
     member: {
         memberId: number;
         memberNickname: string;
-        memberAuthority: number;
+        memberAuthority: string;
     };
 }
 
@@ -10,7 +10,7 @@ const initialMemberState: MemberState = {
     member: {
         memberId: -1,
         memberNickname: "",
-        memberAuthority: 0,
+        memberAuthority: "",
     },
 };
 
