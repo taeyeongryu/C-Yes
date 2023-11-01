@@ -4,8 +4,9 @@ import "./Live.css";
 import CountdownTimer from "../../components/CountdownTimer";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getMainQuizInfo } from "../../api/QuizAPI";
+import { saveQuizId } from "../../redux/actions/QuizAction";
 
 type Props = {};
 
@@ -25,6 +26,7 @@ const Live = (props: Props) => {
     const [joinable, setJoinable] = useState<boolean>(false);
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const memberInfo = useSelector((state: any) => state.member);
 
     const getLiveInfo = async () => {
@@ -46,6 +48,8 @@ const Live = (props: Props) => {
 
     const enterRoom = () => {
         // 다른 페이지로 이동
+        dispatch(saveQuizId(mainQuiz.quizId));
+
         navigate("/quiz");
     };
 

@@ -260,7 +260,9 @@ const Quiz: React.FC = () => {
         addProblem({ question: "문제1 나간다" });
         addAnswer({ answer: "정답은이거" });
 
-        const sock = new SockJS(`http://localhost:5000/quiz/session`);
+        const sock = new SockJS(
+            `${process.env.REACT_APP_SPRING_URI}quiz/session`
+        );
         const ws = Stomp.over(sock);
 
         ws.connect(

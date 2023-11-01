@@ -1,5 +1,8 @@
-export const getQuizId = () => {
+export const saveQuizId = (quizId: number) => {
     return {
-        type: "GET_QUIZID",
+        type: "QUIZ_SAVEID",
+        payload: {
+            quizId,
+        },
     };
 };
