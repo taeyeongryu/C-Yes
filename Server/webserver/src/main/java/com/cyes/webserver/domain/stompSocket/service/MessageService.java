@@ -137,7 +137,8 @@ public class MessageService {
         SubmitRedis submitRedis = message.ToSubmitRedis(LocalDateTime.parse(getDataFromRedis(getRedisKey(message))));
 
         // redis에 제출 정보 저장
-        setDateExpire(key, submitRedis, Duration.ofMinutes(30));
+        redisRepository.save(submitRedis);
+//        setDateExpire(key, submitRedis, Duration.ofMinutes(30));
     }
 
     public void handleChat(ChatMessage message) {
