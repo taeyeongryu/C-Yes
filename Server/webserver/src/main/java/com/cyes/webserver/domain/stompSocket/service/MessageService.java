@@ -1,18 +1,13 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
-import com.cyes.webserver.domain.Answer.entity.Answer;
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.entity.Problem;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.service.QuizService;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.domain.rank.dto.GradingResult;
 import com.cyes.webserver.domain.stompSocket.dto.*;
 import com.cyes.webserver.domain.stompSocket.repository.RedisRepository;
-import com.cyes.webserver.exception.CustomException;
-import com.cyes.webserver.exception.CustomExceptionList;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

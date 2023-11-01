@@ -13,7 +13,6 @@ import java.util.Optional;
 
 
 @Slf4j
-@Repository
 @RequiredArgsConstructor
 public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
 
@@ -22,20 +21,21 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
 
 
     @Override
-    public Optional<Quiz> findLiveQuiz() {
-
+    public Optional<Quiz> findLiveQuiz(LocalDateTime nowDateTime) {
+        log.info("nowDateTime = {}",nowDateTime);
         QQuiz quiz = QQuiz.quiz;
 
         // 00:00:00 ~ 23:59:59
-        LocalDateTime todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime todayEnd = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999_999_999);
+        LocalDateTime todayStart = nowDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime todayEnd = nowDateTime.withHour(23).withMinute(59).withSecond(59).withNano(999_999_999);
+        log.info("todayStart = {}",todayStart);
+        log.info("todayEnd = {}",todayEnd);
 
         return Optional.ofNullable(jpaQueryFactory
                 .select(quiz)
                 .from(quiz)
-                .where(quiz.createdDateTime.between(todayStart, todayEnd))
-                .orderBy(quiz.createdDateTime.desc())
+                .where(quiz.startDateTime.between(todayStart, todayEnd))
+                .orderBy(quiz.startDateTime.asc())
                 .fetchFirst());
-
     }
 }

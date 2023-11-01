@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class QuizService {
     public QuizInfoResponse searchQuiz() {
 
         // 가장 최근에 생성된 라이브 퀴즈쇼 조회
-        Quiz quiz = quizRepository.findLiveQuiz().orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
+        Quiz quiz = quizRepository.findLiveQuiz(LocalDateTime.now()).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
 
         // Entity -> Dto
         QuizInfoResponse quizInfoResponse = quiz.toQuizInfoResponse();

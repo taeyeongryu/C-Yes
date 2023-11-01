@@ -9,10 +9,11 @@ spring:
         password: ssafy
     jpa:
         hibernate:
-            ddl-auto: none
+            ddl-auto: create
         properties:
             hibernate:
                 format_sql: true
+        show-sql: true
     sql:
         init:
             mode: always
