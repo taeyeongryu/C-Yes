@@ -18,12 +18,11 @@ const LoginRedir = () => {
 
         if (data) {
           dispatch(saveMember(data.memberId, data.memberNickname, "USER"));
-          navigate('/live');
+          navigate("/live");
         } else {
           // 데이터가 없거나 에러 발생 시
-          navigate('/');
+          navigate("/");
         }
-
       } else {
         // TODO : NAVER LOGIN
       }
@@ -32,7 +31,18 @@ const LoginRedir = () => {
     Login();
   }, [oAuthState, dispatch, navigate]);
 
-  return <div>로그인 중 입니다!</div>;
+  return (
+    <div style={centerStyle}>
+      <div>로그인 중 입니다!</div>
+    </div>
+  );
+};
+
+const centerStyle: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  minHeight: "100vh", // 화면의 세로 중앙에 오도록 하는 부분입니다. 필요에 따라 조절할 수 있습니다.
 };
 
 export default LoginRedir;
