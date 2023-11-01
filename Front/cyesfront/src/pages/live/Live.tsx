@@ -59,21 +59,21 @@ const Live = (props: Props) => {
                 <CountdownTimer
                     targetHour={mainQuiz.quizStartDate.getHours()}
                     targetMin={mainQuiz.quizStartDate.getMinutes()}
+                    setJoinable={setJoinable}
                 />
                 <p style={{ fontSize: "26px" }}>{mainQuiz.quizTitle}</p>
-                {joinable && (
-                    <RoundCornerBtn
-                        width="150px"
-                        height="45px"
-                        bgcolor="#FF5733"
-                        bghover="#853828"
-                        fontSize="16px"
-                        fontColor="#FFFFFF"
-                        onClick={enterRoom}
-                    >
-                        대기실 입장
-                    </RoundCornerBtn>
-                )}
+                <RoundCornerBtn
+                    width="150px"
+                    height="45px"
+                    bgcolor={joinable ? "#FF5733" : "#868686"}
+                    bghover="#853828"
+                    fontSize="16px"
+                    fontcolor="#FFFFFF"
+                    onClick={enterRoom}
+                    disabled={!joinable}
+                >
+                    대기실 입장
+                </RoundCornerBtn>
             </div>
             <BottomNav checkCS={false} checkLive={true} checkGroup={false} />
         </div>

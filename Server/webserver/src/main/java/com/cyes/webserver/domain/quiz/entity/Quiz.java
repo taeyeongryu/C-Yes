@@ -58,6 +58,7 @@ public class Quiz extends BaseEntity {
         QuizCreateResponse quizCreateResponseByService = QuizCreateResponse.builder()
                 .quizId(this.id)
                 .quizTitle(this.title)
+                .quizStartDate(this.startDateTime)
                 .build();
 
         return quizCreateResponseByService;
