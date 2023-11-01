@@ -1,13 +1,27 @@
-import { combineReducers } from "@reduxjs/toolkit";
-import oAuthReducer from "./OAuthReducer";
-import memberReducer from "./MemberReducer";
-import quizReducer from "./QuizReducer";
+// rootReducer.js
+import { combineReducers } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage'; // localStorage 사용
 
-// Redux는 하나의 Reducer만 가질 수 있다. 따라서 여러개의 리듀서가 있다면 이를 하나로 합친 rootReducer를 만들면 된다.
+import oAuthReducer from './OAuthReducer';
+import memberReducer from './MemberReducer';
+import quizReducer from './QuizReducer';
+
+// combineReducers를 사용하여 여러 리듀서를 하나로 통합
 const rootReducer = combineReducers({
     oauth: oAuthReducer,
     member: memberReducer,
     quiz: quizReducer
 });
 
-export default rootReducer;
+// Redux Persist 설정
+const persistConfig = {
+    key: 'cyes',
+    storage,
+    whitelist: ['member'] // 지속적으로 저장할 리듀서 이름 목록
+};
+
+// persistedReducer 생성
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export default persistedReducer;

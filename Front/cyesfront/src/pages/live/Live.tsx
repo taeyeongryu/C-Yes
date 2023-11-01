@@ -13,8 +13,8 @@ const Live = (props: Props) => {
   const memberInfo = useSelector((state: any) => state.member);
 
   useEffect(() => {
-    console.log("redux체크", memberInfo)
-  })
+    console.log("현재 Redux Member 상태:", memberInfo);
+  }, [memberInfo]);
 
   const enterRoom = () => {
     // 다른 페이지로 이동
