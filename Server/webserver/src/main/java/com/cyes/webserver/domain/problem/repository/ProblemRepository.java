@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
 
-//@EnableMongoRepositories
+
 public interface ProblemRepository extends MongoRepository<Problem,String> {
     @Query("{ 'problem_category' : ?0 }")
     Page<Problem> findProblemByCategory(ProblemCategory category, Pageable pageable);

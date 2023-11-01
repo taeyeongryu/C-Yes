@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface RedisRepository extends CrudRepository<SubmitRedis,Long> {
-
+    //Test 아직 진행 안함
     List<SubmitRedis> findByQuizId(Long quizId);
 }
