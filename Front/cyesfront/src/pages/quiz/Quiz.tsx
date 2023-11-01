@@ -270,9 +270,7 @@ const Quiz: React.FC = () => {
         // setWebSocket(ws);
 
         // const sock = new SockJS(`${process.env.REACT_APP_CLIENT_URI}/quiz/session`);
-        const sock = new SockJS(
-            `${process.env.REACT_APP_CLIENT_URI}quiz/session`
-        );
+        const sock = new SockJS(`${process.env.REACT_APP_SPRING_URI}/ws/quiz`);
         const ws = Stomp.over(sock);
 
         ws.connect(
