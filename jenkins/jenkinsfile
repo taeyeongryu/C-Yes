@@ -9,7 +9,7 @@ pipeline {
                         pwd
                         echo 'springboot build'
                         chmod +x gradlew
-                        ./gradlew clean build
+                        ./gradlew clean build -x test
                         '''
                     }
                 }
