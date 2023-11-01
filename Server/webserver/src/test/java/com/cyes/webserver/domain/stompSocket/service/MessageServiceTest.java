@@ -8,6 +8,7 @@ import com.cyes.webserver.domain.problem.entity.ProblemType;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.rank.dto.GradingResult;
+import com.cyes.webserver.domain.stompSocket.dto.SubmitRedis;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class MessageServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
         Page<ProblemResponse> problemByCategoryOrType = problemService.findProblemByCategoryOrType(ProblemCategory.NETWORK, null, pageRequest);
         List<ProblemResponse> problemResponseList = problemByCategoryOrType.getContent();
-        List<Answer> answerList = getAnswerList();
+        List<SubmitRedis> answerList = getAnswerList();
 
         // when
         List<GradingResult> gradingResultList = messageService.getGradingResultList(answerList, problemResponseList);
@@ -56,17 +57,17 @@ class MessageServiceTest {
                 );
     }
 
-    private List<Answer> getAnswerList(){
-        List<Answer> arrayList = new ArrayList<>();
-        arrayList.add(Answer.builder().memberId(1L).problemNumber(1).submitContent("소켓").duringTime(2L).build());
-        arrayList.add(Answer.builder().memberId(1L).problemNumber(2).submitContent("프로세스간 통신").duringTime(20L).build());
-        arrayList.add(Answer.builder().memberId(1L).problemNumber(3).submitContent("허브").duringTime(200L).build());
-        arrayList.add(Answer.builder().memberId(2L).problemNumber(1).submitContent("").duringTime(20L).build());
-        arrayList.add(Answer.builder().memberId(2L).problemNumber(2).submitContent("").duringTime(300L).build());
-        arrayList.add(Answer.builder().memberId(2L).problemNumber(3).submitContent("허브").duringTime(210L).build());
-        arrayList.add(Answer.builder().memberId(3L).problemNumber(1).submitContent("소켓").duringTime(250L).build());
-        arrayList.add(Answer.builder().memberId(3L).problemNumber(2).submitContent("프로세스간 통신").duringTime(240L).build());
-        arrayList.add(Answer.builder().memberId(3L).problemNumber(3).submitContent("허브").duringTime(290L).build());
+    private List<SubmitRedis> getAnswerList(){
+        List<SubmitRedis> arrayList = new ArrayList<>();
+        arrayList.add(SubmitRedis.builder().memberId(1L).problemOrder(1).submitContent("소켓").duringTime(2L).build());
+        arrayList.add(SubmitRedis.builder().memberId(1L).problemOrder(2).submitContent("프로세스간 통신").duringTime(20L).build());
+        arrayList.add(SubmitRedis.builder().memberId(1L).problemOrder(3).submitContent("허브").duringTime(200L).build());
+        arrayList.add(SubmitRedis.builder().memberId(2L).problemOrder(1).submitContent("").duringTime(20L).build());
+        arrayList.add(SubmitRedis.builder().memberId(2L).problemOrder(2).submitContent("").duringTime(300L).build());
+        arrayList.add(SubmitRedis.builder().memberId(2L).problemOrder(3).submitContent("허브").duringTime(210L).build());
+        arrayList.add(SubmitRedis.builder().memberId(3L).problemOrder(1).submitContent("소켓").duringTime(250L).build());
+        arrayList.add(SubmitRedis.builder().memberId(3L).problemOrder(2).submitContent("프로세스간 통신").duringTime(240L).build());
+        arrayList.add(SubmitRedis.builder().memberId(3L).problemOrder(3).submitContent("허브").duringTime(290L).build());
         //소켓,프로세스간 통신, 허브
         return arrayList;
     }
