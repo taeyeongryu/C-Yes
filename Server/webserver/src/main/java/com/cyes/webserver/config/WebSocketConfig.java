@@ -26,7 +26,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/quiz/session")
 //                .setAllowedOriginPatterns("http://localhost:9510", "http://localhost:3000", "https://k9b103.p.ssafy.io", "https://cyes.site").withSockJS();
-                .setAllowedOriginPatterns("*").withSockJS();
+                .setAllowedOriginPatterns("http://localhost:9510", "http://localhost:3000", "https://k9b103.p.ssafy.io", "https://cyes.site")
+                .withSockJS();
     }
 
 }
