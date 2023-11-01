@@ -21,10 +21,10 @@ function Modal(props: ModalProps) {
     navigate("/live");
   };
 
-  const handleCompleteClick = () => {
-    toggleContent();
-    // 랭킹 산정 완료 버튼을 클릭하면 랭킹내용 표시
-  };
+  // const handleCompleteClick = () => {
+  //   toggleContent();
+  //   // 랭킹 산정 완료 버튼을 클릭하면 랭킹내용 표시
+  // };
 
   // showModal이 false일 경우 null 반환
   if (!showModal) {
@@ -49,7 +49,7 @@ function Modal(props: ModalProps) {
                 <p>3등 00 </p>
               </div>
 
-              <RoundCornerBtn type="submit" onClick={moveMain} bgHover="black">
+              <RoundCornerBtn type="submit" onClick={moveMain} bghover="black">
                 메인
               </RoundCornerBtn>
             </div>
@@ -62,7 +62,7 @@ function Modal(props: ModalProps) {
 
               <div className="loading-text">순위 산정 중</div>
               <img src="/img/loading.gif" alt="로딩 중" width={60}></img>
-              <button onClick={handleCompleteClick}>산정 완료</button>
+              <button onClick={toggleContent}>산정 완료</button>
             </div>
           )}
         </div>
@@ -168,27 +168,35 @@ const Quiz: React.FC = () => {
     switch (recv.type) {
       case "START":
         // 문제 받을 준비
+                
         return;
 
       case "PROBLEM":
         // 문제랑 답 숫자를 state에 저장
-        // 문제 출력
+
+        // 문제 출력'
+        startThisQuestion();
         return;
 
       case "ANSWER":
         // 답을 answer redux state에 저장
         // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
+        
+        //정답 보여줌
+        handleConfirmAnswer();
         return;
 
       case "END":
         // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
         // 계산만 해놓고 기다리기 모달 띄우기
+        openModal();
         return;
 
       case "RESULT":
         // 결과를 받아와서 띄우기
         // 내 총점도 띄우기
         // 모든 처리 완료 하면
+        toggleContent();
         webSocket?.disconnect(() => {});
         return;
 
@@ -253,7 +261,8 @@ const Quiz: React.FC = () => {
 
     // setWebSocket(ws);
 
-    const sock = new SockJS(`${process.env.REACT_APP_CLIENT_URI}/quiz/session`);
+    // const sock = new SockJS(`${process.env.REACT_APP_CLIENT_URI}/quiz/session`);
+    const sock = new SockJS(`http://localhost:5000/quiz/session`);
     const ws = Stomp.over(sock);
 
     ws.connect(
@@ -313,7 +322,7 @@ const Quiz: React.FC = () => {
             setShowConfirmation(false);
 
             // modal 표시 코드
-            openModal();
+            // openModal();
           }, 3000);
         }
       } else if (isQuizStarted && isThisQuestionStarted) {
@@ -404,8 +413,8 @@ const Quiz: React.FC = () => {
                   <RoundCornerBtn
                     type="submit"
                     onClick={() => toggleSubmit()}
-                    bgColor={submitted ? "#265587" : undefined}
-                    bgHover="#265587"
+                    bgcolor={submitted ? "#265587" : undefined}
+                    bghover="#265587"
                     disabled={submitted}
                   >
                     {submitted ? "제출 완료" : "제출"}
