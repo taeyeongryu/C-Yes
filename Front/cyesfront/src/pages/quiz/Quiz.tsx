@@ -21,12 +21,6 @@ function Modal(props: ModalProps) {
         navigate("/live");
     };
 
-    // const handleCompleteClick = () => {
-    //   toggleContent();
-    //   // 랭킹 산정 완료 버튼을 클릭하면 랭킹내용 표시
-    // };
-
-    // showModal이 false일 경우 null 반환
     if (!showModal) {
         return null;
     }
@@ -171,23 +165,56 @@ const Quiz: React.FC = () => {
     const memberId = memberState.memberId;
     //const memberId
 
+    type QuestionMessage = {
+        question: string;
+        // selections: string[];
+    };
+
+    type AnswerMessage = {
+        answer: string;
+    };
+
+    //문제리스트와 현재 문제 state
+    const [problems, setProblems] = useState<QuestionMessage[]>([]);
+    const [problem, setProblem] = useState<QuestionMessage | null>(null);
+
+    //정답리스트와 현재 정답  state
+    const [answers, setAnswers] = useState<AnswerMessage[]>([]);
+
+    const [thisAnswer, setThisAnswer] = useState<AnswerMessage | null>(null);
+
+    // "PROBLEM" 메시지를 받았을 때 문제를 state에 추가
+    const addProblem = (message: QuestionMessage) => {
+        setProblem(message);
+        setProblems((prevProblems) => [...prevProblems, message]);
+    };
+    // "PROBLEM" 메시지를 받았을 때 문제를 state에 추가
+    const addAnswer = (message: AnswerMessage) => {
+        setThisAnswer(message);
+        setAnswers((prevAnswers) => [...prevAnswers, message]);
+    };
+
     // 메세지 받았을 시 컨트롤 함수
     const messageHandler = (recv: any) => {
+        console.log("받은 msg" + recv);
+
         switch (recv.type) {
             case "START":
                 // 문제 받을 준비
-
+                // 대기실 -> 문제페이지 입성
+                startQuiz();
                 return;
 
             case "PROBLEM":
                 // 문제랑 답 숫자를 state에 저장
-
+                addProblem({ question: `${recv.question}` });
                 // 문제 출력'
                 startThisQuestion();
                 return;
 
             case "ANSWER":
                 // 답을 answer redux state에 저장
+                addAnswer({ answer: `${recv.answer}` });
                 // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
 
                 //정답 보여줌
@@ -196,6 +223,7 @@ const Quiz: React.FC = () => {
 
             case "END":
                 // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
+                sendSubmit(`${answers}`);
                 // 계산만 해놓고 기다리기 모달 띄우기
                 openModal();
                 return;
@@ -228,49 +256,13 @@ const Quiz: React.FC = () => {
     };
 
     useEffect(() => {
-        // 리덕스 연결해서 정보 가져오면 지워버리세요
-        // const ws = new Client({
-        //     brokerURL: `ws://localhost:5000/quiz/session`,
-        //     debug(str) {
-        //         console.log(`debug`, str);
-        //     },
-        //     reconnectDelay: 5000,
-        //     connectionTimeout: 100000,
-        //     heartbeatIncoming: 4000,
-        //     heartbeatOutgoing: 4000,
-        // });
+        // 가짜로 받아오기
+        addProblem({ question: "문제1 나간다" });
+        addAnswer({ answer: "정답은이거" });
 
-        // ws.onConnect = (frame) => {
-        //     ws.subscribe("/sub/quiz/session/" + sessionId, (message) => {
-        //         // recv 콜백 함수
-        //         const recvData = JSON.parse(message.body);
-        //         console.log(recvData);
-        //         //TODO: 메세지 타입별로 처리
-        //     });
-
-        //     ws.publish({
-        //         destination: "/pub/session/message",
-        //         body: JSON.stringify({
-        //             type: "ENTER",
-        //             sessionId: sessionId,
-        //             senderId: memberId,
-        //             senderNickname: memberNickname,
-        //             message: "안녕하세요?",
-        //         }),
-        //     });
-        // };
-
-        // ws.onStompError = (frame) => {
-        //     console.log(`Broker reported Error`, frame.headers.message);
-        //     console.log(`Additional details:${frame.body}`);
-        // };
-
-        // ws.activate();
-
-        // setWebSocket(ws);
-
-        // const sock = new SockJS(`${process.env.REACT_APP_CLIENT_URI}/quiz/session`);
-        const sock = new SockJS(`${process.env.REACT_APP_SPRING_URI}/ws/quiz`);
+        const sock = new SockJS(
+            `${process.env.REACT_APP_SPRING_URI}quiz/session`
+        );
         const ws = Stomp.over(sock);
 
         ws.connect(
@@ -305,22 +297,6 @@ const Quiz: React.FC = () => {
                 clearInterval(timer);
                 if (currentQuestion < questions.length - 1) {
                     setIsTextareaEnabled(false);
-                    //   setShowConfirmation(true);
-
-                    //   setTimeout(() => {
-                    //     setShowConfirmation(false);
-
-                    //     // 문제 바뀌는 구간
-                    //     setSubmitted(false);
-                    //     setCurrentQuestion(currentQuestion + 1);
-
-                    //     // textarea 활성화
-                    //     setIsTextareaEnabled(true);
-                    //     setTextareaValue("");
-
-                    //     setIsThisQuestionStarted(false);
-                    //     setProgress(0);
-                    //   }, 3000); // 3초 후에 다음 문제로 이동
                 } else {
                     // 마지막 문제일 때도 답을 보여주도록 수정
                     setIsTextareaEnabled(false);
@@ -330,7 +306,7 @@ const Quiz: React.FC = () => {
                         setShowConfirmation(false);
 
                         // modal 표시 코드
-                        // openModal();
+                        openModal();
                     }, 3000);
                 }
             } else if (isQuizStarted && isThisQuestionStarted) {
@@ -361,7 +337,8 @@ const Quiz: React.FC = () => {
                             <div className="quiz-content">
                                 {isQuizStarted ? (
                                     isThisQuestionStarted ? (
-                                        questions[currentQuestion].question
+                                        // questions[currentQuestion].question
+                                        problem?.question
                                     ) : (
                                         <div>
                                             <button onClick={startThisQuestion}>
@@ -388,14 +365,16 @@ const Quiz: React.FC = () => {
                                 style={{ display: "flex" }}
                             >
                                 {Array.from({
-                                    length: questions[currentQuestion].answer
-                                        .length,
+                                    // length: questions[currentQuestion].answer.length,
+                                    // length: thisAnswer?.answer.length,
+                                    length: thisAnswer
+                                        ? thisAnswer.answer.length
+                                        : 0,
                                 }).map((_, index) => (
                                     <div key={index} className="square">
                                         {showConfirmation
-                                            ? questions[currentQuestion].answer[
-                                                  index
-                                              ]
+                                            ? // ? questions[currentQuestion].answer[index]
+                                              thisAnswer?.answer[index]
                                             : null}
                                     </div>
                                 ))}
