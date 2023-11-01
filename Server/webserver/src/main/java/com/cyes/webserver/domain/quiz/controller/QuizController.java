@@ -61,4 +61,9 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.OK).body(quizCreateResponse);
     }
 
+    @GetMapping("/test")
+    private String testRedis() {
+        return "1";
+    }
+
 }
