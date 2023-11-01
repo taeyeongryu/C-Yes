@@ -15,12 +15,14 @@ public class ProblemResponse {
 
     private String id;
     private ProblemContentResponse contentResponse;
+    private Integer problemOrder;
     private ProblemCategory category;
     private ProblemType type;
 
     @Builder
-    public ProblemResponse(String id, ProblemContentResponse contentResponse, String category, String type) {
+    public ProblemResponse(String id, Integer problemOrder, ProblemContentResponse contentResponse, String category, String type) {
         this.id = id;
+        this.problemOrder = problemOrder;
         this.contentResponse = contentResponse;
         this.category = ProblemCategory.valueOf(category);
         this.type = ProblemType.valueOf(type);

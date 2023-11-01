@@ -11,12 +11,12 @@ public class AnswerResponse {
     private String id;
     private Long memberId;
     private Long quizId;
-    private Integer problemNumber;
+    private int problemNumber;
     private String submitContent;
     private Long duringTime;
 
     @Builder
-    public AnswerResponse(String id, Long memberId, Long quizId, Integer problemNumber, String submitContent, Long duringTime) {
+    public AnswerResponse(String id, Long memberId, Long quizId, int problemNumber, String submitContent, Long duringTime) {
         this.id = id;
         this.memberId = memberId;
         this.quizId = quizId;

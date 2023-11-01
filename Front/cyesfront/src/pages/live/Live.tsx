@@ -33,8 +33,8 @@ const Live = (props: Props) => {
         <RoundCornerBtn
           width="150px"
           height="45px"
-          bgColor="#FF5733"
-          bgHover="#853828"
+          bgcolor="#FF5733"
+          bghover="#853828"
           fontSize="16px"
           fontColor="#FFFFFF"
           onClick={enterRoom}

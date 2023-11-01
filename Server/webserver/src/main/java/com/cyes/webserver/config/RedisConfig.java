@@ -11,12 +11,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.List;
 
 @Configuration
+@EnableRedisRepositories(basePackages = "com.cyes.webserver.domain.stompSocket.repository")
 public class RedisConfig {
 
     @Value("${spring.redis.host}")
@@ -31,14 +33,14 @@ public class RedisConfig {
     /**
      * redis 연결을 설정
      */
-    
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         final RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
         redisStandaloneConfiguration.setPort(redisPort);
 
-        if (redisPassword != null && !redisPassword.isEmpty()){
+        if (redisPassword != null && !redisPassword.isEmpty()) {
             redisStandaloneConfiguration.setPassword(redisPassword);
         }
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
@@ -55,7 +57,7 @@ public class RedisConfig {
             RedisConnectionFactory connectionFactory,
             MessageListenerAdapter listenerAdapter,
             ChannelTopic channelTopic
-    ){
+    ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 
         container.setConnectionFactory(connectionFactory);
@@ -80,7 +82,7 @@ public class RedisConfig {
      * Json 포맷 형식으로 메시지를 교환하기 위해 ValueSerializer에 Jackson2JsonRedisSerializer로 설정해준다.
      */
     @Bean
-    public RedisTemplate<String, Object> redisTemplate (RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
         redisTemplate.setConnectionFactory(connectionFactory);
@@ -96,7 +98,7 @@ public class RedisConfig {
      * Topic이라는 단어보다 Channel이 더 정확한 용어이다.
      */
     @Bean
-    public ChannelTopic channelTopic(){
+    public ChannelTopic channelTopic() {
         return new ChannelTopic("session");
     }
 }

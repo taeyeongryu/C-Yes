@@ -51,4 +51,5 @@ class AnswerTest {
         assertThat(answer).extracting("id", "memberId", "quizId", "problemNumber", "submitContent")
                 .containsExactly(id, memberId, quizId, problemNumber, submitContent);
     }
+
 }

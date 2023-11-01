@@ -165,8 +165,9 @@ public class ProblemService {
     //문제 갯수, 카테고리, 입력받아서 랜덤으로 조회
     private List<ProblemResponse> toProblemResponseList(Iterable<Problem> problemList){
         List<ProblemResponse> list = new ArrayList<>();
+        int problemOrder = 1;
         for (Problem problem : problemList) {
-            list.add(problem.toProblemResponse());
+            list.add(problem.toProblemResponse(problemOrder++));
         }
         return list;
     }

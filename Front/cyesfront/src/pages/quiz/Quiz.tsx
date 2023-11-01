@@ -4,6 +4,7 @@ import RoundCornerBtn from "../../components/RoundCornerBtn";
 import "./Quiz.css";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { useSelector } from "react-redux";
 
 interface ModalProps {
     showModal: boolean;
@@ -20,10 +21,10 @@ function Modal(props: ModalProps) {
         navigate("/live");
     };
 
-    const handleCompleteClick = () => {
-        toggleContent();
-        // 랭킹 산정 완료 버튼을 클릭하면 랭킹내용 표시
-    };
+    // const handleCompleteClick = () => {
+    //   toggleContent();
+    //   // 랭킹 산정 완료 버튼을 클릭하면 랭킹내용 표시
+    // };
 
     // showModal이 false일 경우 null 반환
     if (!showModal) {
@@ -48,7 +49,11 @@ function Modal(props: ModalProps) {
                                 <p>3등 00 </p>
                             </div>
 
-                            <RoundCornerBtn type="submit" onClick={moveMain} bgHover="black">
+                            <RoundCornerBtn
+                                type="submit"
+                                onClick={moveMain}
+                                bghover="black"
+                            >
                                 메인
                             </RoundCornerBtn>
                         </div>
@@ -60,8 +65,12 @@ function Modal(props: ModalProps) {
                             </div>
 
                             <div className="loading-text">순위 산정 중</div>
-                            <img src="/img/loading.gif" alt="로딩 중" width={60}></img>
-                            <button onClick={handleCompleteClick}>산정 완료</button>
+                            <img
+                                src="/img/loading.gif"
+                                alt="로딩 중"
+                                width={60}
+                            ></img>
+                            <button onClick={toggleContent}>산정 완료</button>
                         </div>
                     )}
                 </div>
@@ -92,8 +101,7 @@ const Quiz: React.FC = () => {
     const [showModalContent, setShowModalContent] = useState(false);
     const [isQuizStarted, setIsQuizStarted] = useState(false);
 
-    // const [isThisQuestionStarted, setIsThisQuestionStarted] = useState(false);;
-
+    const [isThisQuestionStarted, setIsThisQuestionStarted] = useState(false);
 
     const handleTextareaChange = (
         event: React.ChangeEvent<HTMLTextAreaElement>
@@ -105,6 +113,9 @@ const Quiz: React.FC = () => {
         setIsQuizStarted(true);
     };
 
+    const startThisQuestion = () => {
+        setIsThisQuestionStarted(true);
+    };
     const toggleSubmit = () => {
         //여기서 backend랑 통신하면 댈듯
         if (!submitted) {
@@ -123,19 +134,101 @@ const Quiz: React.FC = () => {
         setShowModal(true);
     };
 
+    const handleConfirmAnswer = () => {
+        // 정답 확인 버튼을 눌렀을 때
+        setShowConfirmation(true);
+
+        if (currentQuestion < questions.length - 1) {
+            setTimeout(() => {
+                setShowConfirmation(false);
+
+                // 문제 바뀌는 구간
+                setSubmitted(false);
+                setCurrentQuestion(currentQuestion + 1);
+
+                // textarea 활성화
+                setIsTextareaEnabled(true);
+                setTextareaValue("");
+
+                setIsThisQuestionStarted(false);
+                setProgress(0);
+            }, 3000); // 3초 후에 다음 문제로 이동
+        }
+    };
 
     // 웹소켓 연결
-    // const [webSocket, setWebSocket] = useState<Stomp.Client>();
-    let sessionId: string;
-    let memberId: number;
-    let memberNickname: string;
+
+    const [webSocket, setWebSocket] = useState<Stomp.Client>();
+
+    // redux 에서 가져오기
+    const quizState = useSelector((state: any) => state.quiz.quiz);
+    // console.log("리덕스에서 가져온 quiz: ", quizState);
+    const quizId = quizState.quizId;
+    const submit = quizState.submit;
+    const answer = quizState.answer;
+
+    const memberState = useSelector((state: any) => state.member.member);
+    const memberId = memberState.memberId;
+    //const memberId
+
+    // 메세지 받았을 시 컨트롤 함수
+    const messageHandler = (recv: any) => {
+        switch (recv.type) {
+            case "START":
+                // 문제 받을 준비
+
+                return;
+
+            case "PROBLEM":
+                // 문제랑 답 숫자를 state에 저장
+
+                // 문제 출력'
+                startThisQuestion();
+                return;
+
+            case "ANSWER":
+                // 답을 answer redux state에 저장
+                // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
+
+                //정답 보여줌
+                handleConfirmAnswer();
+                return;
+
+            case "END":
+                // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
+                // 계산만 해놓고 기다리기 모달 띄우기
+                openModal();
+                return;
+
+            case "RESULT":
+                // 결과를 받아와서 띄우기
+                // 내 총점도 띄우기
+                // 모든 처리 완료 하면
+                toggleContent();
+                webSocket?.disconnect(() => {});
+                return;
+
+            default:
+            // 이건 와서는 안됨. 에러 처리
+        }
+    };
+
+    // 답안 제출 웹소켓 전송
+    const sendSubmit = (data: any) => {
+        webSocket?.send(
+            "/pub/session/message/submit",
+            {},
+            JSON.stringify({
+                quizId: quizId,
+                type: "SUBMIT",
+                memberId: memberId,
+                submit: data,
+            })
+        );
+    };
 
     useEffect(() => {
         // 리덕스 연결해서 정보 가져오면 지워버리세요
-        sessionId = "0";
-        memberId = 1;
-        memberNickname = "고멤";
-
         // const ws = new Client({
         //     brokerURL: `ws://localhost:5000/quiz/session`,
         //     debug(str) {
@@ -176,30 +269,31 @@ const Quiz: React.FC = () => {
 
         // setWebSocket(ws);
 
-        const sock = new SockJS(`http://localhost:5000/quiz/session`);
+        // const sock = new SockJS(`${process.env.REACT_APP_CLIENT_URI}/quiz/session`);
+        const sock = new SockJS(
+            `${process.env.REACT_APP_CLIENT_URI}quiz/session`
+        );
         const ws = Stomp.over(sock);
 
         ws.connect(
             {},
             (frame) => {
-                ws.subscribe("/sub/quiz/session/" + sessionId, (message) => {
+                ws.subscribe("/sub/quiz/session/" + quizId, (message) => {
                     // recv 콜백 함수
                     console.log("메세지 받았다");
                     const recvData = JSON.parse(message.body);
                     console.log(recvData);
-                    //TODO: 메세지 타입별로 처리
+                    messageHandler(recvData);
                 });
                 ws.send(
-                    "/pub/session/message/submit",
+                    "/pub/session/message/enter",
                     {},
                     JSON.stringify({
                         type: "ENTER",
-                        sessionId: sessionId,
-                        senderId: memberId,
-                        senderNickname: memberNickname,
-                        message: "안녕하세요?",
+                        quizId: quizId.current,
                     })
                 );
+                setWebSocket(ws);
             },
             (err) => {
                 console.log(err);
@@ -207,42 +301,55 @@ const Quiz: React.FC = () => {
         );
     }, []);
 
-
     useEffect(() => {
         const timer = setInterval(() => {
             if (isQuizStarted && progress >= 100) {
                 clearInterval(timer);
                 if (currentQuestion < questions.length - 1) {
                     setIsTextareaEnabled(false);
-                    setShowConfirmation(true);
+                    //   setShowConfirmation(true);
+
+                    //   setTimeout(() => {
+                    //     setShowConfirmation(false);
+
+                    //     // 문제 바뀌는 구간
+                    //     setSubmitted(false);
+                    //     setCurrentQuestion(currentQuestion + 1);
+
+                    //     // textarea 활성화
+                    //     setIsTextareaEnabled(true);
+                    //     setTextareaValue("");
+
+                    //     setIsThisQuestionStarted(false);
+                    //     setProgress(0);
+                    //   }, 3000); // 3초 후에 다음 문제로 이동
+                } else {
+                    // 마지막 문제일 때도 답을 보여주도록 수정
+                    setIsTextareaEnabled(false);
+                    //setShowConfirmation(true);
 
                     setTimeout(() => {
                         setShowConfirmation(false);
 
-                        // 문제 바뀌는 구간
-                        setSubmitted(false);
-                        setCurrentQuestion(currentQuestion + 1);
-
-                        //textarea 활성화
-                        setIsTextareaEnabled(true);
-                        setTextareaValue("");
-
-                        setProgress(0);
-                    }, 3000); // 3초 후에 다음 문제로 이동
-                } else {
-                    // setShowEndPage(true);
-                    openModal();
-                    // clearInterval(timer);
+                        // modal 표시 코드
+                        // openModal();
+                    }, 3000);
                 }
-            } else if (isQuizStarted ) {
-                setProgress(progress + 0.02);
+            } else if (isQuizStarted && isThisQuestionStarted) {
+                setProgress(progress + 0.2);
             }
         }, 0.5); // 0.01초마다 업데이트 (1000 이 1초)
 
         return () => {
             clearInterval(timer);
         };
-    }, [progress, currentQuestion, questions, isQuizStarted]);
+    }, [
+        progress,
+        currentQuestion,
+        questions,
+        isQuizStarted,
+        isThisQuestionStarted,
+    ]);
 
     return (
         <div className="container">
@@ -255,11 +362,21 @@ const Quiz: React.FC = () => {
                         <div className="quiz">
                             <div className="quiz-content">
                                 {isQuizStarted ? (
-                                    questions[currentQuestion].question
+                                    isThisQuestionStarted ? (
+                                        questions[currentQuestion].question
+                                    ) : (
+                                        <div>
+                                            <button onClick={startThisQuestion}>
+                                                문제 도착
+                                            </button>
+                                        </div>
+                                    )
                                 ) : (
                                     <div>
                                         <div>대기 중</div>
-                                        <button onClick={startQuiz}>시작하기</button>
+                                        <button onClick={startQuiz}>
+                                            시작하기
+                                        </button>
                                     </div>
                                 )}
                             </div>
@@ -267,65 +384,93 @@ const Quiz: React.FC = () => {
                     </div>
 
                     <div>
-                        {isQuizStarted && (
-                            <div className="answer-box" style={{ display: "flex" }}>
+                        {isQuizStarted && isThisQuestionStarted ? (
+                            <div
+                                className="answer-box"
+                                style={{ display: "flex" }}
+                            >
                                 {Array.from({
-                                    length: questions[currentQuestion].answer.length,
+                                    length: questions[currentQuestion].answer
+                                        .length,
                                 }).map((_, index) => (
                                     <div key={index} className="square">
                                         {showConfirmation
-                                            ? questions[currentQuestion].answer[index]
+                                            ? questions[currentQuestion].answer[
+                                                  index
+                                              ]
                                             : null}
                                     </div>
                                 ))}
                             </div>
+                        ) : (
+                            <div></div>
                         )}
                     </div>
                     {isQuizStarted ? (
-                        <div className="input-content">
-                            <div>
-                <textarea
-                    ref={answerInput}
-                    id="answer-input"
-                    name="content"
-                    value={textareaValue}
-                    onChange={handleTextareaChange}
-                    disabled={!isTextareaEnabled} // 비활성화 상태 조절
-                    style={{
-                        backgroundColor: isTextareaEnabled ? "white" : "lightgray", // 배경색 제어
-                        color: isTextareaEnabled ? "black" : "gray", // 텍스트 색상 제어
-                    }}
-                    placeholder={isTextareaEnabled ? "입력하세요" : " "} // placeholder 설정
-                />
-                            </div>
+                        isThisQuestionStarted ? (
+                            // questions[currentQuestion].question
 
-                            <div>
-                                <RoundCornerBtn
-                                    type="submit"
-                                    onClick={() => toggleSubmit()}
-                                    bgColor={submitted ? "#265587" : undefined}
-                                    bgHover="#265587"
-                                    disabled={submitted}
-                                >
-                                    {submitted ? "제출 완료" : "제출"}
-                                </RoundCornerBtn>
+                            <div className="input-content">
+                                <div>
+                                    <textarea
+                                        ref={answerInput}
+                                        id="answer-input"
+                                        name="content"
+                                        value={textareaValue}
+                                        onChange={handleTextareaChange}
+                                        disabled={!isTextareaEnabled} // 비활성화 상태 조절
+                                        style={{
+                                            backgroundColor: isTextareaEnabled
+                                                ? "white"
+                                                : "lightgray", // 배경색 제어
+                                            color: isTextareaEnabled
+                                                ? "black"
+                                                : "gray", // 텍스트 색상 제어
+                                        }}
+                                        placeholder={
+                                            isTextareaEnabled
+                                                ? "입력하세요"
+                                                : " "
+                                        } // placeholder 설정
+                                    />
+                                </div>
+
+                                <div>
+                                    <RoundCornerBtn
+                                        type="submit"
+                                        onClick={() => toggleSubmit()}
+                                        bgcolor={
+                                            submitted ? "#265587" : undefined
+                                        }
+                                        bghover="#265587"
+                                        disabled={submitted}
+                                    >
+                                        {submitted ? "제출 완료" : "제출"}
+                                    </RoundCornerBtn>
+                                </div>
+
+                                <div>
+                                    {/* <button onClick={startThisQuestion}>서버 연결</button> */}
+                                    <button onClick={handleConfirmAnswer}>
+                                        정답 도착
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div></div>
+                        )
                     ) : (
                         <div>
-                            <textarea placeholder="퀴즈가 곧 시작합니다!" disabled />
+                            <textarea
+                                placeholder="퀴즈가 곧 시작합니다!"
+                                disabled
+                            />
                         </div>
                     )}
                 </div>
 
                 <div>
                     <ProgressBar progress={progress} />
-                </div>
-                <p></p>
-                <div>
-                    <button  >서버 연결</button>
-
-                    <button >정답 확인</button>
                 </div>
             </div>
 

@@ -56,9 +56,19 @@ public class Problem {
 
 
     public ProblemResponse toProblemResponse(){
+        return ProblemResponse.builder()
+                .id(this.id)
+                .contentResponse(this.content.toProblemContentResponse())
+                .category(this.category)
+                .type(this.type)
+                .build();
+    }
+
+    public ProblemResponse toProblemResponse(int problemOrder){
         ProblemResponse problemResponse = ProblemResponse.builder()
                 .id(this.id)
                 .contentResponse(this.content.toProblemContentResponse())
+                .problemOrder(problemOrder)
                 .category(this.category)
                 .type(this.type)
                 .build();
@@ -74,7 +84,7 @@ public class Problem {
                 ", type='" + type + '\'' +
                 '}';
     }
-    //    public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+//        public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
 //        this.content = problemUpdateServiceRequest.getContent();
 //        this.answer = problemUpdateServiceRequest.getAnswer();
 //        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());

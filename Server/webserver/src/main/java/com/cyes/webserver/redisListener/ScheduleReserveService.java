@@ -39,6 +39,8 @@ public class ScheduleReserveService {
         String quizIdStr = SCHEDULE_PREFIX + quizId;
         op.set(quizIdStr, "");
 
+        stringRedisTemplate.keys("*");
+
         Duration expireDuration = Duration.between(LocalDateTime.now(), expireTime);
 
         stringRedisTemplate.expire(quizIdStr, expireDuration);
