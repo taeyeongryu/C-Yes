@@ -1,10 +1,10 @@
 package com.cyes.webserver.domain.quiz.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,6 +14,7 @@ public class QuizInfoResponse {
 
     private Long quizId;
     private String quizTitle;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime quizStartDate;
 
     @Builder

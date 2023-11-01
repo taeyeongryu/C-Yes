@@ -7,8 +7,6 @@ const loginApi = axios.create({
     timeout: 3000,
 });
 
-setAxiosInterceptor(loginApi);
-
 // TODO: API 요청 시 토큰 넣어서 보내야함
 
 export const requestKakaoLoginInfo = async (
