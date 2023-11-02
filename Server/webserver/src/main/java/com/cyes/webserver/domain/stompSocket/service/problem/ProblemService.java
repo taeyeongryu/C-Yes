@@ -37,6 +37,7 @@ public class ProblemService {
                 .build();
 
         // 클라이언트한테 문제 보내기
+        System.out.println("문제 전달");
         redisTemplate.convertAndSend(channelTopic.getTopic(), problemMessage);
 
         /* Redis에 특정 문제를 보낸 시간을 저장한다. */
