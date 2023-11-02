@@ -20,7 +20,7 @@ public class ScheduledTaskFactory {
     public void quizProcedureTask(Long quizId) throws InterruptedException, JsonProcessingException {
 
         List<ProblemResponse> problems; // 문제 찾아오기
-        long solvableTime = 20000L; // 기본 10초
+        long solvableTime = 20000L; // 기본 20초
 
         problems = messageService.startSession(quizId);
         System.out.println("problems = " + problems);
