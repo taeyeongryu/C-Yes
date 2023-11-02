@@ -135,7 +135,6 @@ public class MessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
     }
 
-
     /**
      * 해당 퀴즈로 제출된 답안 List 조회하는 메서드
      * @param quizId (퀴즈 정보)
@@ -298,7 +297,6 @@ public class MessageService {
     public String getDataFromRedis(String key) {
         return StringRedisTemplate.opsForValue().get(key);
     }
-
 
     /**
      * Redis 검색을 위한 key를 만드는 메서드
