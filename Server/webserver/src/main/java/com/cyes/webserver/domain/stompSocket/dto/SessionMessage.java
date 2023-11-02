@@ -9,9 +9,9 @@ import lombok.*;
 @ToString
 public class SessionMessage {
     //세션 ID
-    private Long quizId;
+    Long quizId;
     //내용
-    private MessageType type;
+    MessageType type;
 
 
     /**
