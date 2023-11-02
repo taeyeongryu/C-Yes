@@ -36,8 +36,13 @@ public class MessageService {
     private final MemberRepository memberRepository;
 
 
-    //client에게 퀴즈쇼 시작 신호를 전송하는 메서드
+    /**
+     * client에게 퀴즈쇼 시작 신호를 전송하는 메서드
+     * @param quizId (퀴즈id)
+     * @return List<problemResponse> 퀴즈 정보
+     */
     public List<ProblemResponse> startSession(Long quizId) {
+
         // 퀴즈 문제 pk 조회
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
         // (문제, 정답) 리스트 조회
@@ -48,9 +53,12 @@ public class MessageService {
         return problemAnswerList;
     }
 
-
-    //client에게 풀어야 할 문제를 전송하는 메서드
-    public void sendProblem(Long quizId, ProblemResponse problem) throws JsonProcessingException {
+    /**
+     * client에게 풀어야 할 문제를 전송하는 메서드
+     * @param quizId (퀴즈id)
+     * @param problem (출제할 문제 정보)
+     */
+    public void sendProblem(Long quizId, ProblemResponse problem) {
         ProblemMessage problemMessage = ProblemMessage.builder()
                 .sessionId(quizId)
                 .type(SessionMessage.MessageType.PROBLEM)
@@ -60,18 +68,22 @@ public class MessageService {
         // 클라이언트한테 문제 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), problemMessage);
 
-        /*
-           Redis에 특정 문제를 보낸 시간을 저장한다.
-         */
+        /* Redis에 특정 문제를 보낸 시간을 저장한다. */
 
         // key : quiz_id_problemOrder ( 퀴즈번호_문제순서 )
-        String key = quizId + "_" + problem.getProblemOrder();
         // value : LocalDateTime.now() ( 문제를 보낸 시간 )
+        String key = quizId + "_" + problem.getProblemOrder();
+        
+        // Redis에 저장
         setStringDateRedis(key, LocalDateTime.now().toString(), Duration.ofMinutes(30));
+
     }
 
-    //client는 다음 문제로 넘어가기 전에 정답을 확인할 수 있다.
-    //client한테 문제의 정답을 보여주는 메서드
+    /**
+     * client한테 문제의 정답을 보여주는 메서드
+     * @param quizId (퀴즈id)
+     * @param problem (퀴즈정보)
+     */
     public void sendAnswer(Long quizId, ProblemResponse problem) {
         AnswerMessage answerMessage = AnswerMessage.builder()
                 .sessionId(quizId)
@@ -83,7 +95,11 @@ public class MessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), answerMessage);
     }
 
-    //client에게 퀴즈가 종료되었음을 알리는 메서드
+
+    /**
+     * client에게 퀴즈가 종료되었음을 알리는 메서드
+     * @param quizId (퀴즈id)
+     */
     public void sendEnd(Long quizId) {
 
         SessionMessage endMessage = new SessionMessage(quizId, SessionMessage.MessageType.END);
@@ -91,12 +107,18 @@ public class MessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), endMessage);
     }
 
-    //client에게 최종 순위를 보내주는 메서드
+    /**
+     * client에게 최종 순위를 보내주는 메서드
+     * @param quizId (퀴즈id)
+     * @param problemResponseList
+     * @throws JsonProcessingException
+     */
     public void sendResult(Long quizId, List<ProblemResponse> problemResponseList) throws JsonProcessingException {
 
-        List<SubmitRedis> list = getSubmitDataRedis(quizId.toString());
-        //채점을 완료해서 순서를 매긴 값의 리스트 이다.
+        // 해당 퀴즈로 제출된 답안 List를 Redis에서 가져온다.
+        List<SubmitRedis> list = getSubmitList(quizId.toString());
 
+        //채점을 완료해서 순서를 매긴 값의 리스트 이다.
         List<GradingResult> gradingResultList = getGradingResultList(list, problemResponseList);
 
         //채점해서 졍렬한 결과를 상위 n명만 골라서 nickname, 맞은 갯수 넘겨준다.
@@ -113,6 +135,75 @@ public class MessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
     }
 
+
+    /**
+     * 해당 퀴즈로 제출된 답안 List 조회하는 메서드
+     * @param quizId (퀴즈 정보)
+     * @return List<SubmitRedis> Redis에 퀴즈id로 저장된 제출 정보 List
+     */
+    public List<SubmitRedis> getSubmitList(String quizId) {
+
+        // 클라이언트가 제출한 정보를 keypattern(submit_퀴즈id*)으로 검색
+        String keyPattern = "submit_" + quizId + "*";
+
+        // keypattern으로 검색이 된 key들을 select
+        Set<String> values = StringRedisTemplate.keys(keyPattern);
+
+        // Redis에서 가져온 제출 정보를 담을 List 선언
+        List<SubmitRedis> submitRedisList = new ArrayList<>();
+
+        // 역직렬화를 위한 objectMapper 선언.
+        ObjectMapper objectMapper = new ObjectMapper();
+        for (String keyStr : values) {
+            try {
+                // 제출 정보 key값으로 검색하여 직렬화하여 스트링으로 저장된 제출 정보를 가져온다.
+                String valueStr = getDataFromRedis(keyStr);
+
+                // 가져온 스트링 제출 정보를 SubmitRedis 객체 형태로 역직렬화한다.
+                SubmitRedis submitRedis = objectMapper.readValue(valueStr, SubmitRedis.class);
+
+                // 역직렬화한 SubmitRedis 객체를 List에 추가.
+                submitRedisList.add(submitRedis);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return submitRedisList;
+    }
+
+    /**
+     * 클라이언트가 보낸 채팅 정보를 처리하는 메서드
+     * @param message(ChatMessage)
+     */
+    public void handleChat(ChatMessage message) {
+
+    }
+
+    /**
+     * 퀴즈 입장을 처리하는 메서드
+     */
+    public void handleEnter(SessionMessage message) {
+
+    }
+
+    /**
+     * 클라이언트의 답안 제출을 처리하는 메서드
+     * @param message(SubmitMessage)
+     * @throws JsonProcessingException
+     */
+    public void handleSubmit(SubmitMessage message) throws JsonProcessingException {
+
+        // key : 퀴즈번호_문제순서_멤버id
+        String key = message.createKey();
+
+        // value : SubmitDto
+        SubmitRedis submitRedis = message.ToSubmitRedis(LocalDateTime.parse(getDataFromRedis(getRedisKey(message))),LocalDateTime.now());
+
+        // redis에 답안 제출 정보 저장
+        setSubmitDateRedis(key, submitRedis, Duration.ofMinutes(30));
+
+    }
 
     private List<GradingResultPresentResponse> gradingPresent(List<GradingResult> gradingResultList, int num) {
         //최종 결과를 보여주는 것 갯수가 참여 멤버보다 크다면 모든 멤버 결과를 보여준다.
@@ -139,23 +230,6 @@ public class MessageService {
         List<GradingResultPresentResponse> resultPresentResponseList = changeGradingResultPresentResponses(slicedList, memberIdToNickName);
 
         return resultPresentResponseList;
-    }
-
-
-    public void handleChat(ChatMessage message) {
-
-    }
-
-
-
-    public void setDateExpire(String key, Object problemAnswerList, Duration duration) throws JsonProcessingException {
-
-        // Redis에 데이터 저장 (리스트 형식으로)
-        ValueOperations<String, String> stringListValueOperations = StringRedisTemplate.opsForValue();
-
-        String jsonToStr = objectMapper.writeValueAsString(problemAnswerList);
-        stringListValueOperations.set(key, jsonToStr, duration);
-
     }
 
     public List<GradingResult> getGradingResultList(List<SubmitRedis> answerList, List<ProblemResponse> problemList) {
@@ -198,16 +272,9 @@ public class MessageService {
         return resultList;
     }
 
-
-
-
-    public void handleEnter(SessionMessage message) {
-
-    }
     private static List<GradingResultPresentResponse> changeGradingResultPresentResponses(List<GradingResult> slicedList, Map<Long, String> memberIdToNickName) {
         //return할 List를 선언한다.
         List<GradingResultPresentResponse> resultPresentResponseList = new ArrayList<>();
-
 
         //slicedList를 GradingResultPresentResponse로 바꿔서 반환한다.
         for (GradingResult gradingResult : slicedList) {
@@ -222,80 +289,57 @@ public class MessageService {
         return resultPresentResponseList;
     }
 
+
     /**
-     * 클라이언트가 보낸 답안을 Redis에 기록하는 메소드.
+     * key로 Redis에 저장된 값(String)을 조회하는 메서드 ( 문제 출제 시간 조회, 제출된 답안 조회 )
+     * @param key
+     * @return key에 대한 value
      */
-    public void handleSubmit(SubmitMessage message) throws JsonProcessingException {
-        // key : 퀴즈번호_문제순서_멤버id
-        String key = message.createKey();
-
-        // value : SubmitDto
-        SubmitRedis submitRedis = message.ToSubmitRedis(LocalDateTime.parse(getDataFromRedis(getRedisKey(message))),LocalDateTime.now());
-
-        // redis에 제출 정보 저장
-        setSubmitDateRedis(key, submitRedis, Duration.ofMinutes(30));
-    }
-
-
-
-    public String getDataFromRedis(String key) throws JsonProcessingException {
-
+    public String getDataFromRedis(String key) {
         return StringRedisTemplate.opsForValue().get(key);
     }
 
-    public List<SubmitRedis> getSubmitDataRedis(String key) {
 
-        // 클라이언트가 제출한 정보를 keypattern(submit_퀴즈id)으로 검색
-        String keyPattern = "submit_" + key + "*";
-
-        // keypattern으로 검색이 된 key들을 select
-        Set<String> values = StringRedisTemplate.keys(keyPattern);
-
-        // Redis에서 가져온 제출 정보를 담을 List 선언
-        List<SubmitRedis> submitRedisList = new ArrayList<>();
-
-        // 역직렬화를 위한 objectMapper 선언.
-        ObjectMapper objectMapper = new ObjectMapper();
-        for (String keyStr : values) {
-            try {
-                // 제출 정보 key값으로 검색하여 직렬화하여 스트링으로 저장된 제출 정보를 가져온다.
-                String valueStr = getDataFromRedis(keyStr);
-
-                // 가져온 스트링 제출 정보를 SubmitRedis 객체 형태로 역직렬화한다.
-                SubmitRedis submitRedis = objectMapper.readValue(valueStr, SubmitRedis.class);
-
-                // 역직렬화한 SubmitRedis 객체를 List에 추가.
-                submitRedisList.add(submitRedis);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return submitRedisList;
+    /**
+     * Redis 검색을 위한 key를 만드는 메서드
+     * @param message(Submitmessage)
+     * @return quizId_problemOrder (String)
+     */
+    public String getRedisKey(SubmitMessage message) {
+        return message.getQuizId() + "_" + message.getProblemOrder();
     }
 
-
+    /**
+     * Redis에 문제 출제 시간을 저장하기 위한 메서드
+     * @param key
+     * @param value
+     * @param duration
+     */
     public void setStringDateRedis(String key, String value, Duration duration) {
 
+        // redis에 접근할 수 있는 객체 선언
         ValueOperations<String, String> stringListValueOperations = StringRedisTemplate.opsForValue();
 
         // Redis에 출제 시간 데이터 저장
         stringListValueOperations.set(key, value, duration);
     }
 
+    /**
+     * 클라이언트가 보낸 답안 정보를 Redis에 기록하는 메소드
+     * @param key
+     * @param submitRedis (답안 제출 정보)
+     * @param duration
+     * @throws JsonProcessingException
+     */
     public void setSubmitDateRedis(String key, SubmitRedis submitRedis, Duration duration) throws JsonProcessingException {
-
 
         ValueOperations<String, String> valueOperations = StringRedisTemplate.opsForValue();
 
+        // SubmitRedis객체를 String으로 직렬화한다.
         String valueStr = objectMapper.writeValueAsString(submitRedis);
-        // Redis에 제출 정보 데이터 저장
+        // Redis에 답안 제출 정보(String) 데이터 저장
         valueOperations.set(key, valueStr, duration);
 
-    }
-
-    public String getRedisKey(SubmitMessage message) {
-        return message.getQuizId() + "_" + message.getProblemOrder();
     }
 
 }
