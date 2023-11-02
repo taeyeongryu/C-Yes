@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class SubmitMessage extends SessionMessage{
     Long memberId;
-    Long quizId;
     Integer problemOrder;
     String submitContent;
 
