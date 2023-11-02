@@ -10,10 +10,20 @@ interface ModalProps {
     showModal: boolean;
     showContent: boolean;
     toggleContent: () => void;
+    memberList: string[];
+    myScore?: number;
+    totalProblemLength?: number;
 }
 
 function Modal(props: ModalProps) {
-    const { showModal, showContent, toggleContent } = props;
+    const {
+        showModal,
+        showContent,
+        toggleContent,
+        memberList,
+        myScore,
+        totalProblemLength,
+    } = props;
     const navigate = useNavigate();
 
     const moveMain = () => {
@@ -38,9 +48,16 @@ function Modal(props: ModalProps) {
                             </div>
 
                             <div className="rank-content">
-                                <p>1등 00 </p>
-                                <p>2등 00 </p>
-                                <p>3등 00 </p>
+                                <div>
+                                    {memberList
+                                        .slice(0, 3)
+                                        .map((nickname, index) => (
+                                            <div key={index}>
+                                                {index + 1}위: {nickname}
+                                            </div>
+                                        ))}
+                                </div>
+                                내 점수 : {myScore} / {totalProblemLength}
                             </div>
 
                             <RoundCornerBtn
@@ -74,17 +91,17 @@ function Modal(props: ModalProps) {
 }
 
 const Quiz: React.FC = () => {
-    const [questions, setQuestions] = useState([
-        {
-            question:
-                "프로그래밍에 집중한 유연한 개발 방식으로 상호작용, 소프트웨어, 협력, 변화 대응에 가치를 두는 이것은?",
-            answer: "애자일",
-        },
-        { question: "두 번째 질문", answer: "아보카도" },
-        { question: "세 번째 질문", answer: "답3" },
-    ]);
+    // const [questions, setQuestions] = useState([
+    //   {
+    //     question:
+    //       "프로그래밍에 집중한 유연한 개발 방식으로 상호작용, 소프트웨어, 협력, 변화 대응에 가치를 두는 이것은?",
+    //     answer: "애자일",
+    //   },
+    //   { question: "두 번째 질문", answer: "아보카도" },
+    //   { question: "세 번째 질문", answer: "답3" },
+    // ]);
 
-    const [currentQuestion, setCurrentQuestion] = useState(0);
+    // const [currentQuestion, setCurrentQuestion] = useState(0);
     const [progress, setProgress] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -114,6 +131,9 @@ const Quiz: React.FC = () => {
         //여기서 backend랑 통신하면 댈듯
         if (!submitted) {
             setSubmitted(true); // 제출 완료 상태로 설정
+
+            sendSubmit(textareaValue);
+
             setIsTextareaEnabled(false); //textarea 비활성화
         }
     };
@@ -132,22 +152,22 @@ const Quiz: React.FC = () => {
         // 정답 확인 버튼을 눌렀을 때
         setShowConfirmation(true);
 
-        if (currentQuestion < questions.length - 1) {
-            setTimeout(() => {
-                setShowConfirmation(false);
+        //if (currentQuestion < questions.length - 1) {
+        setTimeout(() => {
+            setShowConfirmation(false);
 
-                // 문제 바뀌는 구간
-                setSubmitted(false);
-                setCurrentQuestion(currentQuestion + 1);
+            // 문제 바뀌는 구간
+            setSubmitted(false);
+            // setCurrentQuestion(currentQuestion + 1);
 
-                // textarea 활성화
-                setIsTextareaEnabled(true);
-                setTextareaValue("");
+            // textarea 활성화
+            setIsTextareaEnabled(true);
+            setTextareaValue("");
 
-                setIsThisQuestionStarted(false);
-                setProgress(0);
-            }, 3000); // 3초 후에 다음 문제로 이동
-        }
+            setIsThisQuestionStarted(false);
+            setProgress(0);
+        }, 3000); // 3초 후에 다음 문제로 이동
+        //}
     };
 
     // 웹소켓 연결
@@ -165,33 +185,55 @@ const Quiz: React.FC = () => {
     const memberId = memberState.memberId;
     //const memberId
 
-    type QuestionMessage = {
+    type ProblemMessage = {
+        quizId: number;
+        type: string;
         question: string;
-        // selections: string[];
+        order: number;
+        selections: Array<string>;
     };
 
     type AnswerMessage = {
+        quizId: number;
+        type: string;
         answer: string;
     };
 
     //문제리스트와 현재 문제 state
-    const [problems, setProblems] = useState<QuestionMessage[]>([]);
-    const [problem, setProblem] = useState<QuestionMessage | null>(null);
+    const [problems, setProblems] = useState<ProblemMessage[]>([]);
+    const [problem, setProblem] = useState<ProblemMessage | null>(null);
 
     //정답리스트와 현재 정답  state
-    const [answers, setAnswers] = useState<AnswerMessage[]>([]);
+    const [answers, setAnswers] = useState<Array<string>>([]);
+    const [submits, setSubmits] = useState<Array<string>>([]);
+    const [myScore, setMyScore] = useState<number>(0);
+    const [thisAnswer, setThisAnswer] = useState<string>("");
+    const [thisAnswerLength, setThisAnswerLength] = useState<number>(0);
 
-    const [thisAnswer, setThisAnswer] = useState<AnswerMessage | null>(null);
+    //결과 state
+    const [myRank, setMyRank] = useState<number | null>(null);
+    const [memberList, setMemberList] = useState<string[]>([]);
 
     // "PROBLEM" 메시지를 받았을 때 문제를 state에 추가
-    const addProblem = (message: QuestionMessage) => {
+    const addProblem = (message: ProblemMessage) => {
         setProblem(message);
         setProblems((prevProblems) => [...prevProblems, message]);
     };
     // "PROBLEM" 메시지를 받았을 때 문제를 state에 추가
-    const addAnswer = (message: AnswerMessage) => {
-        setThisAnswer(message);
-        setAnswers((prevAnswers) => [...prevAnswers, message]);
+    const addAnswer = (answer: string) => {
+        setThisAnswer(answer);
+        setAnswers((prevAnswers) => [...prevAnswers, answer]);
+        setSubmits((prevSubmits) => [...prevSubmits, textareaValue]);
+    };
+
+    const calcMyScore = (): number => {
+        let score: number = 0;
+
+        answers.forEach((answer, idx) => {
+            score += answer === submits[idx] ? 1 : 0;
+        });
+
+        return score;
     };
 
     // 메세지 받았을 시 컨트롤 함수
@@ -207,24 +249,30 @@ const Quiz: React.FC = () => {
 
             case "PROBLEM":
                 // 문제랑 답 숫자를 state에 저장
-                addProblem({ question: `${recv.question}` });
+                addProblem(recv);
+                setThisAnswerLength(recv.answerLength);
                 // 문제 출력'
                 startThisQuestion();
                 return;
 
             case "ANSWER":
                 // 답을 answer redux state에 저장
-                addAnswer({ answer: `${recv.answer}` });
-                // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
 
+                // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
+                // 정답 보냄
+
+                //나중에 쓸 정답 리스트
+                addAnswer(recv);
                 //정답 보여줌
                 handleConfirmAnswer();
                 return;
 
             case "END":
                 // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
-                sendSubmit(`${answers}`);
+                // sendSubmit(`${answers}`);
+
                 // 계산만 해놓고 기다리기 모달 띄우기
+                setMyScore(calcMyScore());
                 openModal();
                 return;
 
@@ -233,6 +281,8 @@ const Quiz: React.FC = () => {
                 // 내 총점도 띄우기
                 // 모든 처리 완료 하면
                 toggleContent();
+                setMemberList(recv.memberNicknames);
+
                 webSocket?.disconnect(() => {});
                 return;
 
@@ -249,17 +299,15 @@ const Quiz: React.FC = () => {
             JSON.stringify({
                 quizId: quizId,
                 type: "SUBMIT",
+                problemOrder: problem?.order,
                 memberId: memberId,
-                submit: data,
+                submitContent: data,
             })
         );
     };
 
     useEffect(() => {
         // 가짜로 받아오기
-        addProblem({ question: "문제1 나간다" });
-        addAnswer({ answer: "정답은이거" });
-
         const sock = new SockJS(`${process.env.REACT_APP_SPRING_URI}/ws/quiz`);
         const ws = Stomp.over(sock);
 
@@ -293,20 +341,21 @@ const Quiz: React.FC = () => {
         const timer = setInterval(() => {
             if (isQuizStarted && progress >= 100) {
                 clearInterval(timer);
-                if (currentQuestion < questions.length - 1) {
-                    setIsTextareaEnabled(false);
-                } else {
-                    // 마지막 문제일 때도 답을 보여주도록 수정
-                    setIsTextareaEnabled(false);
-                    //setShowConfirmation(true);
+                setIsTextareaEnabled(false);
 
-                    setTimeout(() => {
-                        setShowConfirmation(false);
+                // if (currentQuestion < questions.length - 1) {
+                //   setIsTextareaEnabled(false);
+                // } else {
+                // 마지막 문제일 때도 답을 보여주도록 수정
+                //setShowConfirmation(true);
 
-                        // modal 표시 코드
-                        openModal();
-                    }, 3000);
-                }
+                setTimeout(() => {
+                    setShowConfirmation(false);
+
+                    // modal 표시 코드
+                    openModal();
+                }, 3000);
+                //}
             } else if (isQuizStarted && isThisQuestionStarted) {
                 setProgress(progress + 0.2);
             }
@@ -317,8 +366,7 @@ const Quiz: React.FC = () => {
         };
     }, [
         progress,
-        currentQuestion,
-        questions,
+        // currentQuestion,
         isQuizStarted,
         isThisQuestionStarted,
     ]);
@@ -365,14 +413,14 @@ const Quiz: React.FC = () => {
                                 {Array.from({
                                     // length: questions[currentQuestion].answer.length,
                                     // length: thisAnswer?.answer.length,
-                                    length: thisAnswer
-                                        ? thisAnswer.answer.length
+                                    length: thisAnswerLength
+                                        ? thisAnswerLength
                                         : 0,
                                 }).map((_, index) => (
                                     <div key={index} className="square">
                                         {showConfirmation
                                             ? // ? questions[currentQuestion].answer[index]
-                                              thisAnswer?.answer[index]
+                                              thisAnswer[index]
                                             : null}
                                     </div>
                                 ))}
@@ -453,6 +501,9 @@ const Quiz: React.FC = () => {
                 showModal={showModal}
                 showContent={showModalContent}
                 toggleContent={toggleContent}
+                memberList={memberList}
+                myScore={myScore}
+                totalProblemLength={problems.length}
             />
         </div>
     );

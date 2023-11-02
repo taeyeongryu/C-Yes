@@ -11,6 +11,7 @@ import java.util.List;
 public class ProblemMessage extends SessionMessage{
     String question;
     Integer order;
+    Integer answerLength;
     List<String> selections;
 
     public enum QuestionType {
@@ -19,9 +20,11 @@ public class ProblemMessage extends SessionMessage{
 
 
     @Builder
-    public ProblemMessage(Long sessionId, MessageType type, String question, List<String> selections) {
-        super(sessionId, type);
+    public ProblemMessage(Long quizId, MessageType type, String question, Integer order, Integer answerLength, List<String> selections) {
+        super(quizId, type);
         this.question = question;
+        this.order = order;
+        this.answerLength = answerLength;
         this.selections = selections;
     }
 

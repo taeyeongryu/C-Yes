@@ -68,7 +68,7 @@ public class QuizService {
             quizProblemRepository.save(quizProblem);
         }
 
-        scheduleReserveService.save(quiz.getId(), quiz.getStartDateTime());
+        scheduleReserveService.saveQuiz(quiz.getId(), quiz.getStartDateTime());
 
         // Entity -> Response Dto
         return quiz.toQuizCreateResponse();
