@@ -9,11 +9,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResultMessage extends SessionMessage{
 
-    private List<GradingResult> gradingResultList;
+    private List<GradingResultPresentResponse> gradingResultPresentResponseList;
 
     @Builder
-    public ResultMessage(Long quizId, MessageType type, List<GradingResult> gradingResultList) {
+    public ResultMessage(Long quizId, MessageType type, List<GradingResultPresentResponse> gradingResultPresentResponseList) {
         super(quizId, type);
-        this.gradingResultList = gradingResultList;
+        this.gradingResultPresentResponseList = gradingResultPresentResponseList;
     }
 }
