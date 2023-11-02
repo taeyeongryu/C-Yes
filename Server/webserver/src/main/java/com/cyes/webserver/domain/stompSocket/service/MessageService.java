@@ -60,8 +60,10 @@ public class MessageService {
      */
     public void sendProblem(Long quizId, ProblemResponse problem) {
         ProblemMessage problemMessage = ProblemMessage.builder()
-                .sessionId(quizId)
+                .quizId(quizId)
                 .type(SessionMessage.MessageType.PROBLEM)
+                .order(problem.getProblemOrder())
+                .answerLength(problem.getContentResponse().getAnswer().length())
                 .question(problem.getContentResponse().getQuestion())
                 .build();
 
