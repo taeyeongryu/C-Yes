@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.dto;
 
+import com.cyes.webserver.domain.Answer.entity.Answer;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -37,6 +38,14 @@ public class SubmitRedis {
         this.duringTime = duringTime;
     }
 
-
+    public Answer toAnswerDocument(){
+        return Answer.builder()
+                .quizId(this.quizId)
+                .memberId(this.memberId)
+                .problemNumber(this.problemOrder)
+                .submitContent(this.submitContent)
+                .duringTime(this.duringTime)
+                .build();
+    }
 
 }

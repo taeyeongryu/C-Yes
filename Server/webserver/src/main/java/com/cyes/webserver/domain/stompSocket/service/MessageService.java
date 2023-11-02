@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.service;
 
+import com.cyes.webserver.domain.Answer.service.AnswerService;
 import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
@@ -34,6 +35,7 @@ public class MessageService {
     private final ProblemService problemService;
     private final ObjectMapper objectMapper;
     private final MemberRepository memberRepository;
+    private final AnswerService answerService;
 
 
     //client에게 퀴즈쇼 시작 신호를 전송하는 메서드
@@ -111,34 +113,13 @@ public class MessageService {
 
         //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
+
+        //제출한 답안 전부 MongoDB에 flush
+        answerService.saveAllSubmitRedis(list);
     }
 
+    public void handleEnter(SessionMessage message) {
 
-    private List<GradingResultPresentResponse> gradingPresent(List<GradingResult> gradingResultList, int num) {
-        //최종 결과를 보여주는 것 갯수가 참여 멤버보다 크다면 모든 멤버 결과를 보여준다.
-        if (num > gradingResultList.size()){num = gradingResultList.size();}
-
-        //채점 결과를 원하는 만큼 자른다.
-        List<GradingResult> slicedList = gradingResultList.subList(0, num);
-
-        //member들의 id만 모아놓은 list
-        List<Long> memberIdList = new ArrayList<>();
-        for (GradingResult gradingResult : slicedList) {
-            memberIdList.add(gradingResult.getMemberId());
-        }
-
-        //memberIdList로 그 Member들을 가져온다.
-        List<Member> findAllMemberList = memberRepository.findAllById(memberIdList);
-
-        //memberId를 key로 memberNickName을 value로 담는다.
-        Map<Long, String> memberIdToNickName = new HashMap<>();
-        for (Member member : findAllMemberList) {
-            memberIdToNickName.put(member.getMemberId(), member.getMemberNickname());
-        }
-
-        List<GradingResultPresentResponse> resultPresentResponseList = changeGradingResultPresentResponses(slicedList, memberIdToNickName);
-
-        return resultPresentResponseList;
     }
 
 
@@ -158,7 +139,17 @@ public class MessageService {
 
     }
 
-    public List<GradingResult> getGradingResultList(List<SubmitRedis> answerList, List<ProblemResponse> problemList) {
+
+
+    /**
+     * 문제 리스트, 제출 답안 리스트를 parameter로 받아서
+     * GradingResult로 넘겨주는 메서드.
+     * GradingResult는 참여한 모든 Member의 결과를 알려준다.
+     * @param answerList
+     * @param problemList
+     * @return
+     */
+    private List<GradingResult> getGradingResultList(List<SubmitRedis> answerList, List<ProblemResponse> problemList) {
         //key : memgerId, value : 채점 결과
         Map<Long, GradingResult> resultMap = new HashMap<>();
 
@@ -198,12 +189,45 @@ public class MessageService {
         return resultList;
     }
 
+    /**
+     * 전체 채점결과, slicing 하고싶은 갯수를 parameter로 받아서
+     * GradingResultPresentResponse로 바꿔서 보낸다.
+     * @param gradingResultList
+     * @param num
+     * @return
+     */
+    private List<GradingResultPresentResponse> gradingPresent(List<GradingResult> gradingResultList, int num) {
+        //최종 결과를 보여주는 것 갯수가 참여 멤버보다 크다면 모든 멤버 결과를 보여준다.
+        if (num > gradingResultList.size()){num = gradingResultList.size();}
 
+        //채점 결과를 원하는 만큼 자른다.
+        List<GradingResult> slicedList = gradingResultList.subList(0, num);
 
+        //member들의 id만 모아놓은 list
+        List<Long> memberIdList = new ArrayList<>();
+        for (GradingResult gradingResult : slicedList) {
+            memberIdList.add(gradingResult.getMemberId());
+        }
 
-    public void handleEnter(SessionMessage message) {
+        //memberIdList로 그 Member들을 가져온다.
+        List<Member> findAllMemberList = memberRepository.findAllById(memberIdList);
 
+        //memberId를 key로 memberNickName을 value로 담는다.
+        Map<Long, String> memberIdToNickName = new HashMap<>();
+        for (Member member : findAllMemberList) {
+            memberIdToNickName.put(member.getMemberId(), member.getMemberNickname());
+        }
+
+        //전체 gradingResult중 원하는 갯수만큼 자른 List를 넘겨주면
+        //최종적으로 client한테 반환할 gradingResultProsentResponse List를 반환한다.
+        List<GradingResultPresentResponse> resultPresentResponseList = changeGradingResultPresentResponses(slicedList, memberIdToNickName);
+
+        return resultPresentResponseList;
     }
+
+
+
+
     private static List<GradingResultPresentResponse> changeGradingResultPresentResponses(List<GradingResult> slicedList, Map<Long, String> memberIdToNickName) {
         //return할 List를 선언한다.
         List<GradingResultPresentResponse> resultPresentResponseList = new ArrayList<>();
