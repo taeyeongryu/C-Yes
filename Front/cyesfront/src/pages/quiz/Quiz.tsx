@@ -11,11 +11,19 @@ interface ModalProps {
     showContent: boolean;
     toggleContent: () => void;
     memberList: string[];
-    myRank: number | null;
+    myScore?: number;
+    totalProblemLength?: number;
 }
 
 function Modal(props: ModalProps) {
-    const { showModal, showContent, toggleContent, memberList, myRank } = props;
+    const {
+        showModal,
+        showContent,
+        toggleContent,
+        memberList,
+        myScore,
+        totalProblemLength,
+    } = props;
     const navigate = useNavigate();
 
     const moveMain = () => {
@@ -49,7 +57,7 @@ function Modal(props: ModalProps) {
                                             </div>
                                         ))}
                                 </div>
-                                내 등수 : {myRank} 등
+                                내 점수 : {myScore} / {totalProblemLength}
                             </div>
 
                             <RoundCornerBtn
@@ -200,6 +208,7 @@ const Quiz: React.FC = () => {
     const [submits, setSubmits] = useState<Array<string>>([]);
     const [myScore, setMyScore] = useState<number>(0);
     const [thisAnswer, setThisAnswer] = useState<string>("");
+    const [thisAnswerLength, setThisAnswerLength] = useState<number>(0);
 
     //결과 state
     const [myRank, setMyRank] = useState<number | null>(null);
@@ -217,6 +226,16 @@ const Quiz: React.FC = () => {
         setSubmits((prevSubmits) => [...prevSubmits, textareaValue]);
     };
 
+    const calcMyScore = (): number => {
+        let score: number = 0;
+
+        answers.forEach((answer, idx) => {
+            score += answer === submits[idx] ? 1 : 0;
+        });
+
+        return score;
+    };
+
     // 메세지 받았을 시 컨트롤 함수
     const messageHandler = (recv: any) => {
         console.log("받은 msg" + recv);
@@ -231,7 +250,7 @@ const Quiz: React.FC = () => {
             case "PROBLEM":
                 // 문제랑 답 숫자를 state에 저장
                 addProblem(recv);
-                addAnswer;
+                setThisAnswerLength(recv.answerLength);
                 // 문제 출력'
                 startThisQuestion();
                 return;
@@ -253,6 +272,7 @@ const Quiz: React.FC = () => {
                 // sendSubmit(`${answers}`);
 
                 // 계산만 해놓고 기다리기 모달 띄우기
+                setMyScore(calcMyScore());
                 openModal();
                 return;
 
@@ -393,7 +413,9 @@ const Quiz: React.FC = () => {
                                 {Array.from({
                                     // length: questions[currentQuestion].answer.length,
                                     // length: thisAnswer?.answer.length,
-                                    length: thisAnswer ? thisAnswer.length : 0,
+                                    length: thisAnswerLength
+                                        ? thisAnswerLength
+                                        : 0,
                                 }).map((_, index) => (
                                     <div key={index} className="square">
                                         {showConfirmation
@@ -480,7 +502,8 @@ const Quiz: React.FC = () => {
                 showContent={showModalContent}
                 toggleContent={toggleContent}
                 memberList={memberList}
-                myRank={myRank}
+                myScore={myScore}
+                totalProblemLength={problems.length}
             />
         </div>
     );
