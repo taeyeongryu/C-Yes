@@ -13,8 +13,8 @@ const Live = (props: Props) => {
   const memberInfo = useSelector((state: any) => state.member);
 
   useEffect(() => {
-    console.log("redux체크", memberInfo)
-  })
+    console.log("현재 Redux Member 상태:", memberInfo);
+  }, [memberInfo]);
 
   const enterRoom = () => {
     // 다른 페이지로 이동
@@ -33,8 +33,8 @@ const Live = (props: Props) => {
         <RoundCornerBtn
           width="150px"
           height="45px"
-          bgColor="#FF5733"
-          bgHover="#853828"
+          bgcolor="#FF5733"
+          bghover="#853828"
           fontSize="16px"
           fontColor="#FFFFFF"
           onClick={enterRoom}
