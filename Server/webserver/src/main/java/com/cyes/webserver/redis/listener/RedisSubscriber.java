@@ -1,4 +1,4 @@
-package com.cyes.webserver.domain.stompSocket.service;
+package com.cyes.webserver.redis.listener;
 
 import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
 import com.cyes.webserver.domain.stompSocket.dto.ProblemMessage;
