@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Slf4j
 public class SubmitMessage extends SessionMessage{
@@ -19,20 +18,27 @@ public class SubmitMessage extends SessionMessage{
     String submitContent;
 
     public String createKey() {
-        return this.quizId + "_" + this.problemOrder + "_" + this.memberId;
+        return "submit_" + this.quizId + "_" + this.problemOrder + "_" + this.memberId;
     }
 
-    public SubmitRedis ToSubmitRedis(LocalDateTime startTime) {
+    public SubmitRedis ToSubmitRedis(LocalDateTime startTime,LocalDateTime submitTime) {
 
-        Duration duringTime = Duration.between(startTime,LocalDateTime.now());
+        Long duringTime = Duration.between(startTime, submitTime).toNanos();
 
         return SubmitRedis.builder()
                 .quizId(this.quizId)
                 .problemOrder(this.problemOrder)
                 .memberId(this.memberId)
                 .submitContent(this.submitContent)
-                .duringTime(duringTime.getSeconds())
+                .duringTime(duringTime)
                 .build();
     }
 
+    @Builder
+    public SubmitMessage(Long memberId, Long quizId, Integer problemOrder, String submitContent) {
+        this.memberId = memberId;
+        this.quizId = quizId;
+        this.problemOrder = problemOrder;
+        this.submitContent = submitContent;
+    }
 }
