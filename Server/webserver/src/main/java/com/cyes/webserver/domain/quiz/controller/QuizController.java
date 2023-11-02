@@ -5,20 +5,13 @@ import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToServiceDto;
 import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import com.cyes.webserver.domain.quiz.service.QuizService;
-import com.cyes.webserver.domain.stompSocket.dto.SubmitMessage;
-import com.cyes.webserver.domain.stompSocket.dto.SubmitRedis;
-//import com.cyes.webserver.domain.stompSocket.repository.RedisRepository;
-import com.cyes.webserver.domain.stompSocket.repository.RedisRepository;
 import com.cyes.webserver.domain.stompSocket.service.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,7 +23,6 @@ public class QuizController {
 
     private final QuizService quizService;
     private final MessageService messageService;
-    private final RedisRepository redisRepository;
 
     /*이거 참고해서 메서드 설명 넣어 주세용~~
      @Operation(summary = "객관식 문제등록", description = "객관식 문제를 등록하는 메서드이다.\n" +
@@ -49,11 +41,13 @@ public class QuizController {
     /*
     라이브 퀴즈쇼 개설 APi
      */
-    @PostMapping
+    @PostMapping("/create")
     private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) throws JsonProcessingException {
 
         // service로 보내는 Dto로 변환
         QuizCreateRequestToServiceDto serviceDto = quizCreateRequest.toServiceDto();
+
+        System.out.println(quizCreateRequest.getQuizStartDate());
 
         // service 호출
         QuizCreateResponse quizCreateResponse = quizService.createQuiz(serviceDto);
@@ -61,9 +55,19 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.OK).body(quizCreateResponse);
     }
 
-    @GetMapping("/test")
-    private String testRedis() {
-        return "1";
-    }
+//    @GetMapping("/test")
+//    private String testRedis() throws JsonProcessingException {
+//
+//        SubmitMessage submitMessage = SubmitMessage.builder()
+//                .memberId(1L)
+//                .quizId(95L)
+//                .problemOrder(1)
+//                .submitContent("프로세스")
+//                .build();
+//
+//        messageService.handleSubmit(submitMessage);
+//
+//        return "확인";
+//    }
 
 }

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -18,10 +17,10 @@ public class ScheduledTaskFactory {
     private final MessageService messageService;
 
 
-    public void sessionTask(Long quizId) throws InterruptedException, JsonProcessingException {
+    public void quizProcedureTask(Long quizId) throws InterruptedException, JsonProcessingException {
 
         List<ProblemResponse> problems; // 문제 찾아오기
-        Long solvableTime = 30000L; // 기본 10초
+        long solvableTime = 20000L; // 기본 10초
 
         problems = messageService.startSession(quizId);
         System.out.println("problems = " + problems);
@@ -35,9 +34,8 @@ public class ScheduledTaskFactory {
             Thread.sleep(3000);
         }
 
-
-        Thread.sleep(1000);
         messageService.sendEnd(quizId);
+        Thread.sleep(1000);
         messageService.sendResult(quizId,problems);
     }
 }
