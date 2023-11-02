@@ -5,7 +5,6 @@ import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToServiceDto;
 import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import com.cyes.webserver.domain.quiz.service.QuizService;
-import com.cyes.webserver.domain.stompSocket.service.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class QuizController {
 
     private final QuizService quizService;
-    private final MessageService messageService;
 
     /*이거 참고해서 메서드 설명 넣어 주세용~~
      @Operation(summary = "객관식 문제등록", description = "객관식 문제를 등록하는 메서드이다.\n" +

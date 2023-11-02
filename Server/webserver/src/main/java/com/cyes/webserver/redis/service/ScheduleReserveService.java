@@ -1,4 +1,4 @@
-package com.cyes.webserver.redisListener;
+package com.cyes.webserver.redis.service;
 
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
