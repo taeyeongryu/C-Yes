@@ -1,5 +1,7 @@
 package com.cyes.webserver.domain.stompSocket.service.result;
 
+import com.cyes.webserver.domain.Answer.entity.Answer;
+import com.cyes.webserver.domain.Answer.repository.AnswerRepository;
 import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
@@ -12,6 +14,7 @@ import com.cyes.webserver.domain.stompSocket.service.submit.SubmitService;
 import com.cyes.webserver.redis.service.RedisService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.util.AbstractPartition;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +33,7 @@ public class ResultService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisService redisService;
     private final SubmitService submitService;
+    private final AnswerRepository answerRepository;
 
     /**
      * client에게 최종 순위를 보내주는 메서드
@@ -65,6 +69,15 @@ public class ResultService {
 
         //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
+
+
+        //Redis에 publish 한 뒤 AnswerList로 바꿔서
+        List<Answer> answerList = new ArrayList<>();
+        for (SubmitRedis submitRedis : list) {
+            answerList.add(submitRedis.toAnswerDocument());
+        }
+        //MongoDB에 flush
+        answerRepository.saveAll(answerList);
     }
 
 
