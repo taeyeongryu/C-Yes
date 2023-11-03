@@ -11,7 +11,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity<ExceptionResponse> customExceptionHandler(CustomException e) {
         log.error("CustomException ::: " + e.getMessage());
-        e.printStackTrace();
+//        e.printStackTrace();
         return makeResponseEntity(e.getException());
     }
 

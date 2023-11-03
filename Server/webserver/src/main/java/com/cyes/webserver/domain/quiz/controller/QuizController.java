@@ -45,8 +45,6 @@ public class QuizController {
         // service로 보내는 Dto로 변환
         QuizCreateRequestToServiceDto serviceDto = quizCreateRequest.toServiceDto();
 
-        System.out.println(quizCreateRequest.getQuizStartDate());
-
         // service 호출
         QuizCreateResponse quizCreateResponse = quizService.createQuiz(serviceDto);
 
