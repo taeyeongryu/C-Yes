@@ -1,5 +1,7 @@
 package com.cyes.webserver.domain.stompSocket.service.result;
 
+import com.cyes.webserver.domain.Answer.entity.Answer;
+import com.cyes.webserver.domain.Answer.repository.AnswerRepository;
 import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.ProblemResponse;
@@ -8,12 +10,15 @@ import com.cyes.webserver.domain.stompSocket.dto.GradingResultPresentResponse;
 import com.cyes.webserver.domain.stompSocket.dto.ResultMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SubmitRedis;
+import com.cyes.webserver.domain.stompSocket.service.submit.SubmitService;
 import com.cyes.webserver.redis.service.RedisService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.instrument.util.AbstractPartition;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +28,12 @@ import java.util.*;
 @Slf4j
 @RequiredArgsConstructor
 public class ResultService {
-
-    private final org.springframework.data.redis.core.StringRedisTemplate StringRedisTemplate;
     private final MemberRepository memberRepository;
     private final ChannelTopic channelTopic;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedisService redisService;
+    private final SubmitService submitService;
+    private final AnswerRepository answerRepository;
 
     /**
      * client에게 최종 순위를 보내주는 메서드
@@ -39,7 +44,7 @@ public class ResultService {
     public void sendResult(Long quizId, List<ProblemResponse> problemResponseList) throws JsonProcessingException {
 
         // 해당 퀴즈로 제출된 답안 List를 Redis에서 가져온다.
-        List<SubmitRedis> list = getSubmitList(quizId.toString());
+        List<SubmitRedis> list = submitService.getSubmitList(quizId.toString());
 
         System.out.println("list = " + list);
 
@@ -64,45 +69,19 @@ public class ResultService {
 
         //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
-    }
 
-    /**
-     * 해당 퀴즈로 제출된 답안 List 조회하는 메서드
-     * @param quizId (퀴즈 정보)
-     * @return List<SubmitRedis> Redis에 퀴즈id로 저장된 제출 정보 List
-     */
-    public List<SubmitRedis> getSubmitList(String quizId) {
 
-        // 클라이언트가 제출한 정보를 keypattern(submit_퀴즈id*)으로 검색
-        String keyPattern = "submit_" + quizId + "*";
-
-        // keypattern으로 검색이 된 key들을 select
-        Set<String> values = StringRedisTemplate.keys(keyPattern);
-
-        // Redis에서 가져온 제출 정보를 담을 List 선언
-        List<SubmitRedis> submitRedisList = new ArrayList<>();
-
-        // 역직렬화를 위한 objectMapper 선언.
-        ObjectMapper objectMapper = new ObjectMapper();
-        for (String keyStr : values) {
-            try {
-                // 제출 정보 key값으로 검색하여 직렬화하여 스트링으로 저장된 제출 정보를 가져온다.
-                String valueStr = redisService.getDataFromRedis(keyStr);
-
-                // 가져온 스트링 제출 정보를 SubmitRedis 객체 형태로 역직렬화한다.
-                SubmitRedis submitRedis = objectMapper.readValue(valueStr, SubmitRedis.class);
-
-                // 역직렬화한 SubmitRedis 객체를 List에 추가.
-                submitRedisList.add(submitRedis);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+        //Redis에 publish 한 뒤 AnswerList로 바꿔서
+        List<Answer> answerList = new ArrayList<>();
+        for (SubmitRedis submitRedis : list) {
+            answerList.add(submitRedis.toAnswerDocument());
         }
-
-        return submitRedisList;
+        //MongoDB에 flush
+        answerRepository.saveAll(answerList);
     }
 
-    public List<GradingResult> getGradingResultList(List<SubmitRedis> answerList, List<ProblemResponse> problemList) {
+
+    private List<GradingResult> getGradingResultList(List<SubmitRedis> answerList, List<ProblemResponse> problemList) {
         //key : memgerId, value : 채점 결과
         Map<Long, GradingResult> resultMap = new HashMap<>();
 
@@ -121,16 +100,20 @@ public class ResultService {
             //문제의 정답
             String problemAnswer = problemList.get(problemNumber - 1).getContentResponse().getAnswer();
 
+            //채점결과가 존재하지 않다면
+            if(!resultMap.containsKey(memberId)){
+                resultMap.put(memberId, GradingResult.builder().memberId(memberId).build());
+            }
+
             //제출 답안이랑 정답이랑 같으면
             if (submit.equals(problemAnswer)) {
-                GradingResult result = resultMap.getOrDefault(memberId, GradingResult.builder().memberId(memberId).build());
+                GradingResult result = resultMap.get(memberId);
 
                 result.addCorrectCount();
                 result.addDuringTime(answer.getDuringTime());
 
                 resultMap.put(memberId, result);
             }
-
         }
         //전체 참여자를 순위를 매기고 정렬
         List<GradingResult> resultList = new ArrayList(resultMap.values());
