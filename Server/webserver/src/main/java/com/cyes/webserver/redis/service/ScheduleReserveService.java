@@ -1,4 +1,4 @@
-package com.cyes.webserver.redisListener;
+package com.cyes.webserver.redis.service;
 
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -27,7 +27,7 @@ public class ScheduleReserveService {
      * @param quizId 스케줄링 할 퀴즈의 ID
      * @param expireTime 퀴즈 시작 시간 (키 만료 시간)
      */
-    public void save(Long quizId, LocalDateTime expireTime) {
+    public void saveQuiz(Long quizId, LocalDateTime expireTime) {
 
         ValueOperations<String, String> op = stringRedisTemplate.opsForValue();
 
@@ -53,7 +53,7 @@ public class ScheduleReserveService {
      * @param quizId 스케줄링 된 퀴즈의 ID
      * @param expireTime 교체할 퀴즈 시작 시간
      */
-    public void update(Long quizId, LocalDateTime expireTime) {
+    public void updateQuiz(Long quizId, LocalDateTime expireTime) {
 
         ValueOperations<String, String> op = stringRedisTemplate.opsForValue();
 
@@ -79,7 +79,7 @@ public class ScheduleReserveService {
      * 
      * @param quizId 스케줄링 된 퀴즈 ID
      */
-    public void delete(Long quizId){
+    public void deleteQuiz(Long quizId){
         ValueOperations<String, String> op = stringRedisTemplate.opsForValue();
 
         String quizIdStr = SCHEDULE_PREFIX + quizId;

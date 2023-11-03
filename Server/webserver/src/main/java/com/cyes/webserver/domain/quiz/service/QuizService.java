@@ -11,7 +11,7 @@ import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
-import com.cyes.webserver.redisListener.ScheduleReserveService;
+import com.cyes.webserver.redis.service.ScheduleReserveService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +68,7 @@ public class QuizService {
             quizProblemRepository.save(quizProblem);
         }
 
-        scheduleReserveService.save(quiz.getId(), quiz.getStartDateTime());
+        scheduleReserveService.saveQuiz(quiz.getId(), quiz.getStartDateTime());
 
         // Entity -> Response Dto
         return quiz.toQuizCreateResponse();

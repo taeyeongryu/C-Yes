@@ -17,7 +17,11 @@
 </div>
 
 <script>
-    let socket = new SockJS('http://192.168.31.134:5000/quiz/session');
+<<<<<<< HEAD
+    let socket = new SockJS('http://192.168.31.134:5000/api/ws/quiz');
+=======
+    let socket = new SockJS('http://localhost:5000/api/ws/quiz');
+>>>>>>> 2fc5ff48373141877c30da7f330c1071d84a58d8
     let stompClient = Stomp.over(socket);
     let headers = {};  // 필요한 헤더를 추가하세요.
 

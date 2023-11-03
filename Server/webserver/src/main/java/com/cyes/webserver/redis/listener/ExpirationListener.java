@@ -1,4 +1,4 @@
-package com.cyes.webserver.redisListener;
+package com.cyes.webserver.redis.listener;
 
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -52,7 +52,7 @@ public class ExpirationListener extends KeyExpirationEventMessageListener {
         String quizId = key.replace(SCHEDULE_PREFIX, "");
 
         try {
-            scheduledTaskFactory.sessionTask(Long.parseLong(quizId));
+            scheduledTaskFactory.quizProcedureTask(Long.parseLong(quizId));
         } catch (InterruptedException e) {
 
             throw new CustomException(CustomExceptionList.SCHEDULE_CREATE_FAIL_ERROR);

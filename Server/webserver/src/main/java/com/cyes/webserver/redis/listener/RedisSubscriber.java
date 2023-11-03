@@ -1,7 +1,8 @@
-package com.cyes.webserver.domain.stompSocket.service;
+package com.cyes.webserver.redis.listener;
 
 import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
 import com.cyes.webserver.domain.stompSocket.dto.ProblemMessage;
+import com.cyes.webserver.domain.stompSocket.dto.ResultMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -46,6 +47,8 @@ public class RedisSubscriber implements MessageListener {
                 roomMessage = objectMapper.readValue(publishMessage, ProblemMessage.class);
             } else if (roomMessage.getType().equals(SessionMessage.MessageType.ANSWER)) {
                 roomMessage = objectMapper.readValue(publishMessage, AnswerMessage.class);
+            } else if (roomMessage.getType().equals(SessionMessage.MessageType.RESULT)) {
+                roomMessage = objectMapper.readValue(publishMessage, ResultMessage.class);
             }
 
             log.info(roomMessage.toString());

@@ -17,7 +17,10 @@ const initialQuizState: QuizState = {
 const quizReducer = (state = initialQuizState, action: any) => {
     switch (action.type) {
         case "QUIZ_SAVEID":
-            return { ...state, quizId: action.payload };
+            return {
+                ...state,
+                quiz: { ...action.payload, submit: [], answer: [] },
+            };
 
         default:
             return state;
