@@ -87,16 +87,20 @@ public class ResultService {
             //문제의 정답
             String problemAnswer = problemList.get(problemNumber - 1).getContentResponse().getAnswer();
 
+            //채점결과가 존재하지 않다면
+            if(!resultMap.containsKey(memberId)){
+                resultMap.put(memberId, GradingResult.builder().memberId(memberId).build());
+            }
+
             //제출 답안이랑 정답이랑 같으면
             if (submit.equals(problemAnswer)) {
-                GradingResult result = resultMap.getOrDefault(memberId, GradingResult.builder().memberId(memberId).build());
+                GradingResult result = resultMap.get(memberId);
 
                 result.addCorrectCount();
                 result.addDuringTime(answer.getDuringTime());
 
                 resultMap.put(memberId, result);
             }
-
         }
         //전체 참여자를 순위를 매기고 정렬
         List<GradingResult> resultList = new ArrayList(resultMap.values());
