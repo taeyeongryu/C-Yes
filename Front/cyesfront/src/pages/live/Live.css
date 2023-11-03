@@ -35,3 +35,7 @@
   color: #4c69ff;
   margin: 0; /* 여백 제거 */
 }
+
+.bottom_notice{
+  font-size:25px;
+}
