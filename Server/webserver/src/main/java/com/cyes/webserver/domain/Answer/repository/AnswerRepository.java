@@ -9,6 +9,9 @@ import java.util.Optional;
 
 
 public interface AnswerRepository extends MongoRepository<Answer,String> {
+    @Override
+    <S extends Answer> List<S> saveAll(Iterable<S> entities);
+
     @Query("{ 'member_id' : ?0, 'quiz_id' : ?1 }")
     List<Answer> findAnswerByMemberIdAndQuizId(Long memberId, Long quizId, Sort sort);
 
