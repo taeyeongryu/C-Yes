@@ -10,7 +10,7 @@ interface ModalProps {
     showModal: boolean;
     showContent: boolean;
     toggleContent: () => void;
-    memberList: string[];
+    memberList: Array<any>;
     myScore?: number;
     totalProblemLength?: number;
 }
@@ -49,9 +49,9 @@ function Modal(props: ModalProps) {
 
                             <div className="rank-content">
                                 <div>
-                                    {memberList.map((nickname, index) => (
+                                    {memberList.map((member, index) => (
                                         <div key={index}>
-                                            {index + 1}위: {nickname}
+                                            {index + 1}위: {member.nickName}
                                         </div>
                                     ))}
                                 </div>
@@ -79,7 +79,6 @@ function Modal(props: ModalProps) {
                                 alt="로딩 중"
                                 width={60}
                             ></img>
-                            <button onClick={toggleContent}>산정 완료</button>
                         </div>
                     )}
                 </div>
@@ -139,7 +138,10 @@ const Quiz: React.FC = () => {
     const [thisAnswerLength, setThisAnswerLength] = useState<number>(0);
 
     //결과 state
-    const [memberList, setMemberList] = useState<string[]>([]);
+    const [memberList, setMemberList] = useState<Array<any>>([]);
+
+    //모달
+    const [showModal, setShowModal] = useState(false);
 
     // componentdidmount
     useEffect(() => {
@@ -197,13 +199,35 @@ const Quiz: React.FC = () => {
         }
     }, [progress, isQuizStarted]);
 
-    // problem effect
     useEffect(() => {
-        if (isQuizStarted) {
-            setProgress(0);
-            setThisAnswer("");
+        if (submitted) {
+            sendSubmit(textareaValue);
+
+            setIsTextareaEnabled(false); //textarea 비활성화
+        } else {
+            setIsTextareaEnabled(true);
         }
-    }, [problem]);
+    }, [submitted]);
+
+    useEffect(() => {
+        if (thisAnswer) {
+            setAnswers((prevAnswers) => [...prevAnswers, thisAnswer]);
+            setSubmits((prevSubmits) => [...prevSubmits, textareaValue]);
+        }
+    }, [thisAnswer]);
+
+    useEffect(() => {
+        if (showModal) {
+            let score: number = 0;
+            console.log(answers);
+            console.log(submits);
+            answers.forEach((answer, idx) => {
+                score += answer === submits[idx] ? 1 : 0;
+                console.log("score = ", score);
+            });
+            setMyScore(score);
+        }
+    }, [showModal]);
 
     const handleTextareaChange = (
         event: React.ChangeEvent<HTMLTextAreaElement>
@@ -215,22 +239,9 @@ const Quiz: React.FC = () => {
         setIsQuizStarted(true);
     };
 
-    const toggleSubmit = () => {
-        //여기서 backend랑 통신하면 댈듯
-        if (!submitted) {
-            setSubmitted(true); // 제출 완료 상태로 설정
-
-            sendSubmit(textareaValue);
-
-            setIsTextareaEnabled(false); //textarea 비활성화
-        }
-    };
-
     const toggleContent = () => {
         setShowModalContent(true);
     };
-
-    const [showModal, setShowModal] = useState(false);
 
     const openModal = () => {
         setShowModal(true);
@@ -241,58 +252,31 @@ const Quiz: React.FC = () => {
         setProblem(message);
         setProblems((prevProblems) => [...prevProblems, message]);
     };
-    // "PROBLEM" 메시지를 받았을 때 문제를 state에 추가
-    const addAnswer = (answer: string) => {
-        setThisAnswer(answer);
-        console.log("thisAnswer : " + thisAnswer);
-        setAnswers((prevAnswers) => [...prevAnswers, answer]);
-        setSubmits((prevSubmits) => [...prevSubmits, textareaValue]);
-    };
-
-    const calcMyScore = (): number => {
-        let score: number = 0;
-
-        answers.forEach((answer, idx) => {
-            score += answer === submits[idx] ? 1 : 0;
-        });
-
-        return score;
-    };
 
     // 메세지 받았을 시 컨트롤 함수
     const messageHandler = (recv: any) => {
-        console.log("받은 msg", recv);
-
         switch (recv.type) {
             case "START":
-                // 문제 받을 준비
-                // 대기실 -> 문제페이지 입성
                 startQuiz();
                 return;
 
             case "PROBLEM":
-                // 문제랑 답 숫자를 state에 저장
                 addProblem(recv);
                 setThisAnswerLength(recv.answerLength);
-                // 문제 출력'
+                setSubmitted(false);
+                setTextareaValue("");
+                setProgress(0);
+                setThisAnswer("");
                 return;
 
             case "ANSWER":
-                // 답을 answer redux state에 저장
-
-                // 내가 제출한 답 submit과, answer의 같은 인덱스를 비교해서 정답인지 출력
-                // 정답 보냄
-
-                //나중에 쓸 정답 리스트
-                addAnswer(recv.answer);
+                setThisAnswer(recv.answer);
                 return;
 
             case "END":
                 // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
-                // sendSubmit(`${answers}`);
 
                 // 계산만 해놓고 기다리기 모달 띄우기
-                setMyScore(calcMyScore());
                 openModal();
                 return;
 
@@ -302,8 +286,6 @@ const Quiz: React.FC = () => {
                 // 모든 처리 완료 하면
                 toggleContent();
                 setMemberList(recv.gradingResultPresentResponseList);
-
-                console.log(recv.gradingResultPresentResponseList);
 
                 webSocket?.disconnect(() => {});
                 return;
@@ -398,7 +380,7 @@ const Quiz: React.FC = () => {
                             <div>
                                 <RoundCornerBtn
                                     type="submit"
-                                    onClick={() => toggleSubmit()}
+                                    onClick={() => setSubmitted(true)}
                                     bgcolor={submitted ? "#265587" : undefined}
                                     bghover="#265587"
                                     disabled={submitted}
