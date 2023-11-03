@@ -26,9 +26,7 @@ public class MessageController {
      * 유저 입장 핸들링
      */
     @MessageMapping("/session/message/enter")
-    public void enter(
-            SessionMessage message
-    ) {
+    public void enter(SessionMessage message) {
         enterService.handleEnter(message);
     }
 
@@ -40,15 +38,13 @@ public class MessageController {
         log.info("message = {}", message);
         submitService.handleSubmit(message);
     }
-
-
+    
     /**
      * 유저 채팅 핸들링
      */
     @MessageMapping("/session/message/chat")
-    public void chat(
-            ChatMessage message
-    ) {
+    public void chat(ChatMessage message) {
         chatService.handleChat(message);
     }
+
 }
