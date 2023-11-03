@@ -33,6 +33,9 @@ const Live = (props: Props) => {
         const mainQuizInfo = await getMainQuizInfo();
 
         if (mainQuizInfo == null) {
+            setMainQuiz((prev) => {
+                return { ...prev, quizStartDate: new Date() };
+            });
             return;
         }
 
