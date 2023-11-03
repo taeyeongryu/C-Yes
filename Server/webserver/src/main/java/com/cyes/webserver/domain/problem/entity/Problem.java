@@ -84,11 +84,4 @@ public class Problem {
                 ", type='" + type + '\'' +
                 '}';
     }
-//        public void changeByUpdateDto(ProblemUpdateServiceRequest problemUpdateServiceRequest){
-//        this.content = problemUpdateServiceRequest.getContent();
-//        this.answer = problemUpdateServiceRequest.getAnswer();
-//        this.category =String.valueOf(problemUpdateServiceRequest.getProblemCategory());
-//        this.type = String.valueOf(problemUpdateServiceRequest.getProblemType());
-//        return;
-//    }
 }
