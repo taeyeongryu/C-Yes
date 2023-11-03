@@ -48,11 +48,13 @@ public class ResultService {
         List<GradingResultPresentResponse> resultPresentResponseList = gradingPresent(gradingResultList, 3);
 
         //채점 결과를 담고있는 메시지양
-        SessionMessage resultMessage = ResultMessage.builder()
+        ResultMessage resultMessage = ResultMessage.builder()
                 .quizId(quizId)
                 .gradingResultPresentResponseList(resultPresentResponseList)
                 .type(SessionMessage.MessageType.RESULT)
                 .build();
+
+        System.out.println(resultMessage);
 
         //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);

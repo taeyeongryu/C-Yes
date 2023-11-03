@@ -34,7 +34,6 @@ public class StartService {
         // (문제, 정답) 리스트 조회
         List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
         // 클라이언트한테 시작 신호 보내기
-        System.out.println("시작 메세지 전달");
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
 
         return problemAnswerList;
