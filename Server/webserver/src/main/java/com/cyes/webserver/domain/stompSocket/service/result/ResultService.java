@@ -41,11 +41,17 @@ public class ResultService {
         // 해당 퀴즈로 제출된 답안 List를 Redis에서 가져온다.
         List<SubmitRedis> list = getSubmitList(quizId.toString());
 
+        System.out.println("list = " + list);
+
         //채점을 완료해서 순서를 매긴 값의 리스트 이다.
         List<GradingResult> gradingResultList = getGradingResultList(list, problemResponseList);
 
+        System.out.println("gradingResultList = " + gradingResultList);
+
         //채점해서 졍렬한 결과를 상위 n명만 골라서 nickname, 맞은 갯수 넘겨준다.
         List<GradingResultPresentResponse> resultPresentResponseList = gradingPresent(gradingResultList, 3);
+
+        System.out.println("resultPresentResponseList = " + resultPresentResponseList);
 
         //채점 결과를 담고있는 메시지양
         ResultMessage resultMessage = ResultMessage.builder()
@@ -54,7 +60,7 @@ public class ResultService {
                 .type(SessionMessage.MessageType.RESULT)
                 .build();
 
-        System.out.println(resultMessage);
+        System.out.println("resultMessage = " + resultMessage);
 
         //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
