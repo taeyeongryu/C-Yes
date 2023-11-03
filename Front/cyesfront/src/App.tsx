@@ -21,7 +21,7 @@ function App() {
           <Route path="/answer" element={<Answer />} />
           <Route path="/adminquiz" element={<AdminQuiz />} />
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> 
     </div>
   );
 }

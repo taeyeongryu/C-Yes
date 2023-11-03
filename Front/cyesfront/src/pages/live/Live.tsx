@@ -46,6 +46,7 @@ const Live = (props: Props) => {
     };
 
     useEffect(() => {
+        getLiveInfo();
         const requestMainQuizInterval = setInterval(() => {
             getLiveInfo();
         }, 60000);

@@ -40,7 +40,7 @@ const BottomNav: React.FC<BottomNavProps> = ({
         selectedImg="img/select_pencil.png"
         defaultImg="img/pencil.png"
         altText=""
-        routePath="/cs"
+        routePath="/live"
         onClick={() => handleClick("cs공부")}
         label="cs공부"
       />
@@ -58,7 +58,7 @@ const BottomNav: React.FC<BottomNavProps> = ({
         selectedImg="img/select_people.png"
         defaultImg="img/people.png"
         altText=""
-        routePath="/group"
+        routePath="/live"
         onClick={() => handleClick("그룹")}
         label="그룹"
       />
