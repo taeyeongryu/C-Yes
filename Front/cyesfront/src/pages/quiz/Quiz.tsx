@@ -325,7 +325,25 @@ const Quiz: React.FC = () => {
                                     problem?.question
                                 ) : (
                                     <div>
-                                        <div>타이머 띄우기</div>
+                                     
+                                     📌주의사항 <br/><br/>
+                                        <div className="notice">
+                                            <li>
+                                            각 문제는 20초 동안 풀 수있는 스피드 퀴즈입니다
+                                            </li><br/>
+                                            <li>
+                                            각 문제가 끝난후, 정답을 확인 할 수 있습니다
+                                            </li><br/>
+                                            <li>
+                                            동점일 경우 제출한 순서대로 순위가 산정됩니다
+                                            </li><br/>
+                                            <li>
+                                            모든 정답은 한글로 제출해주세요
+                                            </li>
+                                            <br/>
+                                            
+                                        </div>
+
                                     </div>
                                 )}
                             </div>
@@ -392,10 +410,12 @@ const Quiz: React.FC = () => {
                         </div>
                     ) : (
                         <div>
-                            <textarea
+                            {/* <textarea
                                 placeholder="퀴즈가 곧 시작합니다!"
                                 disabled
-                            />
+                            /> */}
+                            <div className="bottom_notice">🧩퀴즈가 곧 시작합니다!🧩</div>
+                            
                         </div>
                     )}
                 </div>

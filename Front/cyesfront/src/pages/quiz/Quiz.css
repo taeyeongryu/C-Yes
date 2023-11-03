@@ -8,7 +8,9 @@
     padding-left: 45%;
     width: 30%;
 }
-
+.notice{
+  font-size: 15px;
+}
 .head{
     font-size: 220%;
 }
