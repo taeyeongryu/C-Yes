@@ -13,6 +13,7 @@ import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.repository.QuizRepository;
 import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
+import com.cyes.webserver.domain.stompSocket.dto.SubmitRedis;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
@@ -73,21 +74,23 @@ public class AnswerService{
 
         return answerResponse;
     }
+
     /**
-     * quizId를 parameter로 받아서 그 퀴즈의 랭커 3명의 닉네임을 반환한다.
-    */
-//    public RankResult getRank(Long quizId){
-//        //quidId로 problemId List 얻어온다.
-//        List<String> problemIdList = quizProblemRepository.findQuizProblems(quizId);
-//        //problemId List로 problem 가져온다.
-//        List<ProblemResponse> problemResponseList = problemService.findAllProblemByQuiz(problemIdList);
-//
-//        //퀴즈에 참여한 멤버를 Set으로 모두가져온다
-//        Set<Long> memberIdSet = new HashSet<>(answerRepository.findMemberIdsByQuizId(quizId));
-//
-//
-//
-//    }
+     * submitRedisList를 parameter로 입력받는다.
+     * AnswerList로 변환한다.
+     * MongoDB에 saveAll한다.
+     * @param submitRedisList
+     */
+    @Transactional
+    public void saveAllSubmitRedis(List<SubmitRedis> submitRedisList) {
+        List<Answer> answerList = new ArrayList<>();
+
+        for (SubmitRedis submitRedis : submitRedisList) {
+            answerList.add(submitRedis.toAnswerDocument());
+        }
+
+        answerRepository.saveAll(answerList);
+    }
 
     /**
      * 특정 유저가 특정 퀴즈에 제출한 답안을 반환한다.
