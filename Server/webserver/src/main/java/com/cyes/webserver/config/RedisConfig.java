@@ -1,10 +1,9 @@
 package com.cyes.webserver.config;
 
-import com.cyes.webserver.domain.stompSocket.service.RedisSubscriber;
+import com.cyes.webserver.redis.listener.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
