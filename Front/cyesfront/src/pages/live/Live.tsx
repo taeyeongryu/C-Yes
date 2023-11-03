@@ -43,7 +43,13 @@ const Live = (props: Props) => {
     };
 
     useEffect(() => {
-        getLiveInfo();
+        const requestMainQuizInterval = setInterval(() => {
+            getLiveInfo();
+        }, 60000);
+
+        return () => {
+            clearInterval(requestMainQuizInterval);
+        };
     }, []);
 
     const enterRoom = () => {

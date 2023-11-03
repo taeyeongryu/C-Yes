@@ -123,7 +123,7 @@ const Quiz: React.FC = () => {
     //문제리스트와 현재 문제 state
     const [problems, setProblems] = useState<ProblemMessage[]>([]);
     const [problem, setProblem] = useState<ProblemMessage>({
-        quizId: 0,
+        quizId: -1,
         type: "PROBLEM",
         question: "문제를 기다리는 중",
         order: 0,
@@ -191,7 +191,7 @@ const Quiz: React.FC = () => {
 
     // timer effect
     useEffect(() => {
-        if (isQuizStarted && progress < 100) {
+        if (isQuizStarted && problem.quizId !== -1 && progress < 100) {
             setTimeout(() => {
                 console.log("타이머 돈다");
                 setProgress((prev) => prev + 0.5);
@@ -271,6 +271,7 @@ const Quiz: React.FC = () => {
 
             case "ANSWER":
                 setThisAnswer(recv.answer);
+                setIsTextareaEnabled(false);
                 return;
 
             case "END":
