@@ -29,7 +29,7 @@ class QuizRepositoryTest {
     }
 
     @Test
-    @DisplayName("당일 열리는 라이브 퀴즈를 조회한다.")
+    @DisplayName("오늘 현재 시간 이후 열리는 첫번째 라이브 퀴즈를 조회한다.")
     void findLiveQuiz() {
 
         // given
@@ -45,13 +45,19 @@ class QuizRepositoryTest {
         quizRepository.save(quiz2);
 
         // when
-        Optional<Quiz> liveQuiz = quizRepository.findLiveQuiz(LocalDateTime.of(2023, 5, 5, 5, 5));
+        Optional<Quiz> liveQuiz1 = quizRepository.findLiveQuiz(LocalDateTime.of(2023, 5, 5, 5, 5));
+        Optional<Quiz> liveQuiz2 = quizRepository.findLiveQuiz(LocalDateTime.of(2023, 5, 5, 5, 6));
 
         // then
-        assertThat(liveQuiz).isNotEmpty();
-        assertThat(liveQuiz.get()).extracting(
+        assertThat(liveQuiz1).isNotEmpty();
+        assertThat(liveQuiz2).isNotEmpty();
+        assertThat(liveQuiz1.get()).extracting(
                 quiz -> quiz.getMember().getMemberId()
                 ,quiz -> quiz.getTitle()
-                ,quiz -> quiz.getStartDateTime()).containsExactly(member1.getMemberId(), "가쥬아1", startDateTime1);
+                ,quiz -> quiz.getStartDateTime()).containsExactly(member1.getMemberId(), quiz1.getTitle() , startDateTime1);
+        assertThat(liveQuiz2.get()).extracting(
+                quiz -> quiz.getMember().getMemberId()
+                ,quiz -> quiz.getTitle()
+                ,quiz -> quiz.getStartDateTime()).containsExactly(member2.getMemberId(), quiz2.getTitle(), startDateTime2);
     }
 }
