@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/quiz")
@@ -33,7 +35,7 @@ public class QuizController {
     @GetMapping("/live/info")
     private ResponseEntity<QuizInfoResponse> getQuizInfo() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchQuiz());
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchQuiz(LocalDateTime.now()));
     }
 
     /*
