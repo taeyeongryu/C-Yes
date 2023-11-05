@@ -23,7 +23,8 @@ public enum CustomExceptionList {
     SCHEDULE_CREATE_FAIL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E010", "스케줄링 작업 테스크를 생성하지 못했습니다."),
     SCHEDULE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E011", "스케줄링 작업 테스크를 찾을 수 없습니다."),
     SCHEDULE_START_TIME_TOO_EARLY_ERROR(HttpStatus.TOO_EARLY, "E012", "스케줄링 시작 시간이 너무 이릅니다."),
-    REDIS_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E011", "제출된 답안 정보가 없습니다.");
+    REDIS_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E013", "제출된 답안 정보가 없습니다."),
+    SUBMIT_TIME_ERROR(HttpStatus.BAD_REQUEST, "E014", "답안 제출시간은 문제 출제시간보다 같거나 빠를 수 없습니다.");
 
 
     private final HttpStatus status;

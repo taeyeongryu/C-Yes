@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.naming.Name;
+import java.util.Objects;
 
 @Document
 @Getter
@@ -62,5 +63,18 @@ public class Answer {
                 .duringTime(this.duringTime)
                 .build();
         return answerResponse;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Answer)) return false;
+        Answer answer = (Answer) o;
+        return getProblemNumber() == answer.getProblemNumber() && Objects.equals(getId(), answer.getId()) && Objects.equals(getMemberId(), answer.getMemberId()) && Objects.equals(getQuizId(), answer.getQuizId()) && Objects.equals(getSubmitContent(), answer.getSubmitContent()) && Objects.equals(getDuringTime(), answer.getDuringTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getMemberId(), getQuizId(), getProblemNumber(), getSubmitContent(), getDuringTime());
     }
 }

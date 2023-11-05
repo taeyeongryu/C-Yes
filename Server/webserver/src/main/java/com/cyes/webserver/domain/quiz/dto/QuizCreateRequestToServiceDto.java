@@ -37,13 +37,4 @@ public class QuizCreateRequestToServiceDto {
                 .build();
     }
 
-    public QuizProblem toQuizProblemEntity(Quiz quiz, String problemId,int problemNum) {
-        QuizProblem quizProblem = QuizProblem.builder()
-                .quiz(quiz)
-                .problemId(problemId)
-                .problemOrder(problemNum)
-                .build();
-        return quizProblem;
-    }
-
 }
