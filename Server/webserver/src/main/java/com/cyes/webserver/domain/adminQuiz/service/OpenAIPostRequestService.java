@@ -2,14 +2,16 @@ package com.cyes.webserver.domain.adminQuiz.service;
 
 import com.cyes.webserver.domain.adminQuiz.dto.Choices;
 import com.cyes.webserver.domain.adminQuiz.dto.openAIDTO;
+import com.cyes.webserver.domain.adminQuiz.dto.outNoCheckShortProblemDTO;
 import com.cyes.webserver.domain.adminQuiz.entity.noCheckShortProblem;
 import com.cyes.webserver.domain.adminQuiz.repository.noCheckProblemRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,6 +34,8 @@ public class OpenAIPostRequestService {
 
         public List<String> sendPostword(String word) throws JsonProcessingException {
 
+            log.info("무슨 단어 들어옴?" + word);
+
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
@@ -41,7 +45,7 @@ public class OpenAIPostRequestService {
             headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
 
             String requestBody = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\",\"content\": \" " +
-                  word + "에 관련된 설명말고 단어만 1개 뽑아줘" + "\"}] }";
+                  word + "와 관련된 단어만 20개를 뽑아줘" + "\"}] }";
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
             String apiUrl = "https://api.openai.com/v1/chat/completions";
@@ -73,7 +77,7 @@ public class OpenAIPostRequestService {
         }
 
         @Transactional
-    public String makeShortProblem(String searchWord) throws JsonProcessingException {
+    public String makeShortProblem(String searchWord, String word) throws JsonProcessingException {
 
         System.out.println("설명할거" + searchWord);
 
@@ -109,17 +113,17 @@ public class OpenAIPostRequestService {
 
                 noCheckShortProblem ncst = noCheckShortProblem.builder()
                         .question(choice.getMessage().getContent())
+                        .category(word)
                         .build();
 
 
                 System.out.println("뭐임마" + ncst.getQuestion());
 
                 if (ncst != null) {
-                    log.info("널아니야");
 
                     noCheckProblemRepository.save(ncst);
                 } else {
-                    log.info("너 널이냐??");
+
                 }
 
                 noCheckShortProblem problem = noCheckProblemRepository.save(ncst);
@@ -134,6 +138,26 @@ public class OpenAIPostRequestService {
             return "Save Failure";
         }
         return "Save Failure";
+    }
+
+
+    public Page<outNoCheckShortProblemDTO> outNoCheckProblems(Pageable pageable){
+
+        Page<noCheckShortProblem> realProblem = noCheckProblemRepository.findAll(pageable);
+
+        ArrayList<outNoCheckShortProblemDTO> list = new ArrayList<>();
+
+        for(noCheckShortProblem ndto : realProblem){
+
+            outNoCheckShortProblemDTO out = outNoCheckShortProblemDTO.builder()
+                    .question(ndto.getQuestion())
+                    .category(ndto.getCategory()).build();
+
+            list.add(out);
+
+        }
+
+        return new PageImpl<>(list, realProblem.getPageable(), realProblem.getTotalElements());
     }
 
 }

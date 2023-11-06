@@ -1,0 +1,16 @@
+.quizCheck {
+  border-collapse: collapse; /* 테이블 선이 겹치지 않도록 설정 */
+  width: 100%;
+  padding: auto;
+}
+
+.quizCheck th,
+.quizCheck td {
+  border: 1px solid #dddddd; /* 선 스타일 설정 */
+  padding: 8px;
+  text-align: left;
+}
+
+.quizCheck th {
+  background-color: #f2f2f2; /* 헤더 색상 설정 */
+}
