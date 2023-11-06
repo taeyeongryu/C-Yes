@@ -18,23 +18,15 @@ spring:
         init:
             mode: always
 
-    # For MongoDB
+# For MongoDB
     data:
         mongodb:
             uri: mongodb://localhost:27017/cyesdb
-#            host: k9b103.p.ssafy.io
-#            port: 31024
-#            authentication-database: admin
-#            database: cyesdb
-#            username: yoomongo
-#            password: cyesyoomongojofkawoosocket1026
 
     redis:
         host: localhost
-#        host: k9b103.p.ssafy.io
         port: 6379
         password:
-#        password: rudcnrql3
 
 logging:
     level:

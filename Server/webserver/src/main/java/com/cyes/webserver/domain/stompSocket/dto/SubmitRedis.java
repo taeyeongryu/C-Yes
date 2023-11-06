@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 public class SubmitRedis {
-
-
     Long quizId;
     Long memberId;
     Integer problemOrder;
