@@ -131,6 +131,7 @@
   
 
   .loading-topic{
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -139,6 +140,7 @@
   }
 
   .end-topic{
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
