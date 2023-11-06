@@ -1,6 +1,5 @@
 package com.cyes.webserver.domain.stompSocket.controller;
 
-import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.stompSocket.dto.ChatMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SubmitMessage;
