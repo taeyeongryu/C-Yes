@@ -7,6 +7,7 @@ import Live from "./pages/live/Live";
 import Answer from "./pages/quiz/ConfirmQuiz";
 import LoginRedir from "./pages/login/LoginRedir";
 import AdminQuiz from "./pages/adminquiz/quizwordcreate";
+import ComputerScience from "./pages/cs/ComputerScience";
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/answer" element={<Answer />} />
           <Route path="/adminquiz" element={<AdminQuiz />} />
+          <Route path="/cs" element={<ComputerScience />} />
         </Routes>
-      </BrowserRouter> 
+      </BrowserRouter>
     </div>
   );
 }
