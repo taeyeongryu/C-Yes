@@ -29,6 +29,7 @@ public class ScheduledTaskFactory {
 
         List<ProblemResponse> problems; // 문제 찾아오기
         long solvableTime = 20000L; // 기본 20초
+        Thread.sleep(3000);
 
         problems = startService.startSession(quizId);
         Thread.sleep(1000);

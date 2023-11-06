@@ -58,7 +58,6 @@ public class RedisService {
         String valueStr = objectMapper.writeValueAsString(submitRedis);
         // Redis에 답안 제출 정보(String) 데이터 저장
         valueOperations.set(key, valueStr, duration);
-
     }
 
 }

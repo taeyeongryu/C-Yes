@@ -11,6 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatMessage extends SessionMessage {
     Long memberId;
-    String memberNickname;
     String message;
 }

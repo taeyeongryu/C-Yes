@@ -36,7 +36,7 @@ class QuizProblemRepositoryTest {
     }
 
     @Test
-    @DisplayName("퀴즈를 생성할 고 QuizProblem Entity를 저장하면 quizId로 ProblemId 리스트를 조회한다.")
+    @DisplayName("quizId로 ProblemId 리스트를 조회한다.")
     void findQuizProblems() {
         // given
         Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();

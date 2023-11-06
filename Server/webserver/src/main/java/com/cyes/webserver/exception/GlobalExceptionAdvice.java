@@ -2,6 +2,7 @@ package com.cyes.webserver.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -22,8 +23,17 @@ public class GlobalExceptionAdvice {
         return makeResponseEntity(CustomExceptionList.RUNTIME_EXCEPTION);
     }
 
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionResponse> methodArgumentNotValidExceptionHandler(
+            MethodArgumentNotValidException e){
+        log.error("RuntimeException ::: " + e.getMessage());
+        e.printStackTrace();
+        return makeResponseEntity(CustomExceptionList.BINDING_ERROR);
+    }
+
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ExceptionResponse> exceptionHandler(Exception e) {
+
         e.printStackTrace();
         return makeResponseEntity(CustomExceptionList.INTERNAL_SERVER_ERROR);
 
