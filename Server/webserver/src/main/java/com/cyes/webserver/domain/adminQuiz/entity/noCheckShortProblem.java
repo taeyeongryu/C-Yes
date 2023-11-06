@@ -22,14 +22,18 @@ public class noCheckShortProblem {
     @Field(name = "question")
     private String question;
 
+    //카테고리
+    @Indexed
+    @Field(name = "category")
+    private String category;
+
+
     @Builder
-    private noCheckShortProblem (String question) {
+    private noCheckShortProblem (String question, String category) {
         this.question = question;
+        this.category = category;
 
     }
 
-    public void saveproblem(String content){
-        this.question = content;
-    }
 
 }
