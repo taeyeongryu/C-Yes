@@ -21,4 +21,13 @@ public class EnterService {
 
         stringRedisTemplate.opsForValue().increment(key);
     }
+
+    /**
+     * 퀴즈 퇴장을 처리하는 메서드
+     */
+    public void handleDisconnect(SessionMessage message) {
+        String key = "total_participant_"+message.getQuizId();
+
+        stringRedisTemplate.opsForValue().decrement(key);
+    }
 }

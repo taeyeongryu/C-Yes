@@ -52,6 +52,7 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer
     (
+            // java reflection이 필요한 매개변수를 주입
             RedisConnectionFactory connectionFactory,
             MessageListenerAdapter listenerAdapter,
             ChannelTopic channelTopic

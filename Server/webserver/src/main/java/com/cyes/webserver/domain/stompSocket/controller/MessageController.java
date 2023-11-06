@@ -30,6 +30,14 @@ public class MessageController {
     }
 
     /**
+     * 유저 퇴장 핸들링
+     */
+    @MessageMapping("/session/message/disconnect")
+    public void disconnect(SessionMessage message) {
+        enterService.handleDisconnect(message);
+    }
+
+    /**
      * 유저 답안 제출 핸들링
      */
     @MessageMapping("/session/message/submit")
