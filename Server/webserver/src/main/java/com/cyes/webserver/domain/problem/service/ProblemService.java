@@ -137,23 +137,6 @@ public class ProblemService {
          return problemResponseList;
      }
 
-    //문제 수정하는 메서드
-//    @Transactional
-//    public ProblemResponse updateProblem(ProblemUpdateServiceRequest problemUpdateServiceRequest){
-//        //Problem id 값
-//        String id = problemUpdateServiceRequest.getId();
-//
-//        //id값으로 문제를 먼저 찾는다.
-//        //존재하지 않으면 예외 발생
-//        Problem findProblem = problemRepository.findById(id).orElseThrow(() -> {
-//            throw new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR);
-//        });
-//        //Entity 수정
-//        findProblem.changeByUpdateDto(problemUpdateServiceRequest);
-//
-//        //Entity -> Dto
-//        return findProblem.toProblemResponse();
-//    }
 
     //문제를 삭제한다.
     @Transactional
@@ -171,4 +154,21 @@ public class ProblemService {
         }
         return list;
     }
+    //문제 수정하는 메서드
+//    @Transactional
+//    public ProblemResponse updateProblem(ProblemUpdateServiceRequest problemUpdateServiceRequest){
+//        //Problem id 값
+//        String id = problemUpdateServiceRequest.getId();
+//
+//        //id값으로 문제를 먼저 찾는다.
+//        //존재하지 않으면 예외 발생
+//        Problem findProblem = problemRepository.findById(id).orElseThrow(() -> {
+//            throw new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR);
+//        });
+//        //Entity 수정
+//        findProblem.changeByUpdateDto(problemUpdateServiceRequest);
+//
+//        //Entity -> Dto
+//        return findProblem.toProblemResponse();
+//    }
 }

@@ -9,6 +9,7 @@ import com.cyes.webserver.domain.quiz.entity.Quiz;
 import com.cyes.webserver.domain.quiz.repository.QuizRepository;
 import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
+import com.cyes.webserver.domain.quizproblem.service.QuizProblemService;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import com.cyes.webserver.redis.service.ScheduleReserveService;
@@ -28,15 +29,16 @@ public class QuizService {
     private final QuizProblemRepository quizProblemRepository;
     private final MemberRepository memberRepository;
     private final ScheduleReserveService scheduleReserveService;
+    private final QuizProblemService quizProblemService;
 
 
     /* 
     퀴즈 정보 조회
      */
-    public QuizInfoResponse searchQuiz() {
+    public QuizInfoResponse searchQuiz(LocalDateTime now) {
 
         // 가장 최근에 생성된 라이브 퀴즈쇼 조회
-        Quiz quiz = quizRepository.findLiveQuiz(LocalDateTime.now()).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
+        Quiz quiz = quizRepository.findLiveQuiz(now).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
 
         // Entity -> Dto
         QuizInfoResponse quizInfoResponse = quiz.toQuizInfoResponse();
@@ -59,14 +61,9 @@ public class QuizService {
         // Insert Quiz
         quizRepository.save(quiz);
 
-        int probOrder = 1;
-        // QuizProblem
-        for (String problemId : dto.getProblemList()) {
-            // Dto -> Entity
-            QuizProblem quizProblem = dto.toQuizProblemEntity(quiz, problemId, probOrder++);
-            // Insert QuizProblem
-            quizProblemRepository.save(quizProblem);
-        }
+        //Insert QuizProblem
+        quizProblemService.createQuizProblemByQuiz(quiz, dto.getProblemList());
+
 
         scheduleReserveService.saveQuiz(quiz.getId(), quiz.getStartDateTime());
 

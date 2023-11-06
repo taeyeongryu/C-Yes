@@ -51,16 +51,16 @@ public class AnswerService{
         Long quizId = answerSaveServiceRequest.getQuizId();
         Integer problemNumber = answerSaveServiceRequest.getProblemNumber();
 
-        //존재하는 멤버인지 확인
-//        memberRepository.findById(memberId).orElseThrow(()-> {throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR);});
-        //퀴즈 존재하는지 확인
-//        quizRepository.findById(quizId).orElseThrow(() -> {throw new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR);});
 
         //이미 답을 제출한 적 있는지 확인
         Optional<Answer> findOptionalAnswer = answerRepository.findAnswerByMemberIdAndQuizIdAndProblemNumber(memberId, quizId, problemNumber);
+        boolean after = submitTime.isAfter(startTime);
 
         if (findOptionalAnswer.isPresent()){
             throw new CustomException(CustomExceptionList.ALREADY_SUBMIT);
+        }
+        if(!after){
+            throw new CustomException(CustomExceptionList.SUBMIT_TIME_ERROR);
         }
 
         //Dto -> Entity

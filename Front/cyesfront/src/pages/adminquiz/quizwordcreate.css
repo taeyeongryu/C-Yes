@@ -1,0 +1,26 @@
+.adminquiz {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  flex-direction: column;
+  text-align: center;
+  height: 280px;
+  width: 300px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); */
+  background-color: #68d168;
+  border-radius: 30px;
+  /* margin: 30px;  */
+  margin-top: 50%;
+  margin-bottom: 10%;
+  font-size: 25px;
+}
+
+#input {
+  background-color: yellow;
+}

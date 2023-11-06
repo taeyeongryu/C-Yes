@@ -34,4 +34,11 @@ public class QuizProblem {
         this.problemId = problemId;
         this.problemOrder = problemOrder;
     }
+    public static QuizProblem of(Quiz quiz, String problemId,int problemNum){
+        return QuizProblem.builder()
+                .quiz(quiz)
+                .problemId(problemId)
+                .problemOrder(problemNum)
+                .build();
+    }
 }

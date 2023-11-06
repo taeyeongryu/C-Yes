@@ -15,8 +15,6 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.util.List;
-
 @Configuration
 @EnableRedisRepositories(basePackages = "com.cyes.webserver.domain.stompSocket.repository")
 public class RedisConfig {
@@ -54,6 +52,7 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer
     (
+            // java reflection이 필요한 매개변수를 주입
             RedisConnectionFactory connectionFactory,
             MessageListenerAdapter listenerAdapter,
             ChannelTopic channelTopic
@@ -88,8 +87,6 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
-
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(List.class));
         return redisTemplate;
     }
 

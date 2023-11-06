@@ -1,6 +1,5 @@
 package com.cyes.webserver.domain.stompSocket.controller;
 
-import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.stompSocket.dto.ChatMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SubmitMessage;
@@ -28,6 +27,14 @@ public class MessageController {
     @MessageMapping("/session/message/enter")
     public void enter(SessionMessage message) {
         enterService.handleEnter(message);
+    }
+
+    /**
+     * 유저 퇴장 핸들링
+     */
+    @MessageMapping("/session/message/disconnect")
+    public void disconnect(SessionMessage message) {
+        enterService.handleDisconnect(message);
     }
 
     /**
