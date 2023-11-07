@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -77,6 +79,12 @@ public class ProblemController {
         log.info("pageable = {}",pageable);
         Page<ProblemResponse> problemByCategoryOrType = problemService.findProblemByCategoryOrType(problemCategory, problemType, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(problemByCategoryOrType);
+    }
+
+    @GetMapping("category")
+    public ResponseEntity<List<ProblemCategory>> findAllProblemCategory(){
+        List<ProblemCategory> categoryList = List.of(ProblemCategory.DB, ProblemCategory.DESIGNPATTERN, ProblemCategory.DATASTRUCTURE, ProblemCategory.COMPUTERARCHITECTURE, ProblemCategory.ALGORITHM, ProblemCategory.NETWORK, ProblemCategory.OS);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
 }
 
