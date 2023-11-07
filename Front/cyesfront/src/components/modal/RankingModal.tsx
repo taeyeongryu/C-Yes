@@ -1,5 +1,5 @@
 import React from "react";
-import RoundCornerBtn from "./RoundCornerBtn"; // 경로는 실제 위치에 따라 달라질 수 있습니다.
+import RoundCornerBtn from "../RoundCornerBtn"; // 경로는 실제 위치에 따라 달라질 수 있습니다.
 
 type RankingModalProps = {
   memberList: any[]; // Member 타입은 실제 정의에 맞게 수정해야 합니다.
