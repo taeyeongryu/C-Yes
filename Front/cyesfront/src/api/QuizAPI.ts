@@ -14,7 +14,7 @@ export const getMainQuizInfo = async () => {
             return resp.data;
         })
         .catch((err) => {
-            console.log(err);
+            console.log(err); 
             return null;
         });
 

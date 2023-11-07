@@ -8,6 +8,8 @@ import Answer from "./pages/quiz/ConfirmQuiz";
 import LoginRedir from "./pages/login/LoginRedir";
 
 import ComputerScience from "./pages/cs/ComputerScience";
+import CardStudy from "./pages/cs/types/CardStudy";
+
 import AdminQuizCreate from "./pages/adminquiz/quizwordcreate";
 import AdminQuizCheck from "./pages/adminquiz/quizCheck";
 import AdminQuizInsert from "./pages/adminquiz/quizYesCheck";
@@ -25,6 +27,8 @@ function App() {
           <Route path="/answer" element={<Answer />} />
 
           <Route path="/cs" element={<ComputerScience />} />
+          <Route path="/cs/card" element={<CardStudy />} />
+
           <Route path="/adminquiz/creat" element={<AdminQuizCreate />} />
           <Route path="/adminquiz/check" element={<AdminQuizCheck />} />
           <Route path="/adminquiz/insert" element={<AdminQuizInsert />} />

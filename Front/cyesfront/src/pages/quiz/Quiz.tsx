@@ -7,10 +7,10 @@ import Stomp from "stompjs";
 import { useSelector } from "react-redux";
 import ProgressBar from "../../components/ProgressBar";
 import LoadingModal from "../../components/LoadingModal";
-import RankingModal from "../../components/RankingModal";
+import RankingModal from "../../components/modal/RankingModal";
 import TextTimer from "../../components/TextTimer";
 import { useLocation } from "react-router-dom";
-import MomentOfRank from "../../components/MomentOfRank";
+import MomentOfRank from "../../components/modal/MomentOfRank";
 
 interface ModalProps {
   showModal: boolean;
