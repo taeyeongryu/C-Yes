@@ -11,6 +11,7 @@ import RankingModal from "../../components/modal/RankingModal";
 import TextTimer from "../../components/TextTimer";
 import { useLocation } from "react-router-dom";
 import MomentOfRank from "../../components/modal/MomentOfRank";
+import ChatComponent from "../../components/ChatComponent";
 
 interface ModalProps {
   showModal: boolean;
@@ -100,12 +101,21 @@ const Quiz: React.FC = () => {
     answer: string;
   };
 
+  type ChatMessage = {
+    quizId: number;
+    type: string;
+    memberId: number;
+    message: string;
+  };
+
   const [progress, setProgress] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [isTextareaEnabled, setIsTextareaEnabled] = useState(true);
   const [textareaValue, setTextareaValue] = useState("");
   const [showModalContent, setShowModalContent] = useState(false);
   const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [messageList, setMessageList] = useState<ChatMessage[]>([]);
+
   const answerInput = useRef<HTMLTextAreaElement | null>(null);
 
   // 웹소켓 연결
@@ -276,6 +286,9 @@ const Quiz: React.FC = () => {
   // 메세지 받았을 시 컨트롤 함수
   const messageHandler = (recv: any) => {
     switch (recv.type) {
+      case "CHAT":
+        setMessageList((prev) => [...prev, recv]);
+        return;
       case "START":
         startQuiz();
         return;
@@ -358,9 +371,15 @@ const Quiz: React.FC = () => {
         <div className="form-group">
           <div className="quiz-container">
             <div className="quiz">
-              <div className="quiz-content">
-                {isQuizStarted ? problem?.question : <div>채팅</div>}
-              </div>
+              {isQuizStarted ? (
+                <div className="quiz-content">{problem?.question}</div>
+              ) : (
+                <ChatComponent
+                  memberId={memberId}
+                  messageList={messageList}
+                  socketSend={sendChat}
+                />
+              )}
             </div>
           </div>
 
