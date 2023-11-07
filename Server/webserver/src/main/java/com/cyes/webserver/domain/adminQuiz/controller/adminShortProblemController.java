@@ -3,6 +3,15 @@ package com.cyes.webserver.domain.adminQuiz.controller;
 
 import com.cyes.webserver.domain.adminQuiz.dto.outNoCheckShortProblemDTO;
 import com.cyes.webserver.domain.adminQuiz.service.OpenAIPostRequestService;
+import com.cyes.webserver.domain.problem.dto.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.problemcontent.request.MultipleChoiceProblemRequest;
+import com.cyes.webserver.domain.problem.dto.problemcontent.request.ShortAnswerProblemRequest;
+import com.cyes.webserver.domain.problem.dto.problemcontent.request.TrueOrFalseProblemRequest;
+import com.cyes.webserver.domain.problem.entity.ProblemCategory;
+import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +34,7 @@ import java.util.List;
 public class adminShortProblemController {
 
     private final OpenAIPostRequestService openAIPostRequestService;
+    private final ProblemService problemService;
 
 
     @Operation(summary = "문제 생성", description = "단답형 문제 생성을 도와주는 문제들")
@@ -50,15 +60,80 @@ public class adminShortProblemController {
 
     }
 
-    @Operation(summary = "검증된 문제 넣기", description = "검증된 문제 넣기")
-    @GetMapping("/yes-check-insert")
-    public ResponseEntity<String> yesCheckInsert(@RequestParam("question") String question,
-                                                     @RequestParam("answer") String answer,
-                                                     @RequestParam("category") String category) {
+    @Operation(summary = "검증된 단답형 문제 넣기", description = "검증된 단답형 문제 넣기")
+    @GetMapping("/yes-short-insert")
+    public ResponseEntity<ProblemResponse> yesShortInsert(@RequestParam("question") String question,
+                                                          @RequestParam("answer") String answer,
+                                                          @RequestParam("category") String category) {
 
-        return ResponseEntity.status(HttpStatus.OK).body("저장 성공");
-//        return openAIPostRequestService.outNoCheckProblems(pageable);
+        ShortAnswerProblemRequest shortAnswerProblemRequest = ShortAnswerProblemRequest.builder()
+                .question(question)
+                .answer(answer)
+                .build();
+
+
+        ProblemCategory problemCategory = ProblemCategory.valueOf(category);
+
+        ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest = ShortAnswerProblemSaveRequest.builder()
+                .shortAnswerProblemRequest(shortAnswerProblemRequest)
+                .problemCategory(problemCategory)
+                .build();
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveShortAnswer(shortAnswerProblemSaveRequest));
 
     }
+
+    @Operation(summary = "검증된 O/X 문제 넣기", description = "검증된 O/X 문제 넣기")
+    @GetMapping("/yes-O/X-insert")
+    public ResponseEntity<ProblemResponse> yesOXInsert(@RequestParam("question") String question,
+                                                          @RequestParam("answer") String answer,
+                                                          @RequestParam("category") String category) {
+
+        TrueOrFalseProblemRequest trueOrFalseProblemRequest = TrueOrFalseProblemRequest.builder()
+                .question(question)
+                .answer(answer)
+                .build();
+
+
+        ProblemCategory problemCategory = ProblemCategory.valueOf(category);
+
+        TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest = TrueOrFalseProblemSaveRequest.builder()
+                .trueOrFalseProblemRequest(trueOrFalseProblemRequest)
+                .problemCategory(problemCategory)
+                .build();
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveTrueOrFalse(trueOrFalseProblemSaveRequest));
+
+    }
+
+    @Operation(summary = "검증된 4지선다 문제 넣기", description = "검증된 4지선다 문제 넣기")
+    @PostMapping("/yes-four-select-insert")
+    public ResponseEntity<ProblemResponse> yesFourSelectInsert
+            (@RequestBody MultipleChoiceProblemRequest multipleChoiceProblemRequest
+            , @RequestParam String category)
+    {
+        ProblemCategory problemCategory = ProblemCategory.valueOf(category);
+
+        MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest = MultipleChoiceProblemSaveRequest.builder()
+                .multipleChoiceProblemRequest(multipleChoiceProblemRequest)
+                .problemCategory(problemCategory)
+                .build();
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveMultipleChoice(multipleChoiceProblemSaveRequest));
+
+    }
+
+    @Operation(summary = "검증 안된 문제 삭제", description = "검증 안된 문제 삭제")
+    @GetMapping("/noCheck/delete")
+    public ResponseEntity<String> noCheckDelete(@RequestParam("id") String id){
+
+        return ResponseEntity.status(HttpStatus.OK).body(openAIPostRequestService.noCheckDelete(id));
+
+    }
+
+
 
 }

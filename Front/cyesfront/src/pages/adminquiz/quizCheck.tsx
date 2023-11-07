@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Pagination from "./pageNation"; // Pagination 컴포넌트를 import
+import ShortInsert from "./quizShortInsert";
+import OXInsert from "./quizOXInsert";
+import FourSelectInsert from "./quizFourSelectInsert";
 
 interface Quiz {
   content: Content[];
@@ -23,29 +26,61 @@ interface Pageable {
 const QuizsList: React.FC = () => {
   const [quizs, setQuizs] = useState<Content[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수 상태 추가
-  const itemsPerPage = 3; // 페이지당 아이템 수를 원하는 값으로 설정
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 2;
+  const [quizShortInsert, setQuizShortInsert] = useState(false);
+  const [trueFalseInsert, setTrueFalseInsert] = useState(false);
+  const [fourSelectInsert, setFourSelectInsert] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get<Quiz>(
+        `http://localhost:5000/api/adminproblem/no-check-all?page=${currentPage}&size=${itemsPerPage}`
+      );
+      setQuizs(response.data.content);
+      setTotalPages(response.data.totalPages);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<Quiz>(
-          `http://localhost:5000/api/adminproblem/no-check-all?page=${currentPage}&size=${itemsPerPage}`
-        );
-        setQuizs(response.data.content);
-        // API 응답에서 전체 페이지 수 정보 추출
-        setTotalPages(response.data.totalPages);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchData();
   }, [currentPage]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
+  };
+
+  const quizShortInserttClick = () => {
+    setQuizShortInsert(true);
+    setTrueFalseInsert(false);
+    setFourSelectInsert(false);
+  };
+
+  const trueFalseInsertClick = () => {
+    setQuizShortInsert(false);
+    setTrueFalseInsert(true);
+    setFourSelectInsert(false);
+  };
+
+  const fourSelectInsertClick = () => {
+    setQuizShortInsert(false);
+    setTrueFalseInsert(false);
+    setFourSelectInsert(true);
+  };
+
+  const deleteQuiz = (quizId: string) => {
+    axios
+      .get(`http://localhost:5000/api/adminproblem/noCheck/delete/${quizId}`)
+      .then((response) => {
+        console.log("문제 삭제 성공:", response.data);
+        fetchData(); // 삭제 후 데이터 다시 불러오기
+      })
+      .catch((error) => {
+        console.error("문제 삭제 중 오류:", error);
+      });
   };
 
   return (
@@ -64,7 +99,9 @@ const QuizsList: React.FC = () => {
             <tr key={quiz.id}>
               <td>{quiz.question}</td>
               <td>{quiz.category}</td>
-              <td>삭제</td>
+              <td>
+                <button onClick={() => deleteQuiz(quiz.id)}>삭제</button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -74,7 +111,18 @@ const QuizsList: React.FC = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        displayRange={3}
       />
+
+      <div className="button-container">
+        <button onClick={quizShortInserttClick}>단답형</button>
+        <button onClick={trueFalseInsertClick}>O/X형</button>
+        <button onClick={fourSelectInsertClick}>4지선다</button>
+      </div>
+
+      {quizShortInsert && <ShortInsert />}
+      {trueFalseInsert && <OXInsert />}
+      {fourSelectInsert && <FourSelectInsert />}
     </div>
   );
 };

@@ -11,7 +11,7 @@ const QuizWordCrate = () => {
     // Axios를 사용하여 API 호출 수행
     axios
       .get(
-        `http://localhost:5000/api/adminproblem/create?question=${question}&answer=${answer}&category=${category}`
+        `http://localhost:5000/api/adminproblem/yes-O/X-insert?question=${question}&answer=${answer}&category=${category}`
       )
       .then((response) => {
         console.log("API 응답 데이터: ", response.data);
@@ -25,22 +25,24 @@ const QuizWordCrate = () => {
   return (
     <div className="login-container">
       <div className="adminquiz">
-        문제 생성 (문제, 답, 카테고리)
+        O/X문제 생성
         <br></br>
         <br></br>
-        <input
-          type="text"
+        <textarea
+          // type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="문제를 입력하세요."
-          className="input-field"
+          className="text-field"
+          rows={8}
+          cols={40}
         />
         <br></br>
         <input
           type="text"
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
-          placeholder="답을 입력하세요."
+          placeholder="답(O/X)을 입력하세요."
           className="input-field"
         />
         <br></br>

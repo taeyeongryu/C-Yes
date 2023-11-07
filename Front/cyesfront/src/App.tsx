@@ -7,12 +7,10 @@ import Live from "./pages/live/Live";
 import Answer from "./pages/quiz/ConfirmQuiz";
 import LoginRedir from "./pages/login/LoginRedir";
 
-
 import ComputerScience from "./pages/cs/ComputerScience";
 import AdminQuizCreate from "./pages/adminquiz/quizwordcreate";
 import AdminQuizCheck from "./pages/adminquiz/quizCheck";
-import AdminQuizInsert from "./pages/adminquiz/quizYesCheck";
-
+import AdminQuizInsert from "./pages/adminquiz/quizShortInsert";
 
 function App() {
   return (
@@ -26,12 +24,10 @@ function App() {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/answer" element={<Answer />} />
 
-
           <Route path="/cs" element={<ComputerScience />} />
-          <Route path="/adminquiz/creat" element={<AdminQuizCreate />} />
+          <Route path="/adminquiz/create" element={<AdminQuizCreate />} />
           <Route path="/adminquiz/check" element={<AdminQuizCheck />} />
           <Route path="/adminquiz/insert" element={<AdminQuizInsert />} />
-
         </Routes>
       </BrowserRouter>
     </div>
