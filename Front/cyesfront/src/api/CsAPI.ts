@@ -8,14 +8,14 @@ const csApi = axios.create({
 
 export const getCsCategory = async () => {
   const data = await csApi
-      .get(``)
-      .then((resp) => {
-          return resp.data;
-      })
-      .catch((err) => {
-          console.log(err); 
-          return null;
-      });
+    .get(`/api/problem/category`)
+    .then((resp) => {
+      return resp.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return null;
+    });
 
   return data;
 };
