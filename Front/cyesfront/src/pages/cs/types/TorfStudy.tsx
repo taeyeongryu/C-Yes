@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./CardStudy.css";
+import "./TorfStudy.css";
 import IconButton from "../../../components/button/IconButton";
 import { useNavigate } from "react-router-dom";
 type Props = {};
