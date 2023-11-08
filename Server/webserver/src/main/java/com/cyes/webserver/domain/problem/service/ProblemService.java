@@ -120,7 +120,7 @@ public class ProblemService {
 
     //문제를 삭제한다.
     @Transactional
-    public void deleteProblem(String id){
+    public void deleteProblem(String id) {
         problemRepository.deleteById(id);
     }
 
@@ -134,4 +134,5 @@ public class ProblemService {
         }
         return list;
     }
+
 }

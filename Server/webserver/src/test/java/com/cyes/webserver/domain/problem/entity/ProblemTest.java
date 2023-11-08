@@ -4,14 +4,10 @@ import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRe
 import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
 import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
 import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProblemTest {

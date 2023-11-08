@@ -8,6 +8,7 @@ import lombok.*;
 import java.io.IOException;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProblemResponse {
     private String id;
