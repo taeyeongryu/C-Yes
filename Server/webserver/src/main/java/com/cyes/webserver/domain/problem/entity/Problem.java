@@ -1,30 +1,40 @@
 package com.cyes.webserver.domain.problem.entity;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
+import com.mongodb.lang.Nullable;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 
-
 @Getter
-@Document(collection = "problem")
+@Document
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Problem {
-
     //pk
     @Id
     private String id;
 
-    @DBRef
-    @Field(name = "problem_content")
-    private ProblemContent content;
+    @Field("problem_question")
+    private String question;
+
+    @Field("problem_choices")
+    @Nullable
+    private String[] choices;
+
+    @Field("problem_answer")
+    private String answer;
+
+    @Field("problem_decription")
+    private String description;
 
     //카테고리(네트워크, 운영체제 등등)
     //인덱싱으로 조회 성능 향상
@@ -38,12 +48,60 @@ public class Problem {
     @Field(name = "problem_type")
     private String type;
 
+
+
     @Builder
-    public Problem(String id, ProblemContent content, ProblemCategory category, ProblemType type) {
+    private Problem(String id, String question, @Nullable String[] choices, String answer, String description, ProblemCategory category, ProblemType type) {
         this.id = id;
-        this.content = content;
+        this.question = question;
+        this.choices = choices;
+        this.answer = answer;
+        this.description = description;
         this.category = String.valueOf(category);
         this.type = String.valueOf(type);
+    }
+
+    public static Problem  createMultipleChoice(MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest){
+        return Problem.builder()
+                .question(multipleChoiceProblemSaveRequest.getQuestion())
+                .choices(multipleChoiceProblemSaveRequest.getChoices())
+                .answer(multipleChoiceProblemSaveRequest.getAnswer())
+                .description(multipleChoiceProblemSaveRequest.getDescription())
+                .category(multipleChoiceProblemSaveRequest.getProblemCategory())
+                .type(ProblemType.MULTIPLECHOICE)
+                .build();
+    }
+
+    public static Problem createShortAnswer(ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest){
+        return Problem.builder()
+                .question(shortAnswerProblemSaveRequest.getQuestion())
+                .answer(shortAnswerProblemSaveRequest.getAnswer())
+                .description(shortAnswerProblemSaveRequest.getDescription())
+                .category(shortAnswerProblemSaveRequest.getProblemCategory())
+                .type(ProblemType.SHORTANSWER)
+                .build();
+    }
+
+    public static Problem createTrueOrFalse(TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest){
+        return Problem.builder()
+                .question(trueOrFalseProblemSaveRequest.getQuestion())
+                .answer(trueOrFalseProblemSaveRequest.getAnswer())
+                .category(trueOrFalseProblemSaveRequest.getProblemCategory())
+                .description(trueOrFalseProblemSaveRequest.getDescription())
+                .type(ProblemType.TRUEORFALSE)
+                .build();
+    }
+    public ProblemResponse toProblemResponse(int problemOrder){
+        return ProblemResponse.builder()
+                .id(this.id)
+                .question(this.question)
+                .choices(this.choices)
+                .answer(this.answer)
+                .description(this.description)
+                .problemOrder(problemOrder)
+                .category(this.category)
+                .type(this.type)
+                .build();
     }
 
     public ProblemCategory getCategory(){
@@ -53,35 +111,4 @@ public class Problem {
         return ProblemType.valueOf(this.type);
     }
 
-
-
-    public ProblemResponse toProblemResponse(){
-        return ProblemResponse.builder()
-                .id(this.id)
-                .contentResponse(this.content.toProblemContentResponse())
-                .category(this.category)
-                .type(this.type)
-                .build();
-    }
-
-    public ProblemResponse toProblemResponse(int problemOrder){
-        ProblemResponse problemResponse = ProblemResponse.builder()
-                .id(this.id)
-                .contentResponse(this.content.toProblemContentResponse())
-                .problemOrder(problemOrder)
-                .category(this.category)
-                .type(this.type)
-                .build();
-        return problemResponse;
-    }
-
-    @Override
-    public String toString() {
-        return "Problem{" +
-                "id='" + id + '\'' +
-                ", content=" + content +
-                ", category='" + category + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
 }

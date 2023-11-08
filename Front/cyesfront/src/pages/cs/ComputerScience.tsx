@@ -22,10 +22,7 @@ const ComputerScience = (props: Props) => {
   return (
     <div className="live-container">
       <div className="content">
-        <div className="cs-text-container">
-          {" "}
-          <p>cs 학습</p>{" "}
-        </div>
+        <div className="cs-text-container">cs 학습</div>
         <div className="select-title-container">
           <SelectTitleModal
             isOpen={isModalOpen}
@@ -36,7 +33,6 @@ const ComputerScience = (props: Props) => {
         {/* 카드학습 => type = card */}
         <div className="button-container">
           <div className="button-element">
-            {" "}
             <RoundCornerBtn
               width="300px"
               height="100px"

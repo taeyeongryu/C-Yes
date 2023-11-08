@@ -1,14 +1,11 @@
 package com.cyes.webserver.domain.problem.service;
 
-import com.cyes.webserver.domain.problem.dto.MultipleChoiceProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.dto.ShortAnswerProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.problem.entity.*;
-import com.cyes.webserver.domain.problem.repository.MultipleChoiceRepository;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
-import com.cyes.webserver.domain.problem.repository.ShortAnswerRepository;
-import com.cyes.webserver.domain.problem.repository.TrueOrFalseRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
@@ -28,27 +25,19 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ProblemService {
     private final ProblemRepository problemRepository;
-    private final MultipleChoiceRepository multipleChoiceRepository;
-    private final ShortAnswerRepository shortAnswerRepository;
-    private final TrueOrFalseRepository trueOrFalseRepository;
-
 
     //객관식 문제 저장
     @Transactional
     public ProblemResponse saveMultipleChoice(MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest){
         log.info("multipleChoiceProblemSaveRequest = {}",multipleChoiceProblemSaveRequest);
-
-        //Dto -> Entity
-        Problem problem = multipleChoiceProblemSaveRequest.toEntity();
-
-        //Content DB 저장
-        multipleChoiceRepository.save((MultipleChoice) problem.getContent());
+        //Dto -> Document
+        Problem multipleChoice = Problem.createMultipleChoice(multipleChoiceProblemSaveRequest);
 
         //Problem DB 저장
-        problemRepository.save(problem);
+        problemRepository.save(multipleChoice);
 
         //Entity -> Dto
-        ProblemResponse problemResponse = problem.toProblemResponse();
+        ProblemResponse problemResponse = multipleChoice.toProblemResponse(0);
 
         return problemResponse;
     }
@@ -56,39 +45,30 @@ public class ProblemService {
     @Transactional
     public ProblemResponse saveShortAnswer(ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest){
         log.info("shortAnswerProblemSaveRequest = {}",shortAnswerProblemSaveRequest);
-
         //Dto -> Entity
-        Problem problem = shortAnswerProblemSaveRequest.toEntity();
-
-        //Content DB 저장
-        shortAnswerRepository.save((ShortAnswer) problem.getContent());
+        Problem shortAnswer = Problem.createShortAnswer(shortAnswerProblemSaveRequest);
 
         //Problem DB 저장
-        problemRepository.save(problem);
+        problemRepository.save(shortAnswer);
 
         //Entity -> Dto
-        ProblemResponse problemResponse = problem.toProblemResponse();
+        ProblemResponse problemResponse = shortAnswer.toProblemResponse(0);
         return problemResponse;
     }
     //오엑스 문제 저장
     @Transactional
     public ProblemResponse saveTrueOrFalse(TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest){
         log.info("trueOrFalseProblemSaveRequest = {}",trueOrFalseProblemSaveRequest);
-
         //Dto -> Entity
-        Problem problem = trueOrFalseProblemSaveRequest.toEntity();
-
-        //Content DB 저장
-        trueOrFalseRepository.save((TrueOrFalse) problem.getContent());
+        Problem trueOrFalse = Problem.createTrueOrFalse(trueOrFalseProblemSaveRequest);
 
         //Problem DB 저장
-        problemRepository.save(problem);
+        problemRepository.save(trueOrFalse);
 
         //Entity -> Dto
-        ProblemResponse problemResponse = problem.toProblemResponse();
+        ProblemResponse problemResponse = trueOrFalse.toProblemResponse(0);
         return problemResponse;
     }
-
     //문제 전체 조회 - 페이지네이션
     public Page<ProblemResponse> findAllProblem(Pageable pageable){
 
@@ -154,21 +134,4 @@ public class ProblemService {
         }
         return list;
     }
-    //문제 수정하는 메서드
-//    @Transactional
-//    public ProblemResponse updateProblem(ProblemUpdateServiceRequest problemUpdateServiceRequest){
-//        //Problem id 값
-//        String id = problemUpdateServiceRequest.getId();
-//
-//        //id값으로 문제를 먼저 찾는다.
-//        //존재하지 않으면 예외 발생
-//        Problem findProblem = problemRepository.findById(id).orElseThrow(() -> {
-//            throw new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR);
-//        });
-//        //Entity 수정
-//        findProblem.changeByUpdateDto(problemUpdateServiceRequest);
-//
-//        //Entity -> Dto
-//        return findProblem.toProblemResponse();
-//    }
 }

@@ -1,6 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.service.problem;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.stompSocket.dto.ProblemMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import com.cyes.webserver.redis.service.RedisService;
@@ -28,12 +28,13 @@ public class ProblemService {
      * @param problem (출제할 문제 정보)
      */
     public void sendProblem(Long quizId, ProblemResponse problem) {
+
         ProblemMessage problemMessage = ProblemMessage.builder()
                 .quizId(quizId)
                 .type(SessionMessage.MessageType.PROBLEM)
                 .order(problem.getProblemOrder())
-                .answerLength(problem.getContentResponse().getAnswer().length())
-                .question(problem.getContentResponse().getQuestion())
+                .answerLength(problem.getAnswer().length())
+                .question(problem.getQuestion())
                 .build();
 
         // 클라이언트한테 문제 보내기

@@ -1,11 +1,10 @@
 package com.cyes.webserver.domain.stompSocket.service.result;
 
-import com.cyes.webserver.domain.Answer.entity.Answer;
 import com.cyes.webserver.domain.Answer.repository.AnswerRepository;
 import com.cyes.webserver.domain.Answer.service.AnswerService;
 import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.rank.dto.GradingResult;
 import com.cyes.webserver.domain.stompSocket.dto.GradingResultPresentResponse;
 import com.cyes.webserver.domain.stompSocket.dto.ResultMessage;
@@ -89,7 +88,7 @@ public class ResultService {
             Integer problemNumber = answer.getProblemOrder();
 
             //문제의 정답
-            String problemAnswer = problemList.get(problemNumber - 1).getContentResponse().getAnswer();
+            String problemAnswer = problemList.get(problemNumber - 1).getAnswer();
 
             //채점결과가 존재하지 않다면
             if(!resultMap.containsKey(memberId)){
