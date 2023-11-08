@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static com.cyes.webserver.redis.KeyGenerator.SCHEDULE_PREFIX;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ScheduleReserveService {
 
     private final StringRedisTemplate stringRedisTemplate;
-    private final String SCHEDULE_PREFIX = "ScheduledQuizSession_";
+
 
 
     /**
