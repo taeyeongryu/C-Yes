@@ -149,8 +149,10 @@ public class OpenAIPostRequestService {
         ArrayList<outNoCheckShortProblemDTO> list = new ArrayList<>();
 
         for(noCheckShortProblem ndto : realProblem){
+            
 
             outNoCheckShortProblemDTO out = outNoCheckShortProblemDTO.builder()
+                    .id(ndto.getId())
                     .question(ndto.getQuestion())
                     .category(ndto.getCategory()).build();
 
@@ -163,7 +165,9 @@ public class OpenAIPostRequestService {
 
     public String noCheckDelete(String id) {
             Optional<noCheckShortProblem> noCheckShortProblem = noCheckProblemRepository.findById(id);
+        log.info("id: " + id);
         if (noCheckShortProblem.isPresent()) {
+
             noCheckProblemRepository.deleteById(id);
             return "삭제 완료";
         } else {

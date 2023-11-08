@@ -8,30 +8,33 @@ const QuizWordCrate = () => {
   const [choice1, setChoice1] = useState("");
   const [choice2, setChoice2] = useState("");
   const [choice3, setChoice3] = useState("");
+  const [choice4, setChoice4] = useState("");
+  const [description, setDescription] = useState("");
+
+  const multipleChoiceProblemSaveRequest = {
+    question: question,
+    answer: answer,
+    choices: [choice1, choice2, choice3, choice4],
+    category: category,
+    description: description,
+  };
 
   const noCheckProblemWord = () => {
-    const quizWordRequest = {
-      question: question,
-      answer: answer,
-      choices: [choice1, choice2, choice3],
-    };
-
-    const noCheckProblemWord = () => {
-      // Axios를 사용하여 API 호출 수행
-      axios
-        .post(
-          `http://localhost:5000/api/adminproblem/yes-four-select-insert?category=${category}`,
-          quizWordRequest
-        )
-        .then((response) => {
-          console.log("API 응답 데이터: ", response.data);
-          // 원하는 작업 수행
-        })
-        .catch((error) => {
-          console.error("API 호출 중 오류 발생: ", error);
-        });
-    };
+    // Axios를 사용하여 API 호출 수행
+    axios
+      .post(
+        `http://localhost:5000/api/adminproblem/yes-four-select-insert`,
+        multipleChoiceProblemSaveRequest
+      )
+      .then((response) => {
+        console.log("API 응답 데이터: ", response.data);
+        // 원하는 작업 수행
+      })
+      .catch((error) => {
+        console.error("API 호출 중 오류 발생: ", error);
+      });
   };
+
   return (
     <div className="login-container">
       <div className="fourquiz">
@@ -48,11 +51,29 @@ const QuizWordCrate = () => {
           cols={40}
         />
         <br></br>
+        <textarea
+          // type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="설명을 입력하세요."
+          className="text-field"
+          rows={8}
+          cols={40}
+        />
+        <br></br>
         <input
           type="text"
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
-          placeholder="정답을 입력하세요."
+          placeholder="정답1을 입력하세요."
+          className="input-field"
+        />
+        <br></br>
+        <input
+          type="text"
+          value={choice4}
+          onChange={(e) => setChoice4(e.target.value)}
+          placeholder="정답2을 입력하세요."
           className="input-field"
         />
         <br></br>
