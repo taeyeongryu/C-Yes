@@ -3,13 +3,10 @@ package com.cyes.webserver.domain.adminQuiz.controller;
 
 import com.cyes.webserver.domain.adminQuiz.dto.outNoCheckShortProblemDTO;
 import com.cyes.webserver.domain.adminQuiz.service.OpenAIPostRequestService;
-import com.cyes.webserver.domain.problem.dto.MultipleChoiceProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.dto.ShortAnswerProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.TrueOrFalseProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.problemcontent.request.MultipleChoiceProblemRequest;
-import com.cyes.webserver.domain.problem.dto.problemcontent.request.ShortAnswerProblemRequest;
-import com.cyes.webserver.domain.problem.dto.problemcontent.request.TrueOrFalseProblemRequest;
+import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -64,23 +61,21 @@ public class adminShortProblemController {
     @GetMapping("/yes-short-insert")
     public ResponseEntity<ProblemResponse> yesShortInsert(@RequestParam("question") String question,
                                                           @RequestParam("answer") String answer,
-                                                          @RequestParam("category") String category) {
-
-        ShortAnswerProblemRequest shortAnswerProblemRequest = ShortAnswerProblemRequest.builder()
-                .question(question)
-                .answer(answer)
-                .build();
-
+                                                          @RequestParam("category") String category,
+                                                          @RequestParam("description") String description
+    ) {
 
         ProblemCategory problemCategory = ProblemCategory.valueOf(category);
 
-        ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest = ShortAnswerProblemSaveRequest.builder()
-                .shortAnswerProblemRequest(shortAnswerProblemRequest)
+        ShortAnswerProblemSaveRequest shortAnswerProblemRequest = ShortAnswerProblemSaveRequest.builder()
+                .question(question)
+                .answer(answer)
                 .problemCategory(problemCategory)
+                .description(description)
                 .build();
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveShortAnswer(shortAnswerProblemSaveRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveShortAnswer(shortAnswerProblemRequest));
 
     }
 
@@ -88,41 +83,32 @@ public class adminShortProblemController {
     @GetMapping("/yes-O/X-insert")
     public ResponseEntity<ProblemResponse> yesOXInsert(@RequestParam("question") String question,
                                                           @RequestParam("answer") String answer,
-                                                          @RequestParam("category") String category) {
+                                                          @RequestParam("category") String category,
+                                                            @RequestParam("description") String description
 
-        TrueOrFalseProblemRequest trueOrFalseProblemRequest = TrueOrFalseProblemRequest.builder()
-                .question(question)
-                .answer(answer)
-                .build();
-
+    ) {
 
         ProblemCategory problemCategory = ProblemCategory.valueOf(category);
 
-        TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest = TrueOrFalseProblemSaveRequest.builder()
-                .trueOrFalseProblemRequest(trueOrFalseProblemRequest)
+        TrueOrFalseProblemSaveRequest trueOrFalseProblemRequest = TrueOrFalseProblemSaveRequest.builder()
+                .question(question)
+                .answer(answer)
                 .problemCategory(problemCategory)
+                .description(description)
                 .build();
 
-
-        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveTrueOrFalse(trueOrFalseProblemSaveRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveTrueOrFalse(trueOrFalseProblemRequest));
 
     }
 
     @Operation(summary = "검증된 4지선다 문제 넣기", description = "검증된 4지선다 문제 넣기")
     @PostMapping("/yes-four-select-insert")
     public ResponseEntity<ProblemResponse> yesFourSelectInsert
-            (@RequestBody MultipleChoiceProblemRequest multipleChoiceProblemRequest
-            , @RequestParam String category)
+            (@RequestBody MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest)
     {
-        ProblemCategory problemCategory = ProblemCategory.valueOf(category);
+//        ProblemCategory problemCategory = ProblemCategory.valueOf(category);
 
-        MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest = MultipleChoiceProblemSaveRequest.builder()
-                .multipleChoiceProblemRequest(multipleChoiceProblemRequest)
-                .problemCategory(problemCategory)
-                .build();
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(problemService.saveMultipleChoice(multipleChoiceProblemSaveRequest));
+           return ResponseEntity.status(HttpStatus.OK).body(problemService.saveMultipleChoice(multipleChoiceProblemSaveRequest));
 
     }
 
