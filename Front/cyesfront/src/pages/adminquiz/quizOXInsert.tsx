@@ -12,8 +12,7 @@ const QuizWordCrate = () => {
     // Axios를 사용하여 API 호출 수행
     axios
       .get(
-        `http://localhost:5000/api/adminproblem/yes-O/X-insert?question=${question}&answer=${answer}
-        &category=${category}&description=${description}`
+        `http://localhost:5000/api/adminproblem/yes-O/X-insert?question=${question}&answer=${answer}&category=${category}&description=${description}`
       )
       .then((response) => {
         console.log("API 응답 데이터: ", response.data);

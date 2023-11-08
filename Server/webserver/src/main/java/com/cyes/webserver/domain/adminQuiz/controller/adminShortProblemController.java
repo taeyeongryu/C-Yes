@@ -90,6 +90,7 @@ public class adminShortProblemController {
 
     ) {
 
+        log.info(answer);
         ProblemCategory problemCategory = ProblemCategory.valueOf(category);
 
         TrueOrFalseProblemSaveRequest trueOrFalseProblemRequest = TrueOrFalseProblemSaveRequest.builder()
