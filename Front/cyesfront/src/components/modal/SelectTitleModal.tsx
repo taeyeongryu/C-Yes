@@ -6,11 +6,13 @@ import { getCsCategory } from "../../api/CsAPI";
 interface SelectTitleModalProps {
   isOpen: boolean;
   close: () => void;
+  type: string;
 }
 
 const SelectTitleModal: React.FC<SelectTitleModalProps> = ({
   isOpen,
   close,
+  type
 }) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
