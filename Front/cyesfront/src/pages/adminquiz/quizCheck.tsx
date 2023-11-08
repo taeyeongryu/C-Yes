@@ -71,10 +71,11 @@ const QuizsList: React.FC = () => {
     setFourSelectInsert(true);
   };
 
-  const deleteQuiz = (quizId: string) => {
-    axios
-      .get(`http://localhost:5000/api/adminproblem/noCheck/delete/${quizId}`)
+  const deleteQuiz = async (quizId: string) => {
+    await axios
+      .get(`http://localhost:5000/api/adminproblem/noCheck/delete?id=${quizId}`)
       .then((response) => {
+        console.log("id: ", quizId);
         console.log("문제 삭제 성공:", response.data);
         fetchData(); // 삭제 후 데이터 다시 불러오기
       })
@@ -100,7 +101,14 @@ const QuizsList: React.FC = () => {
               <td>{quiz.question}</td>
               <td>{quiz.category}</td>
               <td>
-                <button onClick={() => deleteQuiz(quiz.id)}>삭제</button>
+                <button
+                  onClick={() => {
+                    console.log("Clicked on quiz with ID:", quiz.id);
+                    deleteQuiz(quiz.id);
+                  }}
+                >
+                  삭제
+                </button>
               </td>
             </tr>
           ))}
