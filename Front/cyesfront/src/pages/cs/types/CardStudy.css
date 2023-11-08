@@ -1,14 +1,3 @@
-.title {
-  display: flex;
-  align-items: center; /* 수직 가운데 정렬 */
-
-  margin-top: 30px;
-  font-size: 30px;
-  
-  /* justify-content: center; */
-  /* text-align: center; */
-
-}
 
 .card {
   display: flex;
@@ -57,25 +46,3 @@
   /* transform: rotateY(180deg); */
 }
 
-
-
-.bottom-next {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  height: 20px;
-  width: 300px;
-
-  margin: 0 auto;
-  padding: 20px;
-
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  margin-top: 10%;
-  margin-bottom: 20%;
-  font-size: 15px;
-}
