@@ -39,7 +39,7 @@ class QuizProblemRepositoryTest {
     @DisplayName("quizId로 ProblemId 리스트를 조회한다.")
     void findQuizProblems() {
         // given
-        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
         memberRepository.save(member1);
         LocalDateTime startDateTime1 = LocalDateTime.of(2023, 5, 5, 5, 5, 5);
         Quiz quiz1 = Quiz.builder().member(member1).title("가쥬아1").startDateTime(startDateTime1).build();

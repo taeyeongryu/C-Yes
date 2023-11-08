@@ -1,6 +1,9 @@
 package com.cyes.webserver.domain.problem.repository;
 
 
+import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
 import com.cyes.webserver.domain.problem.entity.*;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
@@ -11,9 +14,11 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
 
 //@SpringBootTest
@@ -21,50 +26,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProblemRepositoryTest {
     @Autowired
     private ProblemRepository problemRepository;
-    @Autowired
-    private MultipleChoiceRepository multipleChoiceRepository;
-    @Autowired
-    private ShortAnswerRepository shortAnswerRepository;
-    @Autowired
-    private TrueOrFalseRepository trueOrFalseRepository;
+
 
 
 
     @AfterEach
     void tearDown() {
         problemRepository.deleteAll();
-        multipleChoiceRepository.deleteAll();
-        shortAnswerRepository.deleteAll();
-        trueOrFalseRepository.deleteAll();
-
     }
     @Test
     @DisplayName("문제를 DB에 저장한다.")
     void save() {
         // given
-        MultipleChoice multipleChoice = MultipleChoice.builder()
-                .question("question")
-                .choices(new String[]{"choice1", "choice2", "choice3", "choice4"})
-                .answer("answer")
-                .build();
+        String description = "description";
+        String answer = "answer";
+        String[] choices = {"choice1", "choice2", "choice3", "choice4"};
+        String question = "question";
+        ProblemCategory category = ProblemCategory.DB;
 
-
-        multipleChoiceRepository.save(multipleChoice);
-
-        Problem problem = Problem.builder()
-                .content(multipleChoice)
-                .category(ProblemCategory.OS)
-                .type(ProblemType.MULTIPLECHOICE)
-                .build();
-
+        MultipleChoiceProblemSaveRequest request = MultipleChoiceProblemSaveRequest.builder().question(question).choices(choices).answer(answer).description(description).problemCategory(category).build();
+        Problem multipleChoice = Problem.createMultipleChoice(request);
 
         // when
-        problemRepository.save(problem);
-
+        Problem problem = problemRepository.save(multipleChoice);
 
         // then
         assertThat(problem.getId()).isNotNull();
-        assertThat(problemRepository.findAll()).isNotNull();
+        assertThat(problemRepository.findAll().get(0))
+                .extracting("question", "choices", "answer", "description", "category", "type")
+                .contains(question, choices, answer, description, category, ProblemType.MULTIPLECHOICE);
     }
     @Test
     @DisplayName("카테고리, Pabeable를 조건으로 DB에서 조회한다.")
@@ -82,14 +72,14 @@ class ProblemRepositoryTest {
         Page<Problem> problemByCategory4 = problemRepository.findProblemByCategory(ProblemCategory.DB, pageable4);
         // then
         assertThat(problemByCategory1.getContent()).hasSize(3)
-                .extracting(problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        ,problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                .extracting(problem -> problem.getQuestion()
+                        ,problem -> problem.getAnswer()
                         ,Problem::getCategory
                         ,Problem::getType)
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("question11", "answer11", ProblemCategory.DB, ProblemType.TRUEORFALSE),
-                        Tuple.tuple("question12", "answer12", ProblemCategory.DB, ProblemType.TRUEORFALSE),
-                        Tuple.tuple("question13", "answer13", ProblemCategory.DB, ProblemType.TRUEORFALSE)
+                        Tuple.tuple("question1", "answer1", ProblemCategory.DB, ProblemType.MULTIPLECHOICE),
+                        Tuple.tuple("question2", "answer2", ProblemCategory.DB, ProblemType.MULTIPLECHOICE),
+                        Tuple.tuple("question3", "answer3", ProblemCategory.DB, ProblemType.MULTIPLECHOICE)
                 );
 
     }
@@ -113,8 +103,8 @@ class ProblemRepositoryTest {
         // then
         assertThat(problemByCategory1.getContent()).hasSize(3)
                 .extracting(
-                        problem->problem.getContent().toProblemContentResponse().getQuestion()
-                        ,problem->problem.getContent().toProblemContentResponse().getAnswer()
+                        problem->problem.getQuestion()
+                        ,problem->problem.getAnswer()
                         ,Problem::getCategory
                         ,Problem::getType
                 )
@@ -125,8 +115,8 @@ class ProblemRepositoryTest {
                 );
         assertThat(problemByCategory2.getContent()).hasSize(3)
                 .extracting(
-                        problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        , problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                        problem -> problem.getQuestion()
+                        , problem -> problem.getAnswer()
                         , Problem::getCategory
                         , Problem::getType
                 )
@@ -137,8 +127,8 @@ class ProblemRepositoryTest {
                 );
         assertThat(problemByCategory3.getContent()).hasSize(3)
                 .extracting(
-                        problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        , problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                        problem -> problem.getQuestion()
+                        , problem -> problem.getAnswer()
                         , Problem::getCategory
                         , Problem::getType
                 )
@@ -149,8 +139,8 @@ class ProblemRepositoryTest {
                 );
         assertThat(problemByCategory4.getContent()).hasSize(1)
                 .extracting(
-                        problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        , problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                        problem -> problem.getQuestion()
+                        , problem -> problem.getAnswer()
                         , Problem::getCategory
                         , Problem::getType
                 )
@@ -169,36 +159,36 @@ class ProblemRepositoryTest {
         Pageable pageable2 = PageRequest.of(0, 3); // page는 0-based index입니다.
         Pageable pageable3 = PageRequest.of(0, 3); // page는 0-based index입니다.
         // when
-        Page<Problem> problemByCategory1 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.MULTIPLECHOICE, pageable1);
-        Page<Problem> problemByCategory2 = problemRepository.findProblemByCategoryAndType(ProblemCategory.DB,ProblemType.TRUEORFALSE, pageable2);
+        Page<Problem> problemByCategory1 = problemRepository.findProblemByCategoryAndType(ProblemCategory.DB,ProblemType.MULTIPLECHOICE, pageable1);
+        Page<Problem> problemByCategory2 = problemRepository.findProblemByCategoryAndType(ProblemCategory.OS,ProblemType.TRUEORFALSE, pageable2);
         Page<Problem> problemByCategory3 = problemRepository.findProblemByCategoryAndType(ProblemCategory.NETWORK,ProblemType.SHORTANSWER, pageable3);
 
 
         // then
         assertThat(problemByCategory1.getContent()).hasSize(3)
-                .extracting(problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        ,problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                .extracting(problem -> problem.getQuestion()
+                        ,problem -> problem.getAnswer()
                         ,Problem::getCategory
                         ,Problem::getType)
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("question1", "answer1", ProblemCategory.OS, ProblemType.MULTIPLECHOICE),
-                        Tuple.tuple("question2", "answer2", ProblemCategory.OS, ProblemType.MULTIPLECHOICE),
-                        Tuple.tuple("question3", "answer3", ProblemCategory.OS, ProblemType.MULTIPLECHOICE)
+                        Tuple.tuple("question1", "answer1", ProblemCategory.DB, ProblemType.MULTIPLECHOICE),
+                        Tuple.tuple("question2", "answer2", ProblemCategory.DB, ProblemType.MULTIPLECHOICE),
+                        Tuple.tuple("question3", "answer3", ProblemCategory.DB, ProblemType.MULTIPLECHOICE)
                 );
         assertThat(problemByCategory2.getContent()).hasSize(3)
-                .extracting(problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        , problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                .extracting(problem -> problem.getQuestion()
+                        , problem -> problem.getAnswer()
                         , Problem::getCategory
                         , Problem::getType)
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("question11", "answer11", ProblemCategory.DB, ProblemType.TRUEORFALSE),
-                        Tuple.tuple("question12", "answer12", ProblemCategory.DB, ProblemType.TRUEORFALSE),
-                        Tuple.tuple("question13", "answer13", ProblemCategory.DB, ProblemType.TRUEORFALSE)
+                        Tuple.tuple("question11", "answer11", ProblemCategory.OS, ProblemType.TRUEORFALSE),
+                        Tuple.tuple("question12", "answer12", ProblemCategory.OS, ProblemType.TRUEORFALSE),
+                        Tuple.tuple("question13", "answer13", ProblemCategory.OS, ProblemType.TRUEORFALSE)
                 );
 
         assertThat(problemByCategory3.getContent()).hasSize(3)
-                .extracting(problem -> problem.getContent().toProblemContentResponse().getQuestion()
-                        , problem -> problem.getContent().toProblemContentResponse().getAnswer()
+                .extracting(problem -> problem.getQuestion()
+                        , problem -> problem.getAnswer()
                         , Problem::getCategory
                         , Problem::getType)
                 .containsExactlyInAnyOrder(
@@ -207,53 +197,52 @@ class ProblemRepositoryTest {
                         Tuple.tuple("question23", "answer23", ProblemCategory.NETWORK, ProblemType.SHORTANSWER)
                 );
     }
+    @Test
+    @DisplayName("pageable을 이용해서 모든 문제를 조회할 수 있다.")
+    void findAll() {
+        // given
+        insertProblemContent();
+        PageRequest pageRequest1 = PageRequest.of(0, 2);
+        // when
+        Page<Problem> problemPage = problemRepository.findAll(pageRequest1);
+        // then
+        assertThat(problemPage.getContent()).hasSize(2);
+    }
 
     private void insertProblemContent(){
         for (int i = 1; i <=10 ; i++) {
-            MultipleChoice multipleChoice = MultipleChoice.builder()
+            MultipleChoiceProblemSaveRequest multipleChoice = MultipleChoiceProblemSaveRequest.builder()
                     .question("question" + i)
-                    .choices(new String[]{"choice1", "choice2", "choice3", "choice4"})
                     .answer("answer" + i)
+                    .choices(new String[]{"choice1", "choice2", "choice3", "choice4"})
+                    .description("description"+i)
+                    .problemCategory(ProblemCategory.DB)
                     .build();
 
-            multipleChoiceRepository.save(multipleChoice);
+            problemRepository.save(Problem.createMultipleChoice(multipleChoice));
 
-            Problem problem = Problem.builder()
-                    .content(multipleChoice)
-                    .category(ProblemCategory.OS)
-                    .type(ProblemType.MULTIPLECHOICE)
-                    .build();
-            problemRepository.save(problem);
         }
         for (int i = 11; i <= 20; i++) {
-            TrueOrFalse trueOrFalse = TrueOrFalse.builder()
+            TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest = TrueOrFalseProblemSaveRequest.builder()
                     .question("question" + i)
                     .answer("answer" + i)
+                    .description("description" + i)
+                    .problemCategory(ProblemCategory.OS)
                     .build();
 
-            trueOrFalseRepository.save(trueOrFalse);
+            problemRepository.save(Problem.createTrueOrFalse(trueOrFalseProblemSaveRequest));
 
-            Problem problem = Problem.builder()
-                    .content(trueOrFalse)
-                    .category(ProblemCategory.DB)
-                    .type(ProblemType.TRUEORFALSE)
-                    .build();
-            problemRepository.save(problem);
         }
         for (int i = 21; i <= 30; i++) {
-            ShortAnswer shortAnswer = ShortAnswer.builder()
+            ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest = ShortAnswerProblemSaveRequest.builder()
                     .question("question" + i)
                     .answer("answer" + i)
+                    .description("description" + i)
+                    .problemCategory(ProblemCategory.NETWORK)
                     .build();
 
-            shortAnswerRepository.save(shortAnswer);
+            problemRepository.save(Problem.createShortAnswer(shortAnswerProblemSaveRequest));
 
-            Problem problem = Problem.builder()
-                    .content(shortAnswer)
-                    .category(ProblemCategory.NETWORK)
-                    .type(ProblemType.SHORTANSWER)
-                    .build();
-            problemRepository.save(problem);
         }
     }
 }
