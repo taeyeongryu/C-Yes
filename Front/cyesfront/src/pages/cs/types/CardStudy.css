@@ -1,3 +1,4 @@
+
 .card {
   display: flex;
   align-items: center;
@@ -21,27 +22,34 @@
   position: relative;
   transition: 0.4s;
   transform-style: preserve-3d;
+  transform: rotateY(0deg); 
 }
+
 .flip {
   perspective: 1100px;
 }
 
 .card-front,
 .card-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
 }
-
 .card-front {
   /* background: red; */
 }
+
 .card-back {
-  /* background: royalblue; */
   transform: rotateY(180deg);
-}
+} 
 
 .flip:hover .card {
   transform: rotateY(180deg);
 }
+
