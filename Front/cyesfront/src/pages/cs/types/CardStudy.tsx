@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./CardStudy.css";
 import "./Common.css";
 import IconButton from "../../../components/button/IconButton";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 type Keyword = {
   keyword: string;
@@ -12,6 +12,7 @@ type Keyword = {
 type Props = {};
 
 const CardStudy = (props: Props) => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [keywords, setKeywords] = useState<Keyword[]>([]);
@@ -33,6 +34,10 @@ const CardStudy = (props: Props) => {
   };
 
   useEffect(() => {
+    if (location.state && location.state.questions) {
+      console.log("가져온 리스트:  ", location.state.questions.id);
+      console.log("가져온 리스트 갯수:  ", location.state.questions.length);
+    }
     const mockKeywords: Keyword[] = [
       { keyword: "React", description: "React는 JavaScript 라이브러리입니다." },
       { keyword: "CSS", description: "CSS는 스타일 시트 언어입니다." },

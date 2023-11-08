@@ -28,6 +28,10 @@
 
 .button-element {
   margin-top: 35px;
+  /* display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row; */
 }
 
 .cs-text-container {
