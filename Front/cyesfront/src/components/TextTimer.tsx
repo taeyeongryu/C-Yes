@@ -32,12 +32,15 @@ const TextTimer: React.FC<TextTimerProps> = ({ targetHour, targetMin }) => {
   return (
     <div style={{ textAlign: "center" }}>
       <div>
-        {" "}
-        {`00 : ${Math.floor(remainingTime / 60)
-          .toString()
-          .padStart(2, "0")} : ${Math.floor(remainingTime % 60)
-          .toString()
-          .padStart(2, "0")}`}
+        {remainingTime >= 0
+          ? `${Math.floor(remainingTime / 3600)
+              .toString()
+              .padStart(2, "0")} : ${Math.floor((remainingTime % 3600) / 60)
+              .toString()
+              .padStart(2, "0")} : ${Math.floor(remainingTime % 60)
+              .toString()
+              .padStart(2, "0")}`
+          : "00 : 00 : 00"}
       </div>
     </div>
   );

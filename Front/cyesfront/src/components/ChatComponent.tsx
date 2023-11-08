@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./ChatComponent.css";
 
 interface Message {
@@ -24,6 +24,11 @@ const ChatComponent: React.FC<Props> = ({
     const chatCounterInit = useRef<NodeJS.Timeout>();
     const chatScroll = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        if (chatScroll.current)
+            chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
+    }, [messageList]);
+
     const onChatTyped = (e: React.ChangeEvent<HTMLInputElement>) => {
         setChat(e.target.value);
     };
@@ -45,8 +50,6 @@ const ChatComponent: React.FC<Props> = ({
         socketSend(chat);
         chatCounter.current++;
         setChat("");
-        if (chatScroll.current)
-            chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
 
         if (chatCounterInit.current) {
             clearTimeout(chatCounterInit.current);
@@ -85,6 +88,11 @@ const ChatComponent: React.FC<Props> = ({
                     value={chat}
                     onChange={onChatTyped}
                     onKeyDown={handleKeyPress}
+                    placeholder={
+                        chatDisabled
+                            ? "잠시 기다려주세요"
+                            : "채팅을 입력해 주세요"
+                    }
                 />
                 <button onClick={sendChat} disabled={chatDisabled}>
                     입력

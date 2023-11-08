@@ -66,7 +66,7 @@ public class Problem {
                 .choices(multipleChoiceProblemSaveRequest.getChoices())
                 .answer(multipleChoiceProblemSaveRequest.getAnswer())
                 .description(multipleChoiceProblemSaveRequest.getDescription())
-                .category(multipleChoiceProblemSaveRequest.getProblemCategory())
+                .category(multipleChoiceProblemSaveRequest.getCategory())
                 .type(ProblemType.MULTIPLECHOICE)
                 .build();
     }

@@ -8,7 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Builder
 @NoArgsConstructor
@@ -40,12 +39,13 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     @ColumnDefault("0")
     private Integer memberPoint;
 
-    @Column(name = "refresh_token", nullable = true)
-    private String refreshToken;
-
     @Column(name = "oauth_provider", nullable = false)
     @Enumerated(EnumType.STRING)
     private OAuthProvider oAuthProvider;
+
+    @Column(name = "nickname_initialized", nullable = false)
+    @ColumnDefault("0")
+    private Boolean nicknameInitialized;
 
 }
 
