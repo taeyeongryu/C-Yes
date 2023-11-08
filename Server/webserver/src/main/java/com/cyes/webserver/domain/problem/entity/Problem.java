@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
 @Getter
 @Document
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -67,7 +66,7 @@ public class Problem {
                 .choices(multipleChoiceProblemSaveRequest.getChoices())
                 .answer(multipleChoiceProblemSaveRequest.getAnswer())
                 .description(multipleChoiceProblemSaveRequest.getDescription())
-                .category(multipleChoiceProblemSaveRequest.getCategory())
+                .category(multipleChoiceProblemSaveRequest.getProblemCategory())
                 .type(ProblemType.MULTIPLECHOICE)
                 .build();
     }
@@ -99,8 +98,8 @@ public class Problem {
                 .answer(this.answer)
                 .description(this.description)
                 .problemOrder(problemOrder)
-                .category(this.category)
-                .type(this.type)
+                .category(ProblemCategory.valueOf(this.category))
+                .type(ProblemType.valueOf(this.type))
                 .build();
     }
 

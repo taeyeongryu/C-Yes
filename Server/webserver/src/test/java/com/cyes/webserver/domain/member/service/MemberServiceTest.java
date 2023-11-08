@@ -29,7 +29,7 @@ class MemberServiceTest {
     @Test
     void changeNickname(){
         //given
-        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
         memberRepository.save(member);
         String changeNickName = "nickname2";
 

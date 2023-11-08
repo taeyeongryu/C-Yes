@@ -33,8 +33,8 @@ class QuizRepositoryTest {
     void findLiveQuiz() {
 
         // given
-        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
-        Member member2 = Member.builder().memberEmail("email2@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
+        Member member2 = Member.builder().memberEmail("email2@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
         memberRepository.save(member1);
         memberRepository.save(member2);
         LocalDateTime startDateTime1 = LocalDateTime.of(2023, 5, 5, 5, 5, 5);

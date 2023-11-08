@@ -48,7 +48,7 @@ class QuizProblemServiceTest {
     void createQuizProblemByQuiz(){
         //given
         //Member 생성
-        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
         memberRepository.save(member);
         //현재시간
         LocalDateTime now = LocalDateTime.now();

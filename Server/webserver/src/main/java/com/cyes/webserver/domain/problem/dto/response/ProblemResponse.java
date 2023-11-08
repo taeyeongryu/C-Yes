@@ -1,6 +1,8 @@
 package com.cyes.webserver.domain.problem.dto.response;
 
 
+import com.cyes.webserver.domain.problem.entity.ProblemCategory;
+import com.cyes.webserver.domain.problem.entity.ProblemType;
 import lombok.*;
 
 @Getter
@@ -13,11 +15,11 @@ public class ProblemResponse {
     private int problemOrder;
     private String answer;
     private String description;
-    private String category;
-    private String type;
+    private ProblemCategory category;
+    private ProblemType type;
 
     @Builder
-    public ProblemResponse(String id, String question, String[] choices, int problemOrder, String answer, String description, String category, String type) {
+    public ProblemResponse(String id, String question, String[] choices, int problemOrder, String answer, String description, ProblemCategory category, ProblemType type) {
         this.id = id;
         this.question = question;
         this.choices = choices;
