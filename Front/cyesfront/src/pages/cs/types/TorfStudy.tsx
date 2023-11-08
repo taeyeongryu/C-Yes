@@ -72,10 +72,8 @@ const TorfStudy = (props: Props) => {
         <div className="x-image-container">
           <IconButton onClick={goCsPage} iconUrl="/icon/close.png" />
         </div>
-        <div className="title-text-container">객관식</div>
+        <div className="title-text-container">T or F</div>
       </div>
-
-      {/* <div className="card-component">카드</div> */}
 
       <div>
         <div className="card-tf">
@@ -91,6 +89,7 @@ const TorfStudy = (props: Props) => {
           bghover="#39A63D"
           height="200px"
           width="100px"
+          fontSize="40px"
         >
           T
         </RoundCornerBtn>
@@ -101,6 +100,7 @@ const TorfStudy = (props: Props) => {
           bghover="#A61B1B"
           height="200px"
           width="100px"
+          fontSize="40px"
         >
           F
         </RoundCornerBtn>
@@ -112,10 +112,12 @@ const TorfStudy = (props: Props) => {
         <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
       </div>
       {modalMessage && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="modal-tf">
+          <div className="modal-content-tf">
             <p>{modalMessage}</p>
-            <button onClick={closeModal}>닫기</button>
+            <RoundCornerBtn onClick={closeModal} fontSize="15px">
+              확인
+            </RoundCornerBtn>
           </div>
         </div>
       )}

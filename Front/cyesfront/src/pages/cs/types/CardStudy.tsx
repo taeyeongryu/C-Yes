@@ -49,8 +49,6 @@ const CardStudy = (props: Props) => {
         <div className="title-text-container">카드 학습</div>
       </div>
 
-      {/* <div className="card-component">카드</div> */}
-
       <div className="flip">
         <div className="card">
           <div className="card-front">{keywords[currentIndex]?.keyword}</div>
