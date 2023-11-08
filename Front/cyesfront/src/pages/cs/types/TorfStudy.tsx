@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TorfStudy.css";
+import RoundCornerBtn from "../../../components/RoundCornerBtn";
 import IconButton from "../../../components/button/IconButton";
 import { useNavigate } from "react-router-dom";
 type Props = {};
@@ -12,9 +13,12 @@ const TorfStudy = (props: Props) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [keywords, setKeywords] = useState<Keyword[]>([]);
+  const [submit, setSubmit] = useState<string>();
+
   const goCsPage = () => {
     navigate("/cs");
   };
+
   const prevStudy = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prevIndex) => prevIndex - 1);
@@ -28,11 +32,38 @@ const TorfStudy = (props: Props) => {
   };
   useEffect(() => {
     const mockKeywords: Keyword[] = [
-      { keyword: "React", description: "React는 JavaScript 라이브러리입니다." },
-      { keyword: "CSS", description: "CSS는 스타일 시트 언어입니다." },
+      { keyword: "T", description: "유혜빈은 도토리이다." },
+      { keyword: "F", description: "우수인은 외계인이다." },
     ];
     setKeywords(mockKeywords);
   }, []);
+
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
+
+  const openModal = (message: string) => {
+    setModalMessage(message);
+  };
+
+  const closeModal = () => {
+    setModalMessage(null);
+    setSubmit("");
+  };
+
+  useEffect(() => {
+    if (submit === "T") {
+      if (keywords[currentIndex]?.keyword === "T") {
+        openModal("정답입니다!");
+      } else {
+        openModal("오답입니다!");
+      }
+    } else if (submit === "F") {
+      if (keywords[currentIndex]?.keyword === "F") {
+        openModal("정답입니다!");
+      } else {
+        openModal("오답입니다!");
+      }
+    }
+  }, [submit, currentIndex, keywords]);
 
   return (
     <div>
@@ -46,8 +77,31 @@ const TorfStudy = (props: Props) => {
 
       <div>
         <div className="card-tf">
-          {/* <div className="card-front">{keywords[currentIndex]?.keyword}</div> */}
+          <div className="card-tf-content">
+            {keywords[currentIndex]?.description}
+          </div>
         </div>
+      </div>
+      <div className="submit-button-content">
+        <RoundCornerBtn
+          onClick={() => setSubmit("T")}
+          bgcolor="#57FF5E"
+          bghover="#39A63D"
+          height="200px"
+          width="100px"
+        >
+          T
+        </RoundCornerBtn>
+        <div className="box"></div>
+        <RoundCornerBtn
+          onClick={() => setSubmit("F")}
+          bgcolor="#FF2A2A"
+          bghover="#A61B1B"
+          height="200px"
+          width="100px"
+        >
+          F
+        </RoundCornerBtn>
       </div>
 
       <div className="bottom-next">
@@ -55,6 +109,14 @@ const TorfStudy = (props: Props) => {
         {currentIndex + 1}/{keywords.length}
         <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
       </div>
+      {modalMessage && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>{modalMessage}</p>
+            <button onClick={closeModal}>닫기</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

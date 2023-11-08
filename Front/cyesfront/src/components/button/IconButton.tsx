@@ -15,9 +15,12 @@ const IconButton: React.FC<Props> = ({ onClick, iconUrl }) => {
         cursor: "pointer",
         padding: 0,
         display: "flex",
-        alignItems: "center",
+        //alignItems: "center",
         justifyContent: "flex-start", // 왼쪽 정렬으로 변경
         outline: "none", // 포커스 시 테두리 제거
+
+        // 위치를 설정할 수 있는 스타일을 추가
+        //position: "absolute",
       }}
     >
       {iconUrl && (

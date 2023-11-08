@@ -31,13 +31,10 @@ const CardStudy = (props: Props) => {
     }
   };
 
-
   useEffect(() => {
-
     const mockKeywords: Keyword[] = [
       { keyword: "React", description: "React는 JavaScript 라이브러리입니다." },
       { keyword: "CSS", description: "CSS는 스타일 시트 언어입니다." },
-
     ];
     setKeywords(mockKeywords);
   }, []);
