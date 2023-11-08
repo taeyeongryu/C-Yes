@@ -1,10 +1,10 @@
 package com.cyes.webserver.domain.problem.controller;
 
 
-import com.cyes.webserver.domain.problem.dto.MultipleChoiceProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.dto.ShortAnswerProblemSaveRequest;
-import com.cyes.webserver.domain.problem.dto.TrueOrFalseProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
 import com.cyes.webserver.domain.problem.entity.ProblemType;
 import com.cyes.webserver.domain.problem.service.ProblemService;
@@ -80,7 +80,7 @@ public class ProblemController {
         Page<ProblemResponse> problemByCategoryOrType = problemService.findProblemByCategoryOrType(problemCategory, problemType, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(problemByCategoryOrType);
     }
-
+    @Operation(summary = "문제의 카테고리 리스트를 조회하는 메서드")
     @GetMapping("category")
     public ResponseEntity<List<ProblemCategory>> findAllProblemCategory(){
         List<ProblemCategory> categoryList = List.of(ProblemCategory.DB, ProblemCategory.DESIGNPATTERN, ProblemCategory.DATASTRUCTURE, ProblemCategory.COMPUTERARCHITECTURE, ProblemCategory.ALGORITHM, ProblemCategory.NETWORK, ProblemCategory.OS);

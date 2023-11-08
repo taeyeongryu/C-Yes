@@ -1,6 +1,6 @@
 package com.cyes.webserver.domain.stompSocket.service.start;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;

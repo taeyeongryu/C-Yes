@@ -2,16 +2,12 @@ package com.cyes.webserver.domain.Answer.service;
 
 import com.cyes.webserver.domain.Answer.dto.AnswerResponse;
 import com.cyes.webserver.domain.Answer.dto.AnswerSaveServiceRequest;
-import com.cyes.webserver.domain.Answer.dto.RankResult;
 import com.cyes.webserver.domain.Answer.entity.Answer;
 import com.cyes.webserver.domain.Answer.repository.AnswerRepository;
-import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
 import com.cyes.webserver.domain.problem.service.ProblemService;
 import com.cyes.webserver.domain.quiz.repository.QuizRepository;
-import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.domain.stompSocket.dto.SubmitRedis;
 import com.cyes.webserver.exception.CustomException;
@@ -22,11 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.lang.model.element.ModuleElement;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static com.cyes.webserver.exception.CustomExceptionList.QUIZ_NOT_FOUND_ERROR;
 
 @Slf4j
 @Service
