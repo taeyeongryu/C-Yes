@@ -1,77 +1,47 @@
-.title {
-    margin-top: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 30px;
-  }
-  .card-tf {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  
-    height: 30px;
-    width: 300px;
-  
-    margin: 0 auto;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-    background-color: white;
-    border-radius: 40px;
-  
-    margin-top: 10%;
-    margin-bottom: 20%;
-    font-size: 25px;
-  
-    position: relative;
-    transition: 0.4s;
-    transform-style: preserve-3d;
-  }
-  .flip {
-    perspective: 1100px;
-  }
-  
-  .card-front,
-  .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-  }
-  
-  .card-front {
-    /* background: red; */
-  }
-  .card-back {
-    /* background: royalblue; */
-    transform: rotateY(180deg);
-  }
-  
-  .flip:hover .card {
-    transform: rotateY(180deg);
-  }
-  
-  .bottom-next {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  
-    height: 20px;
-    width: 300px;
-  
-    margin: 0 auto;
-    padding: 20px;
-  
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-    margin-top: 10%;
-    margin-bottom: 20%;
-    font-size: 15px;
-  }
-  
+.card-tf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  height: 30px;
+  width: 300px;
+
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  background-color: white;
+  border-radius: 40px;
+
+  margin-top: 10%;
+  margin-bottom: 20%;
+  font-size: 25px;
+
+  position: relative;
+  transition: 0.4s;
+  transform-style: preserve-3d;
+}
+.flip {
+  perspective: 1100px;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card-front {
+  /* background: red; */
+}
+.card-back {
+  /* background: royalblue; */
+  transform: rotateY(180deg);
+}
+
+.flip:hover .card {
+  transform: rotateY(180deg);
+}

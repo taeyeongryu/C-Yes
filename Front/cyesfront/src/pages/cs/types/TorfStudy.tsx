@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TorfStudy.css";
+import "./Common.css";
 import IconButton from "../../../components/button/IconButton";
 import { useNavigate } from "react-router-dom";
 type Props = {};
@@ -36,10 +37,11 @@ const TorfStudy = (props: Props) => {
 
   return (
     <div>
-      <div className="title">
-        <IconButton onClick={goCsPage} iconUrl="/icon/close.png" />
-
-        <div>T or F</div>
+      <div className="cs-title-container">
+        <div className="x-image-container">
+          <IconButton onClick={goCsPage} iconUrl="/icon/close.png" />
+        </div>
+        <div className="title-text-container">객관식</div>
       </div>
 
       {/* <div className="card-component">카드</div> */}
