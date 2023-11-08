@@ -6,12 +6,14 @@ const QuizWordCrate = () => {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
 
   const noCheckProblemWord = () => {
     // Axios를 사용하여 API 호출 수행
     axios
       .get(
-        `http://localhost:5000/api/adminproblem/yes-O/X-insert?question=${question}&answer=${answer}&category=${category}`
+        `http://localhost:5000/api/adminproblem/yes-O/X-insert?question=${question}&answer=${answer}
+        &category=${category}&description=${description}`
       )
       .then((response) => {
         console.log("API 응답 데이터: ", response.data);
@@ -33,6 +35,16 @@ const QuizWordCrate = () => {
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           placeholder="문제를 입력하세요."
+          className="text-field"
+          rows={8}
+          cols={40}
+        />
+        <br></br>
+        <textarea
+          // type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="설명을 입력하세요."
           className="text-field"
           rows={8}
           cols={40}

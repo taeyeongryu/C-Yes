@@ -30,6 +30,8 @@ public class ProblemService {
     @Transactional
     public ProblemResponse saveMultipleChoice(MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest){
         log.info("multipleChoiceProblemSaveRequest = {}",multipleChoiceProblemSaveRequest);
+
+        System.out.println("들어옴?222");
         //Dto -> Document
         Problem multipleChoice = Problem.createMultipleChoice(multipleChoiceProblemSaveRequest);
 
