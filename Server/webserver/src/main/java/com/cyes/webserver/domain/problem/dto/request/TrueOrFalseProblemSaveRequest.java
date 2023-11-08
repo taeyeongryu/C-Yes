@@ -1,4 +1,4 @@
-package com.cyes.webserver.domain.problem.dto;
+package com.cyes.webserver.domain.problem.dto.request;
 
 import com.cyes.webserver.domain.problem.entity.Problem;
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
@@ -10,19 +10,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProblemUpdateServiceRequest {
-    private String id;
-    private String content;
+public class TrueOrFalseProblemSaveRequest {
+    private String question;
     private String answer;
+    private String description;
     private ProblemCategory problemCategory;
-    private ProblemType problemType;
 
     @Builder
-    public ProblemUpdateServiceRequest(String id, String content, String answer, ProblemCategory problemCategory, ProblemType problemType) {
-        this.id = id;
-        this.content = content;
+    public TrueOrFalseProblemSaveRequest(String question, String answer, String description, ProblemCategory problemCategory) {
+        this.question = question;
         this.answer = answer;
+        this.description = description;
         this.problemCategory = problemCategory;
-        this.problemType = problemType;
     }
 }

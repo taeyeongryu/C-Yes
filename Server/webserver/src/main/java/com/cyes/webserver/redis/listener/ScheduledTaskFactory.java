@@ -1,6 +1,6 @@
 package com.cyes.webserver.redis.listener;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.stompSocket.service.answer.AnswerService;
 import com.cyes.webserver.domain.stompSocket.service.end.EndService;
 import com.cyes.webserver.domain.stompSocket.service.problem.ProblemService;
