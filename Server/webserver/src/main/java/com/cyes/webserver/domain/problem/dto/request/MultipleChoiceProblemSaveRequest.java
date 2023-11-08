@@ -1,11 +1,10 @@
 package com.cyes.webserver.domain.problem.dto.request;
 
-import com.cyes.webserver.domain.problem.entity.Problem;
 import com.cyes.webserver.domain.problem.entity.ProblemCategory;
-import com.cyes.webserver.domain.problem.entity.ProblemType;
 import lombok.*;
 
-@Data
+@Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MultipleChoiceProblemSaveRequest {
     private String question;

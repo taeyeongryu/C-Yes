@@ -52,7 +52,7 @@ class QuizServiceTest {
         LocalDateTime startTime1 = LocalDateTime.of(2023, 11, 5, 22, 00);
         LocalDateTime startTime2 = LocalDateTime.of(2023, 11, 5, 22, 10);
         LocalDateTime startTime3 = LocalDateTime.of(2023, 11, 5, 22, 20);
-        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
         memberRepository.save(member);
         //퀴즈 생성 1,2,3
         Quiz quiz1 = Quiz.builder().member(member).title("퀴즈 제목").startDateTime(startTime1).build();
@@ -82,7 +82,7 @@ class QuizServiceTest {
     void createQuiz() throws Exception {
         //given
         //Member 생성
-        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member = Member.builder().memberEmail("email@email.com").memberNickname("nickname1").memberAuthority(MemberAuthority.ADMIN).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
         memberRepository.save(member);
 
         //현재시간

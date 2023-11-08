@@ -65,6 +65,8 @@ public class adminShortProblemController {
                                                           @RequestParam("description") String description
     ) {
 
+        System.out.println("단답형 들어옴");
+
         ProblemCategory problemCategory = ProblemCategory.valueOf(category);
 
         ShortAnswerProblemSaveRequest shortAnswerProblemRequest = ShortAnswerProblemSaveRequest.builder()
@@ -88,6 +90,7 @@ public class adminShortProblemController {
 
     ) {
 
+        log.info(answer);
         ProblemCategory problemCategory = ProblemCategory.valueOf(category);
 
         TrueOrFalseProblemSaveRequest trueOrFalseProblemRequest = TrueOrFalseProblemSaveRequest.builder()
@@ -106,7 +109,12 @@ public class adminShortProblemController {
     public ResponseEntity<ProblemResponse> yesFourSelectInsert
             (@RequestBody MultipleChoiceProblemSaveRequest multipleChoiceProblemSaveRequest)
     {
+
+        System.out.println("4지선다 들어옴?");
+        System.out.println("multipleChoiceProblemSaveRequest = " + multipleChoiceProblemSaveRequest);
 //        ProblemCategory problemCategory = ProblemCategory.valueOf(category);
+
+//        MultipleChoiceProblemSaveRequest.builder().problemCategory(problemCategory);
 
            return ResponseEntity.status(HttpStatus.OK).body(problemService.saveMultipleChoice(multipleChoiceProblemSaveRequest));
 

@@ -51,11 +51,12 @@ class MemberRepositoryTest {
     @DisplayName("memberid 와 nickname으로 멤버를 조회할 수 있다.")
     void findByMemberIdAndMemberNickname() {
         // given
-        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
-        Member member2 = Member.builder().memberEmail("email2@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
+        Member member2 = Member.builder().memberEmail("email2@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
 
         memberRepository.save(member1);
         memberRepository.save(member2);
+
 
         // when
         Optional<Member> byMemberIdAndMemberNickname = memberRepository.findByMemberIdAndMemberNickname(member1.getMemberId(), member1.getMemberNickname());
@@ -67,8 +68,8 @@ class MemberRepositoryTest {
                 .isEqualTo("email1@123.123");
     }
     private List<Member> saveMember(){
-        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
-        Member member2 = Member.builder().memberEmail("email2@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).build();
+        Member member1 = Member.builder().memberEmail("email1@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
+        Member member2 = Member.builder().memberEmail("email2@123.123").memberNickname("nickname1").memberAuthority(MemberAuthority.USER).oAuthProvider(OAuthProvider.GUEST).nicknameInitialized(false).build();
 
         memberRepository.save(member1);
         memberRepository.save(member2);
