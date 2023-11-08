@@ -11,14 +11,14 @@ public class MultipleChoiceProblemSaveRequest {
     private String answer;
     private String[] choices;
     private String description;
-    private ProblemCategory category;
+    private ProblemCategory problemCategory;
 
     @Builder
-    public MultipleChoiceProblemSaveRequest(String question, String answer, String[] choices, String description, ProblemCategory category) {
+    public MultipleChoiceProblemSaveRequest(String question, String answer, String[] choices, String description, ProblemCategory problemCategory) {
         this.question = question;
         this.answer = answer;
         this.choices = choices;
         this.description = description;
-        this.category = category;
+        this.problemCategory = problemCategory;
     }
 }
