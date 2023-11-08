@@ -93,7 +93,7 @@ const Live = (props: Props) => {
           width="150px"
           height="45px"
           bgcolor={joinable ? "#FF5733" : "#868686"}
-          bghover="#853828"
+          bghover={joinable ? "#853828" : "#868686"}
           fontSize="16px"
           fontcolor="#FFFFFF"
           onClick={enterRoom}

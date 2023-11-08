@@ -8,6 +8,10 @@ import Answer from "./pages/quiz/ConfirmQuiz";
 import LoginRedir from "./pages/login/LoginRedir";
 
 import ComputerScience from "./pages/cs/ComputerScience";
+import CardStudy from "./pages/cs/types/CardStudy";
+import SelectStudy from "./pages/cs/types/SelectStudy";
+import TorfStudy from "./pages/cs/types/TorfStudy";
+
 import AdminQuizCreate from "./pages/adminquiz/quizwordcreate";
 import AdminQuizCheck from "./pages/adminquiz/quizCheck";
 import AdminQuizInsert from "./pages/adminquiz/quizShortInsert";
@@ -26,6 +30,11 @@ function App() {
 
           <Route path="/cs" element={<ComputerScience />} />
           <Route path="/adminquiz/create" element={<AdminQuizCreate />} />
+          <Route path="/cs/card" element={<CardStudy />} />
+          <Route path="/cs/select" element={<SelectStudy />} />
+          <Route path="/cs/torf" element={<TorfStudy />} />
+
+          <Route path="/adminquiz/creat" element={<AdminQuizCreate />} />
           <Route path="/adminquiz/check" element={<AdminQuizCheck />} />
           <Route path="/adminquiz/insert" element={<AdminQuizInsert />} />
         </Routes>
