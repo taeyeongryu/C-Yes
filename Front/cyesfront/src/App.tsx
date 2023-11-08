@@ -14,7 +14,7 @@ import TorfStudy from "./pages/cs/types/TorfStudy";
 
 import AdminQuizCreate from "./pages/adminquiz/quizwordcreate";
 import AdminQuizCheck from "./pages/adminquiz/quizCheck";
-import AdminQuizInsert from "./pages/adminquiz/quizYesCheck";
+import AdminQuizInsert from "./pages/adminquiz/quizShortInsert";
 
 function App() {
   return (
@@ -29,6 +29,7 @@ function App() {
           <Route path="/answer" element={<Answer />} />
 
           <Route path="/cs" element={<ComputerScience />} />
+          <Route path="/adminquiz/create" element={<AdminQuizCreate />} />
           <Route path="/cs/card" element={<CardStudy />} />
           <Route path="/cs/select" element={<SelectStudy />} />
           <Route path="/cs/torf" element={<TorfStudy />} />

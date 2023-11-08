@@ -5,6 +5,7 @@ import com.cyes.webserver.utils.oauth.request.KakaoLoginParams;
 import com.cyes.webserver.utils.oauth.request.NaverLoginParams;
 import com.cyes.webserver.utils.oauth.request.RegenTokenReq;
 import com.cyes.webserver.utils.oauth.response.LoginResponse;
+import com.cyes.webserver.utils.oauth.response.RefreshTokenResponse;
 import com.cyes.webserver.utils.oauth.service.OAuthLoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -61,7 +62,7 @@ public class OauthController {
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
     @PostMapping("/regen")
-    public ResponseEntity<LoginResponse> regenerateTokens(@RequestBody RegenTokenReq regenTokenReq) {
+    public ResponseEntity<RefreshTokenResponse> regenerateTokens(@RequestBody RegenTokenReq regenTokenReq) {
         return ResponseEntity.status(HttpStatus.OK).body(oAuthLoginService.regenToken(regenTokenReq));
     }
 }

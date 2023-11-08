@@ -2,26 +2,19 @@ import React, { useState } from "react";
 import BottomNav from "../../components/bottomnav/BottomNav";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
 import "./ComputerScience.css";
-import { useNavigate } from "react-router-dom";
 import SelectTitleModal from "../../components/modal/SelectTitleModal";
 type Props = {};
 
 const ComputerScience = (props: Props) => {
-  const navigate = useNavigate();
-  const enterCardStudy = () => {
-    navigate("/cs/card");
-  };
-  const enterSelectStudy = () => {
-    navigate("/cs/select");
-  };
-  const enterTorfStudy = () => {
-    navigate("/cs/torf");
-  };
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [studyType, setStudyType] = useState("");
 
   // 모달 열기
-  const openModal = () => setIsModalOpen(true);
+  const openModal = (type: string) => {
+    console.log(type);
+    setStudyType(type); // 선택된 스터디 타입을 상태 변수에 저장
+    setIsModalOpen(true);
+  };
 
   // 문제 시작하기
   const close = () => setIsModalOpen(false);
@@ -29,18 +22,17 @@ const ComputerScience = (props: Props) => {
   return (
     <div className="live-container">
       <div className="content">
-        <div> cs 학습 </div>
-        <div>
-          <button onClick={openModal}>모달 열기</button>
+        <div className="cs-text-container">cs 학습</div>
+        <div className="select-title-container">
           <SelectTitleModal
             isOpen={isModalOpen}
             close={close}
+            type={studyType}
           ></SelectTitleModal>
         </div>
-        <br />
+        {/* 카드학습 => type = card */}
         <div className="button-container">
           <div className="button-element">
-            {" "}
             <RoundCornerBtn
               width="300px"
               height="100px"
@@ -49,7 +41,7 @@ const ComputerScience = (props: Props) => {
               bgcolor="white"
               bghover="grey"
               customshadow="2px 2px 4px rgba(0, 0, 0, 0.2)"
-              onClick={enterCardStudy}
+              onClick={() => openModal("card")}
             >
               <img
                 className=""
@@ -60,6 +52,7 @@ const ComputerScience = (props: Props) => {
               카드학습
             </RoundCornerBtn>
           </div>
+          {/* 객관식 => type = select */}
           <div className="button-element">
             <RoundCornerBtn
               width="300px"
@@ -69,7 +62,7 @@ const ComputerScience = (props: Props) => {
               bgcolor="white"
               bghover="grey"
               customshadow="2px 2px 4px rgba(0, 0, 0, 0.2)"
-              onClick={enterSelectStudy}
+              onClick={() => openModal("select")}
             >
               <img
                 className=""
@@ -80,6 +73,7 @@ const ComputerScience = (props: Props) => {
               객관식
             </RoundCornerBtn>
           </div>
+          {/* T or F => type = torf*/}
           <div className="button-element">
             {" "}
             <RoundCornerBtn
@@ -90,7 +84,7 @@ const ComputerScience = (props: Props) => {
               bgcolor="white"
               bghover="grey"
               customshadow="2px 2px 4px rgba(0, 0, 0, 0.2)"
-              onClick={enterTorfStudy}
+              onClick={() => openModal("torf")}
             >
               <img
                 className=""

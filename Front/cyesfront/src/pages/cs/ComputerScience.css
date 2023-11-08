@@ -17,6 +17,7 @@
 /* .bottomnav {
     align-self: flex-end;
   } */
+
 .button-container {
   margin-top: 10px;
   display: flex;
@@ -27,4 +28,12 @@
 
 .button-element {
   margin-top: 35px;
+}
+
+.cs-text-container {
+  font-size: 35px;
+  width: 100%; /* 전체 너비를 가짐 */
+  text-align: left;
+  margin-top: -30%;
+  padding-bottom: 15%;
 }

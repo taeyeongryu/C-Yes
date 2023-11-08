@@ -20,7 +20,7 @@ const QuizWordCrate = () => {
 
   return (
     <div className="login-container">
-      <div className="adminquiz">
+      <div className="adminquizcreate">
         관리자님 단어를 입력해 주세요.
         <br></br>
         <br></br>

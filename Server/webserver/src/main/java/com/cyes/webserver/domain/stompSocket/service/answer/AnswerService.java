@@ -1,9 +1,8 @@
 package com.cyes.webserver.domain.stompSocket.service.answer;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.stompSocket.dto.AnswerMessage;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
-import com.cyes.webserver.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,7 +26,7 @@ public class AnswerService {
         AnswerMessage answerMessage = AnswerMessage.builder()
                 .sessionId(quizId)
                 .type(SessionMessage.MessageType.ANSWER)
-                .answer(problem.getContentResponse().getAnswer())
+                .answer(problem.getAnswer())
                 .build();
 
         // 클라이언트한테 답 보내기

@@ -1,15 +1,7 @@
 package com.cyes.webserver.domain.problem.service;
 
-import com.cyes.webserver.domain.problem.dto.ProblemResponse;
-import com.cyes.webserver.domain.problem.entity.ProblemCategory;
-import com.cyes.webserver.domain.problem.entity.ProblemType;
-import org.assertj.core.groups.Tuple;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest

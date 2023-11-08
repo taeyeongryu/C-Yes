@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -158,6 +159,16 @@ public class OpenAIPostRequestService {
         }
 
         return new PageImpl<>(list, realProblem.getPageable(), realProblem.getTotalElements());
+    }
+
+    public String noCheckDelete(String id) {
+            Optional<noCheckShortProblem> noCheckShortProblem = noCheckProblemRepository.findById(id);
+        if (noCheckShortProblem.isPresent()) {
+            noCheckProblemRepository.deleteById(id);
+            return "삭제 완료";
+        } else {
+            return "존재하지 않는 객체입니다.";
+        }
     }
 
 }
