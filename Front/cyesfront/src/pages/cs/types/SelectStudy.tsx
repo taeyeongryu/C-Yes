@@ -55,16 +55,27 @@ const SelectStudy = (props: SelectStudyProps) => {
       </div>
 
       <div className="question-container">
-        {/* 현재 질문 내용을 출력합니다. */}
         <div className="question-content">
           {questions[currentIndex]?.question || "해당 문제가 없습니다."}
         </div>
       </div>
 
       <div className="answer-container">
-        <div className="answer-one-two">{/* 안에 객관식 가로 1,2 추가 */}</div>
-        <div className="answer-three-four">
-          {/* 안에 객관식 가로 3,4 추가 */}
+        <div className="answer-four">
+          <div className="answer-box answer-box-one">
+            {questions[currentIndex]?.choices[0] || "X"}
+          </div>
+          <div className="answer-box answer-box-two">
+            {questions[currentIndex]?.choices[1] || "X"}
+          </div>
+        </div>
+        <div className="answer-four">
+          <div className="answer-box answer-box-three">
+            {questions[currentIndex]?.choices[2] || "X"}
+          </div>
+          <div className="answer-box answer-box-four">
+            {questions[currentIndex]?.choices[3] || "X"}
+          </div>
         </div>
       </div>
 
