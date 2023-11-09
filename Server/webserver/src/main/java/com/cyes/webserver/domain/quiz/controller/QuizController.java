@@ -32,14 +32,10 @@ public class QuizController {
 
     private final QuizService quizService;
 
-    /*이거 참고해서 메서드 설명 넣어 주세용~~
-     @Operation(summary = "객관식 문제등록", description = "객관식 문제를 등록하는 메서드이다.\n" +
-             "question에 문제 내용, answer에 답안 내용\n" +
-             "choices에 보기가 String 배열로 4개 들어가면 된다.\n"+
-             "problemCategory에는 NETWORK, OS, DB, DATASTRUCTURE, ALGORITHM, DESIGNPATTERN, COMPUTERARCHITECTURE 중 하나가 문자열로 들어가야 한다.")*/
-    /*
-    라이브 퀴즈쇼 정보 조회 API
-    */
+    /**
+     * 라이브 퀴즈쇼 정보 조회 API
+     * @return QuizInfoResponse
+     */
     @Operation(summary = "라이브 퀴즈쇼 정보 조회", description = "라이브 퀴즈쇼 정보를 조회하는 메서드이다.")
     @GetMapping("/live/info")
     private ResponseEntity<QuizInfoResponse> getLiveQuizInfo() {
@@ -49,7 +45,7 @@ public class QuizController {
 
     /**
      * 그룹 퀴즈 정보 조회
-     * @return 그룹 퀴즈 정보 리스트
+     * @return List<GroupQuizInfoResponse>
      */
     @Operation(summary = "그룹 퀴즈 정보 조회", description = "그룹 퀴즈 정보 리스트를 조회하는 메서드이다.")
     @GetMapping("/group/info")
@@ -57,10 +53,14 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.searchGroupQuiz(LocalDateTime.now()));
     }
 
-    /*
-    라이브 퀴즈쇼 개설 APi
+    /**
+     * 라이브 퀴즈쇼 개설 API
+     * @param quizCreateRequest
+     * @return QuizCreateResponse
      */
-    @Operation(summary = "퀴즈 개설", description = "라이브 퀴즈, 그룹 퀴즈를 개설하는 메서드이다.")
+
+    @Operation(summary = "퀴즈 개설", description = "라이브 퀴즈, 그룹 퀴즈를 개설하는 메서드이다.\n" +
+    "QuizCreateRequest에는 quizTitle(퀴즈 이름), memberId(멤버 이름), quizStartDate(퀴즈 시작 시간, problemList(문제pk)를 담아서 보내야한다.")
     @PostMapping("/create")
     private ResponseEntity<QuizCreateResponse> createQuiz(@RequestBody QuizCreateRequest quizCreateRequest) throws JsonProcessingException {
 
