@@ -45,47 +45,7 @@ public class SubmitService {
 
         // value : SubmitDto
         SubmitRedis submitRedis = message.ToSubmitRedis(LocalDateTime.parse(redisService.getDataFromRedis(getRedisKey(message))),LocalDateTime.now());
-
-        log.info("Producer 설정 시작~");
-        Properties properties = new Properties();
-
-        log.info("Condukter에 연결 가즈아");
-        properties.setProperty("bootstrap.servers","grown-goblin-6324-us1-kafka.upstash.io:9092");
-        properties.setProperty("security.protocol","SASL_SSL");
-        properties.setProperty("sasl.mechanism","SCRAM-SHA-256");
-        properties.setProperty("sasl.jaas.config","org.apache.kafka.common.security.scram.ScramLoginModule required     username=\"Z3Jvd24tZ29ibGluLTYzMjQkhTAwQ8OQdqDW4QiJUV8c1IHcQ9JhLIb9B-mY1aE\" password=\"MDE3Yzc1OTUtYzVmMS00YmNhLTlmNDItYjdmODg5ZmRiZDE0\";");
-
-        log.info("Producer 설정 가즈아");
-        properties.setProperty("key.serializer", StringSerializer.class.getName());
-        properties.setProperty("value.serializer",StringSerializer.class.getName());
-
-        log.info("Producer 소환");
-        KafkaProducer<String,Object> producer = new KafkaProducer<>(properties);
-
-        ProducerRecord<String,Object> producerRecord = new ProducerRecord<>("demo_java", submitRedis);
-
-        producer.send(producerRecord, new Callback() {
-            @Override
-            public void onCompletion(RecordMetadata metadata, Exception e) {
-
-                if(e == null) {
-                    log.info("Received new metadata \n" +
-                            "Topic : " + metadata.topic() + "\n" +
-                            "Partition : " + metadata.partition() + "\n" +
-                            "Offset : " + metadata.offset() + "\n" +
-                            "Timestamp : " + metadata.timestamp());
-                } else {
-                    log.error("에러다 에러");
-                }
-            }
-        });
-
-        producer.flush();
-
-        producer.close();
-
-
-
+        
         // redis에 답안 제출 정보 저장
         redisService.setSubmitDateRedis(key, submitRedis, Duration.ofMinutes(30));
 
