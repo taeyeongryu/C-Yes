@@ -5,8 +5,6 @@ import com.cyes.webserver.domain.problem.entity.ProblemCategory;
 import com.cyes.webserver.domain.problem.entity.ProblemType;
 import lombok.*;
 
-import java.io.IOException;
-
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -7,10 +7,14 @@ import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
+
+import static com.cyes.webserver.redis.KeyGenerator.TOTAL_PARTICIPANT;
 
 @Service
 @Slf4j
@@ -20,6 +24,7 @@ public class StartService {
     private final QuizProblemRepository quizProblemRepository;
     private final ProblemService problemService;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
     private final ChannelTopic channelTopic;
 
     /**
@@ -37,5 +42,14 @@ public class StartService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
 
         return problemAnswerList;
+    }
+
+    public int fixTotalParticipantsNumber(Long quizId) {
+        String key = TOTAL_PARTICIPANT+quizId;
+
+        String totalNumber = stringRedisTemplate.opsForValue().get(key);
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30));
+
+        return Integer.parseInt(totalNumber);
     }
 }
