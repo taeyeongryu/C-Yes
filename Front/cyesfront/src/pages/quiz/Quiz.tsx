@@ -1,113 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
 import "./Quiz.css";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 import { useSelector } from "react-redux";
 import ProgressBar from "../../components/ProgressBar";
-import LoadingModal from "../../components/LoadingModal";
-import RankingModal from "../../components/modal/RankingModal";
 import TextTimer from "../../components/TextTimer";
 import { useLocation } from "react-router-dom";
-import MomentOfRank from "../../components/modal/MomentOfRank";
-import ChatComponent from "../../components/ChatComponent";
-
-interface ModalProps {
-    showModal: boolean;
-    showContent: boolean;
-    toggleContent: () => void;
-    memberList: Array<any>;
-    myScore?: number;
-    totalProblemLength?: number;
-    modalType: string;
-}
-
-function Modal(props: ModalProps) {
-    const {
-        showModal,
-        showContent,
-        toggleContent,
-        memberList,
-        myScore,
-        totalProblemLength,
-        modalType,
-    } = props;
-    const navigate = useNavigate();
-
-    const moveMain = () => {
-        navigate("/live");
-    };
-
-    if (!showModal) {
-        return null;
-    }
-
-    const renderModalContent = () => {
-        if (!showContent) {
-            return <LoadingModal />;
-        }
-
-        switch (modalType) {
-            case "result":
-                return (
-                    <RankingModal
-                        memberList={memberList}
-                        myScore={myScore}
-                        totalProblemLength={totalProblemLength}
-                        onNavigate={moveMain}
-                    />
-                );
-            case "moment":
-                return (
-                    <MomentOfRank
-                    // 여기에 필요한 props를 전달하세요.
-                    />
-                );
-            default:
-                return null;
-        }
-    };
-
-    return (
-        <div className="modal">
-            <div className="modal-content">{renderModalContent()}</div>
-        </div>
-    );
-}
+import ChatComponent from "../../components/chat/ChatComponent";
+import ModalContainer from "../../components/modal/ModalContainer";
+import {
+    ChatMessage,
+    ProblemMessage,
+} from "../../api/websocket/MessageInterface";
+import NotifyBox from "./NotifyBox";
+import SubmitShort from "./SubmitShort";
+import QuizWebSocket from "../../api/websocket/QuizWebSocket";
 
 const Quiz: React.FC = () => {
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-
-    // URL 매개변수에서 정보 추출
-    const targetHourString = searchParams.get("targetHour");
-    const targetHour = targetHourString ? parseInt(targetHourString, 10) : 0;
-
-    const targetMinString = searchParams.get("targetMin");
-    const targetMin = targetMinString ? parseInt(targetMinString, 10) : 0;
-
-    type ProblemMessage = {
-        quizId: number;
-        type: string;
-        question: string;
-        order: number;
-        selections: Array<string>;
-    };
-
-    type AnswerMessage = {
-        quizId: number;
-        type: string;
-        answer: string;
-    };
-
-    type ChatMessage = {
-        quizId: number;
-        type: string;
-        memberId: number;
-        message: string;
-    };
-
     const [progress, setProgress] = useState(0);
     const [submitted, setSubmitted] = useState(false);
     const [isTextareaEnabled, setIsTextareaEnabled] = useState(true);
@@ -116,11 +26,8 @@ const Quiz: React.FC = () => {
     const [isQuizStarted, setIsQuizStarted] = useState(false);
     const [messageList, setMessageList] = useState<ChatMessage[]>([]);
 
-    const answerInput = useRef<HTMLTextAreaElement | null>(null);
-
     // 웹소켓 연결
-    const [sock, setSock] = useState<WebSocket>();
-    const [webSocket, setWebSocket] = useState<Stomp.Client>();
+    const [socket, setSocket] = useState<QuizWebSocket>();
 
     // redux 에서 가져오기
     const quizState = useSelector((state: any) => state.quiz.quiz);
@@ -136,6 +43,7 @@ const Quiz: React.FC = () => {
         type: "PROBLEM",
         question: "문제를 기다리는 중",
         order: 0,
+        answerLength: 0,
         selections: [],
     });
 
@@ -159,67 +67,18 @@ const Quiz: React.FC = () => {
      */
     // componentdidmount
     useEffect(() => {
-        const sockjs = new SockJS(
-            `${process.env.REACT_APP_SPRING_URI}/ws/quiz`
-        );
-        const ws = Stomp.over(sockjs);
+        const quizSocket = new QuizWebSocket(quizId);
 
-        ws.heartbeat.incoming = 0;
-        ws.heartbeat.outgoing = 0;
+        quizSocket.connect();
 
-        let reconnect = 0;
-
-        const subscribeChannel = (frame?: Stomp.Frame | undefined) => {
-            ws.subscribe("/sub/quiz/session/" + quizId, (message) => {
-                // recv 콜백 함수
-
-                console.log("메세지 받았다");
-                const recvData = JSON.parse(message.body);
-                console.log(recvData);
-                messageHandler(recvData);
-            });
-
-            ws.send(
-                "/pub/session/message/enter",
-                {},
-                JSON.stringify({
-                    type: "ENTER",
-                    quizId: quizId,
-                })
-            );
-
-            setSock(sockjs);
-            setWebSocket(ws);
-        };
-
-        ws.connect({}, subscribeChannel, (err) => {
-            console.log(err);
-            if (reconnect < 5) {
-                setTimeout(() => {
-                    subscribeChannel();
-                }, 1000);
-            }
-        });
+        setSocket(quizSocket);
 
         return () => {
-            if (ws.connected) {
-                if (!isQuizStarted) {
-                    ws.send(
-                        "/pub/session/message/disconnect",
-                        {},
-                        JSON.stringify({
-                            type: "ENTER",
-                            quizId: quizId,
-                        })
-                    );
-                }
-
-                ws?.disconnect(() => {
-                    console.log("socket disconnected");
-                });
+            if (quizSocket.client.connected) {
+                quizSocket.sendLeave();
             }
 
-            sockjs?.close();
+            quizSocket.disconnect();
         };
     }, []);
 
@@ -238,7 +97,13 @@ const Quiz: React.FC = () => {
     // 정답 제출
     useEffect(() => {
         if (submitted) {
-            sendSubmit(textareaValue);
+            socket?.sendSubmit({
+                quizId,
+                type: "SUBMIT",
+                memberId,
+                problemOrder: problem.order,
+                submitContent: textareaValue,
+            });
             setIsTextareaEnabled(false); //textarea 비활성화
         }
     }, [submitted]);
@@ -268,10 +133,7 @@ const Quiz: React.FC = () => {
 
     useEffect(() => {
         if (showModalContent) {
-            webSocket?.disconnect(() => {
-                console.log("socket disconnected");
-            });
-            sock?.close();
+            socket?.disconnect();
         }
     }, [showModalContent]);
 
@@ -352,34 +214,6 @@ const Quiz: React.FC = () => {
         }
     };
 
-    // 답안 제출 웹소켓 전송
-    const sendSubmit = (data: any) => {
-        webSocket?.send(
-            "/pub/session/message/submit",
-            {},
-            JSON.stringify({
-                quizId: quizId,
-                type: "SUBMIT",
-                problemOrder: problem?.order,
-                memberId: memberId,
-                submitContent: data,
-            })
-        );
-    };
-
-    const sendChat = (data: string) => {
-        webSocket?.send(
-            "/pub/session/message/chat",
-            {},
-            JSON.stringify({
-                quizId: quizId,
-                type: "CHAT",
-                memberId: memberId,
-                message: memberNickname + ":" + data,
-            })
-        );
-    };
-
     return (
         <div className="container">
             <img className="live-logo-img" src="/img/live_logo.png" alt="" />
@@ -387,6 +221,7 @@ const Quiz: React.FC = () => {
 
             <div className="form">
                 <div className="form-group">
+                    {/* Problem Container */}
                     <div className="quiz-container">
                         <div className="quiz">
                             {isQuizStarted ? (
@@ -395,108 +230,39 @@ const Quiz: React.FC = () => {
                                 </div>
                             ) : (
                                 <ChatComponent
+                                    quizId={quizId}
                                     memberId={memberId}
+                                    memberNickname={memberNickname}
                                     messageList={messageList}
-                                    socketSend={sendChat}
+                                    socketSend={(message: ChatMessage) => {
+                                        socket?.sendChat(message);
+                                    }}
                                 />
                             )}
                         </div>
                     </div>
+                    {/* Problem Container End*/}
 
-                    <div>
-                        {isQuizStarted ? (
-                            <div
-                                className="answer-box"
-                                style={{ display: "flex" }}
-                            >
-                                {Array.from({
-                                    length: thisAnswerLength
-                                        ? thisAnswerLength
-                                        : 0,
-                                }).map((_, index) => (
-                                    <div key={index} className="square">
-                                        {thisAnswer ? thisAnswer[index] : null}
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div></div>
-                        )}
-                    </div>
+                    {/* Under Box */}
                     {isQuizStarted ? (
-                        // questions[currentQuestion].question
-
-                        <div className="input-content">
-                            <div>
-                                <textarea
-                                    ref={answerInput}
-                                    id="answer-input"
-                                    name="content"
-                                    value={textareaValue}
-                                    onChange={handleTextareaChange}
-                                    disabled={!isTextareaEnabled} // 비활성화 상태 조절
-                                    style={{
-                                        backgroundColor: isTextareaEnabled
-                                            ? "white"
-                                            : "lightgray", // 배경색 제어
-                                        color: isTextareaEnabled
-                                            ? "black"
-                                            : "gray", // 텍스트 색상 제어
-                                    }}
-                                    placeholder={
-                                        isTextareaEnabled ? "입력하세요" : " "
-                                    } // placeholder 설정
-                                />
-                            </div>
-
-                            <div>
-                                <RoundCornerBtn
-                                    type="submit"
-                                    onClick={() => setSubmitted(true)}
-                                    bgcolor={submitted ? "#265587" : undefined}
-                                    bghover="#265587"
-                                    disabled={submitted}
-                                >
-                                    {submitted ? "제출 완료" : "제출"}
-                                </RoundCornerBtn>
-                            </div>
-                        </div>
+                        <SubmitShort
+                            answer={thisAnswer}
+                            answerLength={thisAnswerLength}
+                            textareaValue={textareaValue}
+                            isTextareaEnabled={isTextareaEnabled}
+                            isSubmitted={submitted}
+                            onSubmit={setSubmitted}
+                            onTextAreaChanged={handleTextareaChange}
+                        />
                     ) : (
-                        <div>
-                            {/* <textarea
-                                placeholder="퀴즈가 곧 시작합니다!"
-                                disabled
-                            /> */}
-                            <div className="bottom_notice">
-                                🧩퀴즈가 곧 시작합니다!🧩
-                            </div>
-                            <div>
-                                <TextTimer
-                                    targetHour={targetHour}
-                                    targetMin={targetMin}
-                                />
-                            </div>
-                            <div className="notice">
-                                <br />
-                                <br />
-                                📌각 문제는 20초 동안 풀 수있는 스피드
-                                퀴즈입니다
-                                <br />
-                                📌각 문제가 끝난후, 정답을 확인 할 수 있습니다
-                                <br />
-                                📌동점일 경우 제출한 순서대로 순위가 산정됩니다
-                                <br />
-                                📌모든 정답은 한글로 제출해주세요
-                                <br />
-                            </div>
-                        </div>
+                        <NotifyBox />
                     )}
 
                     <ProgressBar progress={progress} />
                 </div>
             </div>
 
-            <Modal
+            <ModalContainer
                 showModal={showModal}
                 showContent={showModalContent}
                 toggleContent={toggleContent}

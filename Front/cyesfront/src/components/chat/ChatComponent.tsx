@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ChatComponent.css";
-
-interface Message {
-    message: string;
-    memberId: number;
-}
+import { ChatMessage } from "../../api/websocket/MessageInterface";
 
 interface Props {
+    quizId: number;
     memberId: number;
-    messageList: Message[];
-    socketSend: (arg: string) => void;
+    memberNickname: string;
+    messageList: ChatMessage[];
+    socketSend: (chat: ChatMessage) => void;
 }
 
 const ChatComponent: React.FC<Props> = ({
+    quizId,
     memberId,
+    memberNickname,
     messageList,
     socketSend,
 }) => {
@@ -47,7 +47,12 @@ const ChatComponent: React.FC<Props> = ({
             return;
         }
 
-        socketSend(chat);
+        socketSend({
+            quizId,
+            type: "CHAT",
+            memberId,
+            message: memberNickname + ":" + chat,
+        });
         chatCounter.current++;
         setChat("");
 
