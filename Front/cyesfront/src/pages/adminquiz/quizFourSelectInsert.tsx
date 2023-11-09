@@ -15,7 +15,7 @@ const QuizWordCrate = () => {
     question: question,
     answer: answer,
     choices: [choice1, choice2, choice3, choice4],
-    category: category,
+    problemCategory: category,
     description: description,
   };
 
@@ -23,7 +23,7 @@ const QuizWordCrate = () => {
     // Axios를 사용하여 API 호출 수행
     axios
       .post(
-        `http://localhost:5000/api/adminproblem/yes-four-select-insert`,
+        `https://cyes.site/api/adminproblem/yes-four-select-insert`,
         multipleChoiceProblemSaveRequest
       )
       .then((response) => {

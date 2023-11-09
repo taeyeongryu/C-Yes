@@ -8,7 +8,7 @@ const QuizWordCrate = () => {
   const noCheckProblemWord = () => {
     // Axios를 사용하여 API 호출 수행
     axios
-      .get(`http://localhost:5000/api/adminproblem/create/${inputValue}`)
+      .get(`https://cyes.site/api/adminproblem/create/${inputValue}`)
       .then((response) => {
         console.log("API 응답 데이터: ", response.data);
         // 원하는 작업 수행
