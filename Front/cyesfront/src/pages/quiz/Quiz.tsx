@@ -202,17 +202,23 @@ const Quiz: React.FC = () => {
         });
 
         return () => {
-            ws.send(
-                "/pub/session/message/disconnect",
-                {},
-                JSON.stringify({
-                    type: "ENTER",
-                    quizId: quizId,
-                })
-            );
-            ws?.disconnect(() => {
-                console.log("socket disconnected");
-            });
+            if (ws.connected) {
+                if (!isQuizStarted) {
+                    ws.send(
+                        "/pub/session/message/disconnect",
+                        {},
+                        JSON.stringify({
+                            type: "ENTER",
+                            quizId: quizId,
+                        })
+                    );
+                }
+
+                ws?.disconnect(() => {
+                    console.log("socket disconnected");
+                });
+            }
+
             sockjs?.close();
         };
     }, []);
@@ -259,6 +265,15 @@ const Quiz: React.FC = () => {
             setMyScore(score);
         }
     }, [showModal]);
+
+    useEffect(() => {
+        if (showModalContent) {
+            webSocket?.disconnect(() => {
+                console.log("socket disconnected");
+            });
+            sock?.close();
+        }
+    }, [showModalContent]);
 
     const handleTextareaChange = (
         event: React.ChangeEvent<HTMLTextAreaElement>
@@ -330,7 +345,6 @@ const Quiz: React.FC = () => {
                 toggleContent();
                 setMemberList(recv.gradingResultPresentResponseList);
 
-                webSocket?.disconnect(() => {});
                 return;
 
             default:

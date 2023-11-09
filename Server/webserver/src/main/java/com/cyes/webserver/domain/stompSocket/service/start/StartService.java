@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 
 import static com.cyes.webserver.redis.KeyGenerator.TOTAL_PARTICIPANT;
@@ -47,6 +48,7 @@ public class StartService {
         String key = TOTAL_PARTICIPANT+quizId;
 
         String totalNumber = stringRedisTemplate.opsForValue().get(key);
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30));
 
         return Integer.parseInt(totalNumber);
     }
