@@ -41,9 +41,7 @@ const SubmitShort = ({
                         onChange={onTextAreaChanged}
                         disabled={!isTextareaEnabled} // 비활성화 상태 조절
                         style={{
-                            backgroundColor: isTextareaEnabled
-                                ? "white"
-                                : "lightgray", // 배경색 제어
+                            backgroundColor: isTextareaEnabled ? "white" : "lightgray", // 배경색 제어
                             color: isTextareaEnabled ? "black" : "gray", // 텍스트 색상 제어
                         }}
                         placeholder={isTextareaEnabled ? "입력하세요" : " "} // placeholder 설정

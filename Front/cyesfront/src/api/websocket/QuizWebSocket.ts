@@ -13,13 +13,8 @@ class QuizWebSocket {
     socket: WebSocket;
     client: Stomp.Client;
     quizId: number;
+    receiveHandler: (message: any) => void = (message: any) => {};
     private reconnect: number = 0;
-    private onChat: Function = () => {};
-    private onStart: Function = () => {};
-    private onProblem: Function = () => {};
-    private onAnswer: Function = () => {};
-    private onEnd: Function = () => {};
-    private onResult: Function = () => {};
 
     constructor(quizId: number) {
         this.socket = new SockJS(`${process.env.REACT_APP_SPRING_URI}/ws/quiz`);
@@ -51,67 +46,12 @@ class QuizWebSocket {
         this.sendEnter();
     };
 
-    private receiveHandler = (message: any) => {
-        switch (message.type) {
-            case "CHAT":
-                this.onChat(message);
-                return;
-
-            case "START":
-                this.onStart(message);
-                return;
-
-            case "PROBLEM":
-                this.onProblem(message);
-                return;
-
-            case "ANSWER":
-                this.onAnswer(message);
-                return;
-
-            case "END":
-                this.onEnd(message);
-                return;
-
-            case "RESULT":
-                this.onResult(message);
-                return;
-
-            default:
-            // 이건 와서는 안됨. 에러 처리
-        }
-    };
-
-    onChatCallback = (callback: (message: ChatMessage) => void) => {
-        this.onChat = callback;
-    };
-
-    onStartCallback = (callback: (message: SessionMessage) => void) => {
-        this.onStart = callback;
-    };
-
-    onProblemCallback = (callback: (message: ProblemMessage) => void) => {
-        this.onProblem = callback;
-    };
-
-    onAnswerCallback = (callback: (message: AnswerMessage) => void) => {
-        this.onAnswer = callback;
-    };
-
-    onEndCallback = (callback: (message: SessionMessage) => void) => {
-        this.onEnd = callback;
-    };
-
-    onResultCallback = (callback: (message: ResultMessage) => void) => {
-        this.onResult = callback;
+    setMessageHandler = (handler: (message: any) => void) => {
+        this.receiveHandler = handler;
     };
 
     sendSubmit = (data: SubmitMessage) => {
-        this.client.send(
-            "/pub/session/message/submit",
-            {},
-            JSON.stringify(data)
-        );
+        this.client.send("/pub/session/message/submit", {}, JSON.stringify(data));
     };
 
     sendChat = (data: ChatMessage) => {

@@ -9,24 +9,13 @@ import TextTimer from "../../components/TextTimer";
 import { useLocation } from "react-router-dom";
 import ChatComponent from "../../components/chat/ChatComponent";
 import ModalContainer from "../../components/modal/ModalContainer";
-import {
-    ChatMessage,
-    ProblemMessage,
-} from "../../api/websocket/MessageInterface";
+import { ChatMessage, MemberScore, ProblemMessage } from "../../api/websocket/MessageInterface";
 import NotifyBox from "./NotifyBox";
 import SubmitShort from "./SubmitShort";
 import QuizWebSocket from "../../api/websocket/QuizWebSocket";
 
 const Quiz: React.FC = () => {
-    const [progress, setProgress] = useState(0);
-    const [submitted, setSubmitted] = useState(false);
-    const [isTextareaEnabled, setIsTextareaEnabled] = useState(true);
-    const [textareaValue, setTextareaValue] = useState("");
-    const [showModalContent, setShowModalContent] = useState(false);
-    const [isQuizStarted, setIsQuizStarted] = useState(false);
-    const [messageList, setMessageList] = useState<ChatMessage[]>([]);
-
-    // 웹소켓 연결
+    // 웹소켓
     const [socket, setSocket] = useState<QuizWebSocket>();
 
     // redux 에서 가져오기
@@ -36,7 +25,18 @@ const Quiz: React.FC = () => {
     const memberId = memberState.memberId;
     const memberNickname = memberState.memberNickname;
 
-    //문제리스트와 현재 문제 state
+    const [isQuizStarted, setIsQuizStarted] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isTextareaEnabled, setIsTextareaEnabled] = useState(true);
+
+    const [progress, setProgress] = useState(0);
+
+    const [textareaValue, setTextareaValue] = useState("");
+
+    // 채팅 리스트
+    const [chatList, setChatList] = useState<ChatMessage[]>([]);
+
+    // 문제리스트와 현재 문제 state
     const [problems, setProblems] = useState<ProblemMessage[]>([]);
     const [problem, setProblem] = useState<ProblemMessage>({
         quizId: -1,
@@ -50,31 +50,29 @@ const Quiz: React.FC = () => {
     //정답리스트와 현재 정답  state
     const [answers, setAnswers] = useState<Array<string>>([]);
     const [submits, setSubmits] = useState<Array<string>>([]);
-    const [myScore, setMyScore] = useState<number>(0); // 맞은 개수
-    const [thisAnswer, setThisAnswer] = useState<string>("");
-    const [thisAnswerLength, setThisAnswerLength] = useState<number>(0);
+    const [currentAnswer, setCurrentAnswer] = useState<string>("");
+    const [currentAnswerLength, setCurrentAnswerLength] = useState<number>(0);
 
     //결과 state
-    const [memberList, setMemberList] = useState<Array<any>>([]);
+    const [resultList, setResultList] = useState<MemberScore[]>([]);
+    const [myScore, setMyScore] = useState<number>(0); // 맞은 개수
 
     //모달
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState("moment");
 
-    /*
-     * ===========================================================================
-     * ================================소 켓 연 결================================
-     */
     // componentdidmount
     useEffect(() => {
         const quizSocket = new QuizWebSocket(quizId);
+
+        quizSocket.setMessageHandler(messageHandler);
 
         quizSocket.connect();
 
         setSocket(quizSocket);
 
         return () => {
-            if (quizSocket.client.connected) {
+            if (quizSocket.client.connected && !isQuizStarted) {
                 quizSocket.sendLeave();
             }
 
@@ -82,21 +80,69 @@ const Quiz: React.FC = () => {
         };
     }, []);
 
+    // 메세지 받았을 시 컨트롤 함수
+    const messageHandler = (message: any) => {
+        switch (message.type) {
+            case "CHAT":
+                setChatList((prev) => [...prev, message]);
+                return;
+
+            case "START":
+                setIsQuizStarted(true);
+                return;
+
+            case "PROBLEM":
+                console.log("문제 받은 시각 : ", new Date());
+                setProblem(message);
+                setProblems((prevProblems) => [...prevProblems, message]);
+                setCurrentAnswerLength(message.answerLength);
+
+                setIsTextareaEnabled(true);
+                setIsSubmitted(false);
+                setTextareaValue("");
+                setCurrentAnswer("");
+                setProgress(0);
+                return;
+
+            case "ANSWER":
+                console.log("정답 받은 시각 : ", new Date());
+                setCurrentAnswer(message.answer);
+                setIsTextareaEnabled(false);
+                setIsSubmitted(true);
+                return;
+
+            case "END":
+                // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
+                // 계산만 해놓고 기다리기 모달 띄우기
+                openModal("result");
+                return;
+
+            case "RESULT":
+                // 결과를 받아와서 띄우기
+                // 내 총점도 띄우기
+                // 모든 처리 완료 하면
+                setResultList(message.gradingResultPresentResponseList);
+                return;
+
+            default:
+            // 이건 와서는 안됨. 에러 처리
+        }
+    };
+
     // timer effect
     useEffect(() => {
         if (isQuizStarted && problem.quizId !== -1 && progress < 100) {
             const remainingTime = 20000 - progress * 100; // 20초를 ms로 계산
             const timeInterval = remainingTime / 200; // 0.1초 간격으로 나누기
             setTimeout(() => {
-                console.log("타이머 돈다");
                 setProgress((prev) => prev + 0.5);
             }, timeInterval);
         }
-    }, [problem, progress, isQuizStarted]);
+    }, [problem, progress]);
 
     // 정답 제출
     useEffect(() => {
-        if (submitted) {
+        if (isSubmitted && isTextareaEnabled) {
             socket?.sendSubmit({
                 quizId,
                 type: "SUBMIT",
@@ -106,15 +152,15 @@ const Quiz: React.FC = () => {
             });
             setIsTextareaEnabled(false); //textarea 비활성화
         }
-    }, [submitted]);
+    }, [isSubmitted]);
 
     // 정답 입력
     useEffect(() => {
-        if (thisAnswer) {
-            setAnswers((prevAnswers) => [...prevAnswers, thisAnswer]);
+        if (currentAnswer) {
+            setAnswers((prevAnswers) => [...prevAnswers, currentAnswer]);
             setSubmits((prevSubmits) => [...prevSubmits, textareaValue]);
         }
-    }, [thisAnswer]);
+    }, [currentAnswer]);
 
     //
     useEffect(() => {
@@ -132,86 +178,18 @@ const Quiz: React.FC = () => {
     }, [showModal]);
 
     useEffect(() => {
-        if (showModalContent) {
+        if (resultList) {
             socket?.disconnect();
         }
-    }, [showModalContent]);
+    }, [resultList]);
 
-    const handleTextareaChange = (
-        event: React.ChangeEvent<HTMLTextAreaElement>
-    ) => {
+    const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTextareaValue(event.target.value);
-    };
-
-    const startQuiz = () => {
-        setIsQuizStarted(true);
-    };
-
-    const toggleContent = () => {
-        setShowModalContent(true);
     };
 
     const openModal = (modalType: string) => {
         setModalType(modalType);
         setShowModal(true);
-    };
-
-    // "PROBLEM" 메시지를 받았을 때 문제를 state에 추가
-    const addProblem = (message: ProblemMessage) => {
-        setProblem(message);
-        setProblems((prevProblems) => [...prevProblems, message]);
-    };
-
-    // 메세지 받았을 시 컨트롤 함수
-    const messageHandler = (recv: any) => {
-        switch (recv.type) {
-            case "CHAT":
-                setMessageList((prev) => [...prev, recv]);
-                return;
-            case "START":
-                startQuiz();
-                return;
-
-            case "PROBLEM":
-                console.log("문제 받은 시각 : ", new Date());
-                addProblem(recv);
-                setThisAnswerLength(recv.answerLength);
-                setIsTextareaEnabled(true);
-                setSubmitted(false);
-                setTextareaValue("");
-                setProgress(0);
-                setThisAnswer("");
-                // setShowModal(false);
-                return;
-
-            case "ANSWER":
-                console.log("정답 받은 시각 : ", new Date());
-                console.log(recv);
-
-                setThisAnswer(recv.answer);
-                setIsTextareaEnabled(false);
-                setSubmitted(true);
-                // openModal("moment");
-                return;
-
-            case "END":
-                // 모든 제출 정답에 대해 총 점수 계산해서 점수를 state 에 저장
-                // 계산만 해놓고 기다리기 모달 띄우기
-                openModal("result");
-                return;
-
-            case "RESULT":
-                // 결과를 받아와서 띄우기
-                // 내 총점도 띄우기
-                // 모든 처리 완료 하면
-                toggleContent();
-                setMemberList(recv.gradingResultPresentResponseList);
-
-                return;
-
-            default:
-            // 이건 와서는 안됨. 에러 처리
-        }
     };
 
     return (
@@ -225,15 +203,13 @@ const Quiz: React.FC = () => {
                     <div className="quiz-container">
                         <div className="quiz">
                             {isQuizStarted ? (
-                                <div className="quiz-content">
-                                    {problem?.question}
-                                </div>
+                                <div className="quiz-content">{problem?.question}</div>
                             ) : (
                                 <ChatComponent
                                     quizId={quizId}
                                     memberId={memberId}
                                     memberNickname={memberNickname}
-                                    messageList={messageList}
+                                    chatList={chatList}
                                     socketSend={(message: ChatMessage) => {
                                         socket?.sendChat(message);
                                     }}
@@ -246,17 +222,18 @@ const Quiz: React.FC = () => {
                     {/* Under Box */}
                     {isQuizStarted ? (
                         <SubmitShort
-                            answer={thisAnswer}
-                            answerLength={thisAnswerLength}
+                            answer={currentAnswer}
+                            answerLength={currentAnswerLength}
                             textareaValue={textareaValue}
                             isTextareaEnabled={isTextareaEnabled}
-                            isSubmitted={submitted}
-                            onSubmit={setSubmitted}
+                            isSubmitted={isSubmitted}
+                            onSubmit={setIsSubmitted}
                             onTextAreaChanged={handleTextareaChange}
                         />
                     ) : (
                         <NotifyBox />
                     )}
+                    {/* Under Box End */}
 
                     <ProgressBar progress={progress} />
                 </div>
@@ -264,9 +241,7 @@ const Quiz: React.FC = () => {
 
             <ModalContainer
                 showModal={showModal}
-                showContent={showModalContent}
-                toggleContent={toggleContent}
-                memberList={memberList}
+                resultList={resultList}
                 myScore={myScore}
                 totalProblemLength={problems.length}
                 modalType={modalType}

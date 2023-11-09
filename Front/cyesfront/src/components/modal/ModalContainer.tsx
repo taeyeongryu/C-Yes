@@ -2,27 +2,18 @@ import { useNavigate } from "react-router-dom";
 import LoadingModal from "../LoadingModal";
 import RankingModal from "./RankingModal";
 import MomentOfRank from "./MomentOfRank";
+import { MemberScore } from "../../api/websocket/MessageInterface";
 
 interface ModalProps {
     showModal: boolean;
-    showContent: boolean;
-    toggleContent: () => void;
-    memberList: Array<any>;
+    resultList: MemberScore[];
     myScore?: number;
     totalProblemLength?: number;
     modalType: string;
 }
 
 const ModalContainer: React.FC<ModalProps> = (props: ModalProps) => {
-    const {
-        showModal,
-        showContent,
-        toggleContent,
-        memberList,
-        myScore,
-        totalProblemLength,
-        modalType,
-    } = props;
+    const { showModal, resultList, myScore, totalProblemLength, modalType } = props;
     const navigate = useNavigate();
 
     const moveMain = () => {
@@ -34,7 +25,7 @@ const ModalContainer: React.FC<ModalProps> = (props: ModalProps) => {
     }
 
     const renderModalContent = () => {
-        if (!showContent) {
+        if (!resultList) {
             return <LoadingModal />;
         }
 
@@ -42,7 +33,7 @@ const ModalContainer: React.FC<ModalProps> = (props: ModalProps) => {
             case "result":
                 return (
                     <RankingModal
-                        memberList={memberList}
+                        memberList={resultList}
                         myScore={myScore}
                         totalProblemLength={totalProblemLength}
                         onNavigate={moveMain}

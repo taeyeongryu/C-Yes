@@ -28,11 +28,13 @@ interface AnswerMessage extends SessionMessage {
 }
 
 interface ResultMessage extends SessionMessage {
-    gradingResultPresentResponseList: {
-        memberId: number;
-        nickName: string;
-        correctProblemCount: number;
-    }[];
+    gradingResultPresentResponseList: MemberScore[];
+}
+
+interface MemberScore {
+    memberId: number;
+    nickName: string;
+    correctProblemCount: number;
 }
 
 export type {
@@ -42,4 +44,5 @@ export type {
     SubmitMessage,
     AnswerMessage,
     ResultMessage,
+    MemberScore,
 };
