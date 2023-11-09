@@ -17,7 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.assertj.core.api.InstanceOfAssertFactories.type;
 
 
@@ -209,6 +214,39 @@ class ProblemRepositoryTest {
         assertThat(problemPage.getContent()).hasSize(2);
     }
 
+    @Test
+    @DisplayName("category, type, size로 문제를 Random으로 조회할 수 있다.")
+    void findProblemByCategoryAndTypeRandom() {
+        // given
+        insertProblemContentRandom();
+
+        ProblemCategory category1= ProblemCategory.DB;
+        ProblemCategory category2= ProblemCategory.OS;
+        ProblemType type1 = ProblemType.MULTIPLECHOICE;
+        ProblemType type2 = ProblemType.TRUEORFALSE;
+        int size = 10;
+
+        // when
+        Set<Problem> set1 = new HashSet<>(problemRepository.findProblemByCategoryAndTypeRandom(category1, type1, size));
+        Set<Problem> set2 = new HashSet<>(problemRepository.findProblemByCategoryAndTypeRandom(category2, type2, size));
+
+        // then
+        assertThat(set1).hasSize(10).extracting("category", "type")
+                .containsExactlyInAnyOrder(
+                        Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                        ,Tuple.tuple(category1, type1)
+                );
+        assertThat(set2).hasSize(10);
+    }
+
     private void insertProblemContent(){
         for (int i = 1; i <=10 ; i++) {
             MultipleChoiceProblemSaveRequest multipleChoice = MultipleChoiceProblemSaveRequest.builder()
@@ -234,6 +272,42 @@ class ProblemRepositoryTest {
 
         }
         for (int i = 21; i <= 30; i++) {
+            ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest = ShortAnswerProblemSaveRequest.builder()
+                    .question("question" + i)
+                    .answer("answer" + i)
+                    .description("description" + i)
+                    .problemCategory(ProblemCategory.NETWORK)
+                    .build();
+
+            problemRepository.save(Problem.createShortAnswer(shortAnswerProblemSaveRequest));
+
+        }
+    }
+    private void insertProblemContentRandom(){
+        for (int i = 1; i <=20 ; i++) {
+            MultipleChoiceProblemSaveRequest multipleChoice = MultipleChoiceProblemSaveRequest.builder()
+                    .question("question" + i)
+                    .answer("answer" + i)
+                    .choices(new String[]{"choice1", "choice2", "choice3", "choice4"})
+                    .description("description"+i)
+                    .problemCategory(ProblemCategory.DB)
+                    .build();
+
+            problemRepository.save(Problem.createMultipleChoice(multipleChoice));
+
+        }
+        for (int i = 21; i <= 40; i++) {
+            TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest = TrueOrFalseProblemSaveRequest.builder()
+                    .question("question" + i)
+                    .answer("answer" + i)
+                    .description("description" + i)
+                    .problemCategory(ProblemCategory.OS)
+                    .build();
+
+            problemRepository.save(Problem.createTrueOrFalse(trueOrFalseProblemSaveRequest));
+
+        }
+        for (int i = 41; i <= 60; i++) {
             ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest = ShortAnswerProblemSaveRequest.builder()
                     .question("question" + i)
                     .answer("answer" + i)
