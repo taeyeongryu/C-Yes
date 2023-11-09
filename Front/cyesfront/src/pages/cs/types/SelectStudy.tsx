@@ -3,6 +3,7 @@ import "./SelectStudy.css";
 import "./Common.css";
 import IconButton from "../../../components/button/IconButton";
 import { useNavigate, useLocation } from "react-router-dom";
+import RoundCornerBtn from "../../../components/RoundCornerBtn";
 
 type SelectStudyProps = {};
 
@@ -21,6 +22,7 @@ const SelectStudy = (props: SelectStudyProps) => {
   const location = useLocation();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [questions, setQuestions] = useState<QuestionContent[]>([]);
+  const [modalMessage, setModalMessage] = useState<string | null>(null);
 
   const goCsPage = () => {
     navigate("/cs");
@@ -36,6 +38,22 @@ const SelectStudy = (props: SelectStudyProps) => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prevIndex) => prevIndex + 1);
     }
+  };
+
+  const compareAnswer = (selectNum: number) => {
+    if (currentIndex === selectNum) {
+      openModal("정답입니다!");
+    } else {
+      openModal("오답입니다!");
+    }
+  };
+
+  const openModal = (message: string) => {
+    setModalMessage(message);
+  };
+
+  const closeModal = () => {
+    setModalMessage(null);
   };
 
   useEffect(() => {
@@ -62,18 +80,30 @@ const SelectStudy = (props: SelectStudyProps) => {
 
       <div className="answer-container">
         <div className="answer-four">
-          <div className="answer-box answer-box-one">
+          <div
+            className="answer-box answer-box-one"
+            onClick={() => compareAnswer(0)}
+          >
             {questions[currentIndex]?.choices[0] || "X"}
           </div>
-          <div className="answer-box answer-box-two">
+          <div
+            className="answer-box answer-box-two"
+            onClick={() => compareAnswer(1)}
+          >
             {questions[currentIndex]?.choices[1] || "X"}
           </div>
         </div>
         <div className="answer-four">
-          <div className="answer-box answer-box-three">
+          <div
+            className="answer-box answer-box-three"
+            onClick={() => compareAnswer(2)}
+          >
             {questions[currentIndex]?.choices[2] || "X"}
           </div>
-          <div className="answer-box answer-box-four">
+          <div
+            className="answer-box answer-box-four"
+            onClick={() => compareAnswer(3)}
+          >
             {questions[currentIndex]?.choices[3] || "X"}
           </div>
         </div>
@@ -90,6 +120,16 @@ const SelectStudy = (props: SelectStudyProps) => {
           <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
         </div>
       </div>
+      {modalMessage && (
+        <div className="modal-tf">
+          <div className="modal-content-tf">
+            <p>{modalMessage}</p>
+            <RoundCornerBtn onClick={closeModal} fontSize="15px">
+              확인
+            </RoundCornerBtn>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
