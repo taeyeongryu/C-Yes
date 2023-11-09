@@ -39,6 +39,24 @@ const TorfStudy = (props: Props) => {
     }
   };
 
+  const nextTen = () => {
+    if (questions.length - currentIndex > 10) {
+      setCurrentIndex((prevIndex) => prevIndex + 10);
+    } else {
+      setCurrentIndex(
+        (prevIndex) => prevIndex + (questions.length - currentIndex) - 1
+      );
+    }
+  };
+
+  const prevTen = () => {
+    if (currentIndex > 10) {
+      setCurrentIndex((prevIndex) => prevIndex - 10);
+    } else {
+      setCurrentIndex((prevIndex) => prevIndex - currentIndex);
+    }
+  };
+
   const [modalMessage, setModalMessage] = useState<string | null>(null);
 
   const openModal = (message: string) => {
@@ -111,9 +129,11 @@ const TorfStudy = (props: Props) => {
       </div>
 
       <div className="bottom-next">
+        <IconButton onClick={prevTen} iconUrl="/icon/left-ten.png" />
         <IconButton onClick={prevStudy} iconUrl="/icon/left-arrow.png" />
         {currentIndex + 1}/{questions.length}
         <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
+        <IconButton onClick={nextTen} iconUrl="/icon/right-ten.png" />
       </div>
       {modalMessage && (
         <div className="modal-tf">
