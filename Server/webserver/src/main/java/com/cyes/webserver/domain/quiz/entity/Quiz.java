@@ -2,6 +2,7 @@ package com.cyes.webserver.domain.quiz.entity;
 
 import com.cyes.webserver.common.entity.BaseEntity;
 import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.quiz.dto.GroupQuizInfoResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import lombok.AccessLevel;
@@ -45,22 +46,28 @@ public class Quiz extends BaseEntity {
 
 
     public QuizInfoResponse toQuizInfoResponse() {
-        QuizInfoResponse quizInfoResponse = QuizInfoResponse.builder()
+
+        return QuizInfoResponse.builder()
                 .quizId(this.id)
                 .quizTitle(this.title)
                 .quizStartDate(this.startDateTime)
                 .build();
-
-        return quizInfoResponse;
     }
 
     public QuizCreateResponse toQuizCreateResponse() {
-        QuizCreateResponse quizCreateResponseByService = QuizCreateResponse.builder()
+
+        return QuizCreateResponse.builder()
                 .quizId(this.id)
                 .quizTitle(this.title)
                 .quizStartDate(this.startDateTime)
                 .build();
+    }
 
-        return quizCreateResponseByService;
+    public GroupQuizInfoResponse toGroupQuizInfoResponse() {
+        return GroupQuizInfoResponse.builder()
+                .quizId(this.id)
+                .quizTitle(this.title)
+                .quizStartDate(this.startDateTime)
+                .build();
     }
 }
