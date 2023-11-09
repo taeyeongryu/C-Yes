@@ -35,7 +35,7 @@ const QuizsList: React.FC = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get<Quiz>(
-        `http://localhost:5000/api/adminproblem/no-check-all?page=${currentPage}&size=${itemsPerPage}`
+        `https://cyes.site/api/adminproblem/no-check-all?page=${currentPage}&size=${itemsPerPage}`
       );
       setQuizs(response.data.content);
       setTotalPages(response.data.totalPages);
@@ -73,7 +73,7 @@ const QuizsList: React.FC = () => {
 
   const deleteQuiz = async (quizId: string) => {
     await axios
-      .get(`http://localhost:5000/api/adminproblem/noCheck/delete?id=${quizId}`)
+      .get(`https://cyes.site/api/adminproblem/noCheck/delete?id=${quizId}`)
       .then((response) => {
         console.log("id: ", quizId);
         console.log("문제 삭제 성공:", response.data);

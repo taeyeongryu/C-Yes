@@ -32,13 +32,19 @@ public class ScheduledTaskFactory {
         Thread.sleep(3000);
 
         problems = startService.startSession(quizId);
+
+        log.info(problems.toString());
+
+        int totalParticipants = startService.fixTotalParticipantsNumber(quizId);
+
+        log.info("{}", totalParticipants);
         Thread.sleep(1000);
 
         for (ProblemResponse problem : problems) {
             problemService.sendProblem(quizId, problem);
             Thread.sleep(solvableTime);
 
-            answerService.sendAnswer(quizId, problem);
+            answerService.sendAnswer(quizId, problem, totalParticipants);
             Thread.sleep(3000);
         }
 
