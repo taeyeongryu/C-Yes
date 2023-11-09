@@ -7,9 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.List;
 
 
-public interface ProblemRepository extends MongoRepository<Problem,String> {
+public interface ProblemRepository extends MongoRepository<Problem,String> ,ProblemCustomRepository {
     @Query("{ 'problem_category' : ?0 }")
     Page<Problem> findProblemByCategory(ProblemCategory category, Pageable pageable);
 

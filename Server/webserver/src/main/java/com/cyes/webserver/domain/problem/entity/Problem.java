@@ -5,17 +5,18 @@ import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveReque
 import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
 import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.mongodb.lang.Nullable;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 @Getter
 @Document
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Problem {
     //pk
@@ -110,4 +111,18 @@ public class Problem {
         return ProblemType.valueOf(this.type);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Problem problem = (Problem) o;
+        return Objects.equals(id, problem.id) && Objects.equals(question, problem.question) && Arrays.equals(choices, problem.choices) && Objects.equals(answer, problem.answer) && Objects.equals(description, problem.description) && Objects.equals(category, problem.category) && Objects.equals(type, problem.type);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, question, answer, description, category, type);
+        result = 31 * result + Arrays.hashCode(choices);
+        return result;
+    }
 }
