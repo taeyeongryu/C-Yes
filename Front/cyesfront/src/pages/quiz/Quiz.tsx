@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import RoundCornerBtn from "../../components/RoundCornerBtn";
 import "./Quiz.css";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
 import { useSelector } from "react-redux";
 import ProgressBar from "../../components/ProgressBar";
-import TextTimer from "../../components/TextTimer";
-import { useLocation } from "react-router-dom";
 import ChatComponent from "../../components/chat/ChatComponent";
 import ModalContainer from "../../components/modal/ModalContainer";
 import { ChatMessage, MemberScore, ProblemMessage } from "../../api/websocket/MessageInterface";
