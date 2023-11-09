@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import static com.cyes.webserver.redis.KeyGenerator.TOTAL_PARTICIPANT;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class EnterService {
      * 퀴즈 입장을 처리하는 메서드
      */
     public void handleEnter(SessionMessage message) {
-        String key = "total_participant_"+message.getQuizId();
+        String key = TOTAL_PARTICIPANT+message.getQuizId();
 
         stringRedisTemplate.opsForValue().increment(key);
     }
@@ -26,7 +28,7 @@ public class EnterService {
      * 퀴즈 퇴장을 처리하는 메서드
      */
     public void handleDisconnect(SessionMessage message) {
-        String key = "total_participant_"+message.getQuizId();
+        String key = TOTAL_PARTICIPANT+message.getQuizId();
 
         stringRedisTemplate.opsForValue().decrement(key);
     }
