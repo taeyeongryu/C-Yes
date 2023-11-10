@@ -20,4 +20,5 @@ public interface ProblemRepository extends MongoRepository<Problem,String> ,Prob
     @Query("{ 'problem_category' : ?0, 'problem_type' : ?1 }")
     Page<Problem> findProblemByCategoryAndType(ProblemCategory category, ProblemType type, Pageable pageable);
 
+
 }
