@@ -86,10 +86,9 @@ public class QuizService {
 
             // 그 퀴즈의 문제 하나를 본다. (퀴즈 유형, 문제 과목 검색을 위해서)
             QuizProblem quizProblem = quiz.getQuizProblemList().get(0);
-            log.info(quizProblem.getProblemId());
-            Problem problem = problemRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
             int problemCnt = quiz.getQuizProblemList().size();
-
+            Problem problem = problemRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
+            
             responseList.add(quiz.toGroupQuizInfoResponse(problem.getCategory(), problem.getType(), problemCnt));
 
         }
@@ -104,24 +103,20 @@ public class QuizService {
      */
     public List<GroupQuizInfoResponse> searchGroupQuiz(LocalDateTime now) {
 
+
         // 퀴즈를 만든 사람이 일반 유저인 퀴즈 조회
         List<Quiz> quizList = quizRepository.findGroupQuiz(now).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
+
 
         // Entirty -> Dto
         List<GroupQuizInfoResponse> responseList = new ArrayList<>();
         for (Quiz quiz : quizList) {
             // 그 퀴즈의 문제 하나를 본다. (퀴즈 유형, 문제 과목 검색을 위해서)
-
             QuizProblem quizProblem = quiz.getQuizProblemList().get(0);
             int problemCnt = quiz.getQuizProblemList().size();
 
-            if(quiz.getMember().getMemberAuthority() == MemberAuthority.ADMIN) {
-                Problem problem = problemRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
-                responseList.add(quiz.toGroupQuizInfoResponse(problem.getCategory(), problem.getType(), problemCnt));
-            } else {
-                ProblemByUser problemByUser = problemByUserRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
-                responseList.add(quiz.toGroupQuizInfoResponse(problemByUser.getCategory(), problemByUser.getType(), problemCnt));
-            }
+            ProblemByUser problemByUser = problemByUserRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
+            responseList.add(quiz.toGroupQuizInfoResponse(problemByUser.getCategory(), problemByUser.getType(), problemCnt));
 
         }
 

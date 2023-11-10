@@ -32,7 +32,7 @@ import java.util.Properties;
 public class QuizController {
 
     private final QuizService quizService;
-    private final KafkaTemplate<Object, Object> producer;
+//    private final KafkaTemplate<Object, Object> producer;
 
     /**
      * 라이브 퀴즈쇼 정보 조회 API
@@ -90,27 +90,27 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.OK).body(quizCreateResponse);
     }
 
-
-    @Operation(summary = "카프카 테스트", description = "테스트를 위해 임시로 만든 메서드이다.")
-    @GetMapping("/test")
-    private String testKafka() throws JsonProcessingException {
-        SubmitRedis submitRedis = SubmitRedis.builder()
-                .quizId(1L)
-                .memberId(1L)
-                .problemOrder(1)
-                .submitContent(LocalDateTime.now().toString())
-                .duringTime(123L)
-                .build();
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String valueStr = objectMapper.writeValueAsString(submitRedis);
-
-        producer.send("demo_java", valueStr);
-        producer.flush();
-
-        return "확인";
-    }
+//
+//    @Operation(summary = "카프카 테스트", description = "테스트를 위해 임시로 만든 메서드이다.")
+//    @GetMapping("/test")
+//    private String testKafka() throws JsonProcessingException {
+//        SubmitRedis submitRedis = SubmitRedis.builder()
+//                .quizId(1L)
+//                .memberId(1L)
+//                .problemOrder(1)
+//                .submitContent(LocalDateTime.now().toString())
+//                .duringTime(123L)
+//                .build();
+//
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        String valueStr = objectMapper.writeValueAsString(submitRedis);
+//
+//        producer.send("demo_java", valueStr);
+//        producer.flush();
+//
+//        return "확인";
+//    }
 
 
     @Operation(summary = "유저가 만드는 그룹퀴즈를 생성하는 메서드", description = "유저가 그룹 퀴즈를 만들 때 문제를 저장하고 그 문제로 퀴즈를 생성한다.")
