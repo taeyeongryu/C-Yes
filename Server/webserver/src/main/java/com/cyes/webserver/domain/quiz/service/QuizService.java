@@ -58,18 +58,37 @@ public class QuizService {
         return quizInfoResponse;
     }
 
+    /**
+     *
+     * @param keyword
+     * @return List<GroupQuizInfoResponse>
+     */
+    public List<GroupQuizInfoResponse> searchByQuizTitle(String keyword) {
+
+        // keyword를 제목으로 포함하는 퀴즈 조회
+        List<Quiz> quizList = quizRepository.findByTitle(keyword).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
+
+        // Entity -> Dto
+        List<GroupQuizInfoResponse> responseList = new ArrayList<>();
+        for(Quiz quiz : quizList) {
+            responseList.add(quiz.toGroupQuizInfoResponse());
+        }
+
+        return responseList;
+
+    }
     public List<GroupQuizInfoResponse> searchGroupQuiz(LocalDateTime now) {
 
         // 퀴즈를 만든 사람이 일반 유저인 퀴즈 조회
         List<Quiz> quizList = quizRepository.findGroupQuiz(now).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
 
         // Entirty -> Dto
-        List<GroupQuizInfoResponse> list = new ArrayList<>();
+        List<GroupQuizInfoResponse> responseList = new ArrayList<>();
         for(Quiz quiz : quizList) {
-            list.add(quiz.toGroupQuizInfoResponse());
+            responseList.add(quiz.toGroupQuizInfoResponse());
         }
 
-        return list;
+        return responseList;
 
     }
     /*

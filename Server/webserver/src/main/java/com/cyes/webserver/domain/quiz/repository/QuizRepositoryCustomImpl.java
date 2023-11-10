@@ -50,6 +50,20 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
                 .fetch());
     }
 
+    @Override
+    public Optional<List<Quiz>> findByTitle(String keyword) {
+
+
+        QQuiz quiz = QQuiz.quiz;
+
+        // keyword를 포함하는 Quiz 검색
+        return Optional.ofNullable(jpaQueryFactory
+                .select(quiz)
+                .from(quiz)
+                .where(quiz.title.contains(keyword))
+                .fetch());
+    }
+
     private static BooleanExpression isUser(QQuiz quiz) {
         return quiz.member.memberAuthority.eq(MemberAuthority.USER);
     }
