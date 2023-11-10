@@ -54,6 +54,14 @@ public class QuizController {
     }
 
     /**
+     * 그룹 퀴즈 제목 검색
+     * @return List<GroupQuizInfoResponse>
+     */
+    @GetMapping("/group/info/searchByTitle")
+    public ResponseEntity<List<GroupQuizInfoResponse>> getGroupQuizInfoByTitle(@RequestBody GroupQuizInfoRequestByTitle groupQuizInfoRequestByTitle) {
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchByQuizTitle(groupQuizInfoRequestByTitle.getKeyword()));
+    }
+    /**
      * 라이브 퀴즈쇼 개설 API
      * @param quizCreateRequest
      * @return QuizCreateResponse
@@ -133,4 +141,10 @@ public class QuizController {
         return "확인";
     }
 
+    @Operation(summary = "유저가 만드는 그룹퀴즈를 생성하는 메서드", description = "유저가 그룹 퀴즈를 만들 때 문제를 저장하고 그 문제로 퀴즈를 생성한다.")
+    @PostMapping("/create/user")
+    public ResponseEntity<QuizCreateResponse> createQuizByUser(QuizCreateRequestByUser quizCreateRequestByUser){
+        QuizCreateResponse quizByUser = quizService.createQuizByUser(quizCreateRequestByUser);
+        return ResponseEntity.status(HttpStatus.OK).body(quizByUser);
+    }
 }

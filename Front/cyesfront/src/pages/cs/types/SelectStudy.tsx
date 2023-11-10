@@ -41,7 +41,10 @@ const SelectStudy = (props: SelectStudyProps) => {
   };
 
   const compareAnswer = (selectNum: number) => {
-    if (currentIndex === selectNum) {
+    if (
+      questions[currentIndex].answer ===
+      questions[currentIndex].choices[selectNum]
+    ) {
       openModal("정답입니다!");
     } else {
       openModal("오답입니다!");

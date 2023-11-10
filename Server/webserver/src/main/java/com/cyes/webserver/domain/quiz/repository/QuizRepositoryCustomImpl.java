@@ -40,13 +40,24 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
 
         QQuiz quiz = QQuiz.quiz;
 
-        LocalDateTime todayEnd = nowDateTime.withHour(23).withMinute(59).withSecond(59).withNano(999_999_999);
-
        return Optional.ofNullable(jpaQueryFactory
                 .select(quiz)
                 .from(quiz)
-                .where(isUser(quiz).and(isTimeBetween(nowDateTime, quiz, todayEnd)))
+                .where(isUser(quiz).and(isTimeAfter(nowDateTime, quiz)))
                 .orderBy(quiz.startDateTime.asc())
+                .fetch());
+    }
+
+    @Override
+    public Optional<List<Quiz>> findByTitle(String keyword,LocalDateTime nowDateTime) {
+
+        QQuiz quiz = QQuiz.quiz;
+
+        // keyword를 포함하는 Quiz 검색
+        return Optional.ofNullable(jpaQueryFactory
+                .select(quiz)
+                .from(quiz)
+                .where(quiz.title.contains(keyword).and(isTimeAfter(nowDateTime,quiz)))
                 .fetch());
     }
 
@@ -56,6 +67,9 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
 
     private static BooleanExpression isTimeBetween(LocalDateTime nowDateTime, QQuiz quiz, LocalDateTime todayEnd) {
         return quiz.startDateTime.between(nowDateTime, todayEnd);
+    }
+    private static BooleanExpression isTimeAfter(LocalDateTime nowDateTime, QQuiz quiz) {
+        return quiz.startDateTime.after(nowDateTime);
     }
 
 

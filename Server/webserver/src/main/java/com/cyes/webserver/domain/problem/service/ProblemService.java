@@ -1,10 +1,12 @@
 package com.cyes.webserver.domain.problem.service;
 
 import com.cyes.webserver.domain.problem.dto.request.MultipleChoiceProblemSaveRequest;
+import com.cyes.webserver.domain.problem.dto.request.ProblemSaveByUserRequest;
 import com.cyes.webserver.domain.problem.dto.request.ShortAnswerProblemSaveRequest;
 import com.cyes.webserver.domain.problem.dto.request.TrueOrFalseProblemSaveRequest;
 import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.problem.entity.*;
+import com.cyes.webserver.domain.problem.repository.ProblemByUserRepository;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
@@ -25,6 +27,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ProblemService {
     private final ProblemRepository problemRepository;
+    private final ProblemByUserRepository problemByUserRepository;
 
     //객관식 문제 저장
     @Transactional
@@ -43,6 +46,7 @@ public class ProblemService {
 
         return problemResponse;
     }
+
     //단답형 문제 저장
     @Transactional
     public ProblemResponse saveShortAnswer(ShortAnswerProblemSaveRequest shortAnswerProblemSaveRequest){
@@ -57,6 +61,7 @@ public class ProblemService {
         ProblemResponse problemResponse = shortAnswer.toProblemResponse(0);
         return problemResponse;
     }
+
     //오엑스 문제 저장
     @Transactional
     public ProblemResponse saveTrueOrFalse(TrueOrFalseProblemSaveRequest trueOrFalseProblemSaveRequest){
@@ -70,6 +75,27 @@ public class ProblemService {
         //Entity -> Dto
         ProblemResponse problemResponse = trueOrFalse.toProblemResponse(0);
         return problemResponse;
+    }
+    //유저가 만든 퀴즈의 문제 저장하는 메서드
+    public List<String> saveProblemByUserAll(List<ProblemSaveByUserRequest> problemSaveByUserRequestList){
+        //problem id list 반환 할 List
+        List<String> problemIdList = new ArrayList<>();
+
+        for (ProblemSaveByUserRequest problemSaveByUserRequest : problemSaveByUserRequestList) {
+
+            //Dto -> Document
+            ProblemByUser problemDocument = problemSaveByUserRequest.toDocument();
+
+            //Document save
+            problemByUserRepository.save(problemDocument);
+
+            //get problem Id
+            String problemId = problemDocument.getId();
+
+            //add problemId to problemList
+            problemIdList.add(problemId);
+        }
+        return problemIdList;
     }
     //문제 전체 조회 - 페이지네이션
     public Page<ProblemResponse> findAllProblem(Pageable pageable){

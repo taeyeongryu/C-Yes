@@ -25,7 +25,9 @@ public enum CustomExceptionList {
     SCHEDULE_START_TIME_TOO_EARLY_ERROR(HttpStatus.TOO_EARLY, "E012", "스케줄링 시작 시간이 너무 이릅니다."),
     REDIS_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E013", "제출된 답안 정보가 없습니다."),
     SUBMIT_TIME_ERROR(HttpStatus.BAD_REQUEST, "E014", "답안 제출시간은 문제 출제시간보다 같거나 빠를 수 없습니다."),
-    BINDING_ERROR(HttpStatus.BAD_REQUEST, "E015", "요청에 정확한 값을 입력해야 합니다.");
+    BINDING_ERROR(HttpStatus.BAD_REQUEST, "E015", "요청에 정확한 값을 입력해야 합니다."),
+    QUIZPROBLEM_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "E015", "퀴즈에 문제가 존재하지 않습니다.");
+
 
 
 
