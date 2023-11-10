@@ -133,4 +133,9 @@ public class QuizController {
         return "확인";
     }
 
+    @Operation
+    @PostMapping("/create/user")
+    public ResponseEntity<QuizCreateResponse> createQuizByUser(QuizCreateRequestByUser quizCreateRequestByUser){
+        return null;
+    }
 }
