@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./GroupMain.css";
 import BottomNav from "../../components/bottomnav/BottomNav";
-import { getGroupQuiz } from "../../api/Group";
+import { getGroupQuiz, getGroupQuizUseTitle } from "../../api/Group";
 import FloatingButton from "../../components/FloatingButton";
 
 type Props = {};
@@ -15,24 +15,49 @@ interface QuizInfo {
 
 const GroupMain = (props: Props) => {
   const [quizzes, setQuizzes] = useState<QuizInfo[]>([]);
+  const [searchQuiz, setSearchQuiz] = useState<QuizInfo[]>([]);
+  const [searchTerm, setSearchTerm] = useState(""); // 검색어를 저장할 상태
   const navigate = useNavigate();
-  const [currentTime, setCurrentTime] = useState(
-    new Date().toLocaleTimeString()
-  );
 
   const handleButtonClick = () => {
     navigate("/group/create");
   };
 
-  useEffect(() => {
-    const fetchQuizData = async () => {
-      const data = await getGroupQuiz(); // API 호출
-      if (data) {
-        setQuizzes(data);
-      }
-    };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); // 입력 필드 값 변경 시 상태 업데이트
+  };
 
+  const handleInputKeyDown = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter") {
+      console.log("enter눌림", searchTerm);
+      // 엔터 키를 누르면
+      // const data = await getGroupQuizUseTitle(searchTerm); // API 호출 (검색어 인자 추가)
+      const data = await getGroupQuizUseTitle();
+      if (data) {
+        setSearchQuiz(data); // 상태 업데이트
+      }
+    }
+  };
+
+  const fetchQuizData = async () => {
+    const data = await getGroupQuiz(); // API 호출
+    if (data) {
+      setQuizzes(data);
+    }
+  };
+
+  const fetchSearchQuiz = async () => {
+    const data = await getGroupQuizUseTitle(); // API 호출
+    if (data) {
+      setSearchQuiz(data);
+    }
+  };
+
+  useEffect(() => {
     fetchQuizData();
+    fetchSearchQuiz();
   }, []);
 
   return (
@@ -45,7 +70,12 @@ const GroupMain = (props: Props) => {
         </div>
         <div className="group-search-container">
           <img src="/icon/search.png" alt=""></img>
-          <input placeholder="퀴즈 방 검색"></input>
+          <input
+            placeholder="퀴즈 방 검색"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeyDown}
+          ></input>
         </div>
         <div className="fast-quiz-container">
           <div className="quiz-text-container">빠른 퀴즈</div>
@@ -83,8 +113,8 @@ const GroupMain = (props: Props) => {
           <div className="group-result-container">
             <div className="quiz-text-container">검색된 퀴즈</div>
             <div className="result-quiz-box">
-              {quizzes.length > 0 ? (
-                quizzes.map((quiz, index) => (
+              {searchQuiz.length > 0 ? (
+                searchQuiz.map((quiz, index) => (
                   <div key={index} className="each-result-quiz-box">
                     <div className="search-box-title">{quiz.quizTitle}</div>
                     <div className="search-box-text">
