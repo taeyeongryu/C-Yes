@@ -1,20 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./GroupMain.css";
 import BottomNav from "../../components/bottomnav/BottomNav";
+import { getGroupQuiz } from "../../api/Group";
+import FloatingButton from "../../components/FloatingButton";
 
 type Props = {};
 
+interface QuizInfo {
+  quizId: number;
+  quizTitle: string;
+  quizStartDate: string;
+}
+
 const GroupMain = (props: Props) => {
+  const [quizzes, setQuizzes] = useState<QuizInfo[]>([]);
+  const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
   );
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString());
-    }, 1000); // 매 1초마다 시간 업데이트
+  const handleButtonClick = () => {
+    navigate("/group/create");
+  };
 
-    return () => clearInterval(timer); // 컴포넌트 언마운트 시 인터벌 제거
+  useEffect(() => {
+    const fetchQuizData = async () => {
+      const data = await getGroupQuiz(); // API 호출
+      if (data) {
+        setQuizzes(data);
+      }
+    };
+
+    fetchQuizData();
   }, []);
 
   return (
@@ -32,25 +50,56 @@ const GroupMain = (props: Props) => {
         <div className="fast-quiz-container">
           <div className="quiz-text-container">빠른 퀴즈</div>
           <div className="fast-quiz-lineup-container">
-            <div className="fast-quiz-box">
-              <div className="quiz-box-title">수인이 문제집</div>
-              <div className="quiz-box-text">{currentTime}</div>
-              <div className="quiz-box-text">문제수: 20개</div>
-              <div className="quiz-box-text">출제자: 5반 킹카</div>
-              <div className="quiz-box-text"># 네트워크, OS</div>
-            </div>
-            <div className="fast-quiz-box">
-              <div className="quiz-box-title">태영이와 아이들</div>
-              <div className="quiz-box-text">{currentTime}</div>
-              <div className="quiz-box-text">문제수: 20개</div>
-              <div className="quiz-box-text">출제자: 4반 킹카</div>
-              <div className="quiz-box-text"># 자바의 근본</div>
-            </div>
+            {quizzes.length === 0 && (
+              <div className="fast-quiz-box">퀴즈가 없습니다!</div>
+            )}
+            {quizzes.length > 0 && (
+              <div className="fast-quiz-box">
+                <div className="quiz-box-title">{quizzes[0].quizTitle}</div>
+                <div className="quiz-box-text">{quizzes[0].quizTitle}</div>
+                <div className="quiz-box-text">
+                  문제수: {quizzes[0].quizTitle}
+                </div>
+                <div className="quiz-box-text">
+                  출제자: {quizzes[0].quizTitle}
+                </div>
+                <div className="quiz-box-text">{quizzes[0].quizTitle}</div>
+              </div>
+            )}
+            {quizzes.length > 1 && (
+              <div className="fast-quiz-box">
+                <div className="quiz-box-title">{quizzes[1].quizTitle}</div>
+                <div className="quiz-box-text">{quizzes[1].quizTitle}</div>
+                <div className="quiz-box-text">
+                  문제수: {quizzes[1].quizTitle}
+                </div>
+                <div className="quiz-box-text">
+                  출제자: {quizzes[1].quizTitle}
+                </div>
+                <div className="quiz-box-text">{quizzes[1].quizTitle}</div>
+              </div>
+            )}
           </div>
           <div className="group-result-container">
             <div className="quiz-text-container">검색된 퀴즈</div>
-            <div className="result-quiz-box"></div>
+            <div className="result-quiz-box">
+              {quizzes.length > 0 ? (
+                quizzes.map((quiz, index) => (
+                  <div key={index} className="each-result-quiz-box">
+                    <div className="search-box-title">{quiz.quizTitle}</div>
+                    <div className="search-box-text">
+                      시작 시간: {new Date(quiz.quizStartDate).toLocaleString()}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="no-quiz-message">검색된 퀴즈가 없습니다!</div>
+              )}
+            </div>
           </div>
+        </div>
+        <div>
+          <FloatingButton onClick={handleButtonClick} />
         </div>
       </div>
       <div className="bottom-nav">

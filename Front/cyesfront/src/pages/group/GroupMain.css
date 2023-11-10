@@ -79,12 +79,32 @@
 
 .result-quiz-box {
   width: 100%;
-  height: 100px;
+  height: 200px;
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-top: 3%;
   padding: 3%;
+  display: flex; /* Flexbox 사용 */
+  flex-direction: column; /* 자식 요소들을 세로 방향으로 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 (필요한 경우) */
+  overflow-y: auto; /* 세로 방향으로 스크롤 생성 */
+}
+.each-result-quiz-box {
+  width: 90%;
+  height: 50px;
+  margin-top: 3%;
+  padding: 3%;
+  border-top: none; /* 위쪽 테두리 없앰 */
+  border-left: none; /* 왼쪽 테두리 없앰 */
+  border-right: none; /* 오른쪽 테두리 없앰 */
+  border-bottom: 1px solid lightblue; /* 아래쪽 테두리 검은색으로 설정 */
+}
+.search-box-title {
+}
+.search-box-text {
+  color: gray;
 }
 .bottom-nav {
   position: fixed; /* 고정 위치 설정 */
