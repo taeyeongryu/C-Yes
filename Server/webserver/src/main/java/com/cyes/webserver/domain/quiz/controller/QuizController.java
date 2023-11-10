@@ -54,6 +54,14 @@ public class QuizController {
     }
 
     /**
+     * 그룹 퀴즈 제목 검색
+     * @return List<GroupQuizInfoResponse>
+     */
+    @GetMapping("/group/info/searchByTitle")
+    public ResponseEntity<List<GroupQuizInfoResponse>> getGroupQuizInfoByTitle(@RequestBody GroupQuizInfoRequestByTitle groupQuizInfoRequestByTitle) {
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchByQuizTitle(groupQuizInfoRequestByTitle.getKeyword()));
+    }
+    /**
      * 라이브 퀴즈쇼 개설 API
      * @param quizCreateRequest
      * @return QuizCreateResponse
