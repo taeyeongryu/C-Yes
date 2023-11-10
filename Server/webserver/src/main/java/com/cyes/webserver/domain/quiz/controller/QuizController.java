@@ -57,6 +57,8 @@ public class QuizController {
      * 그룹 퀴즈 제목 검색
      * @return List<GroupQuizInfoResponse>
      */
+    @Operation(summary = "그룹 퀴즈 제목으로 검색", description = "그룹 퀴즈 정보를 제목을 통해 검색한다. \n" +
+    "keyword를 json형식으로 요청해야한다.")
     @GetMapping("/group/info/searchByTitle")
     public ResponseEntity<List<GroupQuizInfoResponse>> getGroupQuizInfoByTitle(@RequestBody GroupQuizInfoRequestByTitle groupQuizInfoRequestByTitle) {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.searchByQuizTitle(groupQuizInfoRequestByTitle.getKeyword()));
