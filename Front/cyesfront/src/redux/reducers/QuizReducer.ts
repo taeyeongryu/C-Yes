@@ -8,7 +8,7 @@ const initialQuizState: QuizState = {
     quiz: {
         quizId: -1,
         quizTitle: "",
-        quizStartDate: new Date(),
+        quizStartDate: new Date().toISOString(),
     },
 };
 

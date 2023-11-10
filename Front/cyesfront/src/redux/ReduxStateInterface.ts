@@ -1,7 +1,7 @@
 interface Quiz {
     quizId: number;
     quizTitle: string;
-    quizStartDate: Date;
+    quizStartDate: string;
 }
 
 export type { Quiz };

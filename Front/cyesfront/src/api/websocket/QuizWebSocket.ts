@@ -51,7 +51,11 @@ class QuizWebSocket {
     };
 
     sendSubmit = (data: SubmitMessage) => {
-        this.client.send("/pub/session/message/submit", {}, JSON.stringify(data));
+        this.client.send(
+            "/pub/session/message/submit",
+            {},
+            JSON.stringify(data)
+        );
     };
 
     sendChat = (data: ChatMessage) => {

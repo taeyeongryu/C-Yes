@@ -4,10 +4,18 @@ import { useSelector } from "react-redux";
 import ProgressBar from "../../components/ProgressBar";
 import ChatComponent from "../../components/chat/ChatComponent";
 import ModalContainer from "../../components/modal/ModalContainer";
-import { ChatMessage, MemberScore, ProblemMessage } from "../../api/websocket/MessageInterface";
+import {
+    AnswerMessage,
+    ChatMessage,
+    MemberScore,
+    ProblemMessage,
+} from "../../api/websocket/MessageInterface";
 import NotifyBox from "./NotifyBox";
 import SubmitShort from "./SubmitShort";
 import QuizWebSocket from "../../api/websocket/QuizWebSocket";
+import SubmitSelection from "./SubmitSelection";
+import SubmitOX from "./SubmitOX";
+import AnswerResultComponent from "./AnswerResultComponent";
 
 const Quiz: React.FC = () => {
     // 웹소켓
@@ -26,7 +34,7 @@ const Quiz: React.FC = () => {
 
     const [progress, setProgress] = useState(0);
 
-    const [textareaValue, setTextareaValue] = useState("");
+    const [currentSubmit, setCurrentSubmit] = useState("");
 
     // 채팅 리스트
     const [chatList, setChatList] = useState<ChatMessage[]>([]);
@@ -38,15 +46,18 @@ const Quiz: React.FC = () => {
         type: "PROBLEM",
         question: "문제를 기다리는 중",
         order: 0,
-        answerLength: 0,
+        answerLength: "",
         selections: [],
+        problemType: "",
     });
 
     //정답리스트와 현재 정답  state
     const [answers, setAnswers] = useState<Array<string>>([]);
     const [submits, setSubmits] = useState<Array<string>>([]);
     const [currentAnswer, setCurrentAnswer] = useState<string>("");
-    const [currentAnswerLength, setCurrentAnswerLength] = useState<number>(0);
+    const [currentAnswerMessage, setCurrentAnswerMessage] =
+        useState<AnswerMessage>();
+    const [currentAnswerLength, setCurrentAnswerLength] = useState<string>("");
 
     //결과 state
     const [resultList, setResultList] = useState<MemberScore[]>([]);
@@ -94,7 +105,7 @@ const Quiz: React.FC = () => {
 
                 setIsTextareaEnabled(true);
                 setIsSubmitted(false);
-                setTextareaValue("");
+                setCurrentSubmit("");
                 setCurrentAnswer("");
                 setProgress(0);
                 return;
@@ -102,6 +113,7 @@ const Quiz: React.FC = () => {
             case "ANSWER":
                 console.log("정답 받은 시각 : ", new Date());
                 setCurrentAnswer(message.answer);
+                setCurrentAnswerMessage(message);
                 setIsTextareaEnabled(false);
                 setIsSubmitted(true);
                 return;
@@ -143,7 +155,7 @@ const Quiz: React.FC = () => {
                 type: "SUBMIT",
                 memberId,
                 problemOrder: problem.order,
-                submitContent: textareaValue,
+                submitContent: currentSubmit,
             });
             setIsTextareaEnabled(false); //textarea 비활성화
         }
@@ -153,7 +165,7 @@ const Quiz: React.FC = () => {
     useEffect(() => {
         if (currentAnswer) {
             setAnswers((prevAnswers) => [...prevAnswers, currentAnswer]);
-            setSubmits((prevSubmits) => [...prevSubmits, textareaValue]);
+            setSubmits((prevSubmits) => [...prevSubmits, currentSubmit]);
         }
     }, [currentAnswer]);
 
@@ -178,8 +190,10 @@ const Quiz: React.FC = () => {
         }
     }, [resultList]);
 
-    const handleTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setTextareaValue(event.target.value);
+    const handleTextareaChange = (
+        event: React.ChangeEvent<HTMLTextAreaElement>
+    ) => {
+        setCurrentSubmit(event.target.value);
     };
 
     const openModal = (modalType: string) => {
@@ -198,7 +212,9 @@ const Quiz: React.FC = () => {
                     <div className="quiz-container">
                         <div className="quiz">
                             {isQuizStarted ? (
-                                <div className="quiz-content">{problem?.question}</div>
+                                <div className="quiz-content">
+                                    {problem?.question}
+                                </div>
                             ) : (
                                 <ChatComponent
                                     quizId={quizId}
@@ -215,22 +231,49 @@ const Quiz: React.FC = () => {
                     {/* Problem Container End*/}
 
                     {/* Under Box */}
-                    {isQuizStarted ? (
-                        <SubmitShort
-                            answer={currentAnswer}
-                            answerLength={currentAnswerLength}
-                            textareaValue={textareaValue}
-                            isTextareaEnabled={isTextareaEnabled}
-                            isSubmitted={isSubmitted}
-                            onSubmit={setIsSubmitted}
-                            onTextAreaChanged={handleTextareaChange}
-                        />
-                    ) : (
-                        <NotifyBox />
-                    )}
-                    {/* Under Box End */}
+                    {isQuizStarted &&
+                        currentAnswer === "" &&
+                        problem.problemType === "SHORTANSWER" && (
+                            <SubmitShort
+                                answer={currentAnswer}
+                                answerLength={currentAnswerLength}
+                                textareaValue={currentSubmit}
+                                isTextareaEnabled={isTextareaEnabled}
+                                isSubmitted={isSubmitted}
+                                onSubmit={setIsSubmitted}
+                                onTextAreaChanged={handleTextareaChange}
+                            />
+                        )}
+                    {isQuizStarted &&
+                        currentAnswer === "" &&
+                        problem.problemType == "MULTIPLECHOICE" && (
+                            <SubmitSelection
+                                answer={currentAnswer}
+                                isSubmitted={isSubmitted}
+                                selectionList={problem.selections}
+                                setIsSubmitted={setIsSubmitted}
+                                setSubmit={setCurrentSubmit}
+                            />
+                        )}
+                    {isQuizStarted &&
+                        currentAnswer === "" &&
+                        problem.problemType === "TRUEORFALSE" && <SubmitOX />}
 
-                    <ProgressBar progress={progress} />
+                    {isQuizStarted && currentAnswer === "" && (
+                        <ProgressBar progress={progress} />
+                    )}
+
+                    {isQuizStarted && currentAnswer !== "" && (
+                        <AnswerResultComponent
+                            answer={currentAnswer}
+                            submit={currentSubmit}
+                            correctNumber={currentAnswerMessage?.correctNumber}
+                            totalNumber={currentAnswerMessage?.totalNumber}
+                        />
+                    )}
+
+                    {!isQuizStarted && <NotifyBox />}
+                    {/* Under Box End */}
                 </div>
             </div>
 
