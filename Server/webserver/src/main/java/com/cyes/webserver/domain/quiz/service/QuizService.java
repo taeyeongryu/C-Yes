@@ -77,7 +77,7 @@ public class QuizService {
      */
     public List<GroupQuizInfoResponse> searchByQuizTitle(String keyword) {
 
-        // keyword를 제목으로 포함하는 퀴즈리스트 조회
+        // keyword를 제목으로 포함하고, 퀴즈리스트 조회
         List<Quiz> quizList = quizRepository.findByTitle(keyword, LocalDateTime.now()).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
 
         // Entity -> Dto
@@ -87,9 +87,9 @@ public class QuizService {
             // 그 퀴즈의 문제 하나를 본다. (퀴즈 유형, 문제 과목 검색을 위해서)
             QuizProblem quizProblem = quiz.getQuizProblemList().get(0);
             int problemCnt = quiz.getQuizProblemList().size();
-            Problem problem = problemRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
-            
-            responseList.add(quiz.toGroupQuizInfoResponse(problem.getCategory(), problem.getType(), problemCnt));
+
+            ProblemByUser problemByUser = problemByUserRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
+            responseList.add(quiz.toGroupQuizInfoResponse(problemByUser.getCategory(), problemByUser.getType(), problemCnt));
 
         }
         return responseList;
