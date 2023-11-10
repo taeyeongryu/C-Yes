@@ -1,10 +1,10 @@
 import React from "react";
 import RoundCornerBtn from "../../components/RoundCornerBtn";
-import "./Quiz.css";
+import "./SubmitShort.css";
 
 type Props = {
     answer: string;
-    answerLength: number;
+    answerLength: string;
     textareaValue: string;
     isTextareaEnabled: boolean;
     isSubmitted: boolean;
@@ -22,26 +22,39 @@ const SubmitShort = ({
     onTextAreaChanged,
 }: Props) => {
     return (
-        <div>
-            <div className="answer-box" style={{ display: "flex" }}>
+        <div className="short-buttom-box">
+            <div className="short-answer-box">
                 {Array.from({
-                    length: answerLength ? answerLength : 0,
-                }).map((_, index) => (
-                    <div key={index} className="square">
-                        {answer ? answer[index] : null}
-                    </div>
-                ))}
+                    length: answerLength.length ? answerLength.length : 0,
+                }).map((_, index) => {
+                    if (answerLength[index] === "C") {
+                        return (
+                            <div key={index} className="short-square">
+                                {answer ? answer[index] : null}
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div
+                                key={index}
+                                className="short-empty-square"
+                            ></div>
+                        );
+                    }
+                })}
             </div>
-            <div className="input-content">
+            <div className="short-input-content">
                 <div>
                     <textarea
-                        id="answer-input"
+                        id="short-answer-input"
                         name="content"
                         value={textareaValue}
                         onChange={onTextAreaChanged}
                         disabled={!isTextareaEnabled} // 비활성화 상태 조절
                         style={{
-                            backgroundColor: isTextareaEnabled ? "white" : "lightgray", // 배경색 제어
+                            backgroundColor: isTextareaEnabled
+                                ? "white"
+                                : "lightgray", // 배경색 제어
                             color: isTextareaEnabled ? "black" : "gray", // 텍스트 색상 제어
                         }}
                         placeholder={isTextareaEnabled ? "입력하세요" : " "} // placeholder 설정

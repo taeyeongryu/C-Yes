@@ -11,8 +11,9 @@ interface ChatMessage extends SessionMessage {
 interface ProblemMessage extends SessionMessage {
     question: string;
     order: number;
-    answerLength: number;
+    answerLength: string;
     selections: string[];
+    problemType: string;
 }
 
 interface SubmitMessage extends SessionMessage {

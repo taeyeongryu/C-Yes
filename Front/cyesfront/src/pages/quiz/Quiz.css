@@ -20,21 +20,6 @@
     align-items: center;
 }
 
-.square {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    width: 30px;
-    height: 30px;
-    margin: 9px;
-    border-radius: 3px;
-    border: 1px solid black;
-    font-size: 30px;
-    color: blue;
-}
-
 /* .quiz-content {
     display: flex;
     align-items: center;
@@ -67,15 +52,6 @@
 }
 .progress-bar {
     margin-top: 15px;
-}
-#answer-input {
-    margin-bottom: 20px;
-    border: none; /* 테두리 없앰 */
-    background-color: white; /* 흰 배경 설정 */
-    padding: 10px; /* 원하는 패딩 설정 */
-    width: 80%; /* 원하는 너비 설정 */
-    height: 12px; /* 원하는 높이 설정 */
-    resize: none;
 }
 
 /* Modal 스타일 */
@@ -168,10 +144,4 @@
     background-size: cover; /* 이미지를 커버하는 크기로 확대/축소 */
     background-position: center; /* 이미지를 중앙 정렬 */
     background-repeat: no-repeat; /* 이미지 반복 없음 */
-}
-
-.input-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
