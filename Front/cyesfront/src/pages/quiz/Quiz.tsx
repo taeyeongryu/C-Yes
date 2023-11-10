@@ -257,7 +257,13 @@ const Quiz: React.FC = () => {
                         )}
                     {isQuizStarted &&
                         currentAnswer === "" &&
-                        problem.problemType === "TRUEORFALSE" && <SubmitOX />}
+                        problem.problemType === "TRUEORFALSE" && (
+                            <SubmitOX
+                                isSubmitted={isSubmitted}
+                                setIsSubmitted={setIsSubmitted}
+                                setSubmit={setCurrentSubmit}
+                            />
+                        )}
 
                     {isQuizStarted && currentAnswer === "" && (
                         <ProgressBar progress={progress} />
