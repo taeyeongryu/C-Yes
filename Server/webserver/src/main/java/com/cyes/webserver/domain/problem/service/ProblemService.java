@@ -109,6 +109,19 @@ public class ProblemService {
         return new PageImpl<>(problemResponseList, problemPage.getPageable(), problemPage.getTotalElements());
     }
 
+    /**
+     * category, type, size를 입력받아서 조건에 맞는
+     * randomproblem을 size만큼 반환한다.
+     * @param problemCategory
+     * @param problemType
+     * @param size
+     * @return List<ProblemResponse></>
+     */
+    public List<ProblemResponse> findProblemByCategoryTypeRandom(ProblemCategory problemCategory, ProblemType problemType, int size){
+        List<Problem> problemList = problemRepository.findProblemByCategoryAndTypeRandom(problemCategory, problemType, size);
+        return toProblemResponseList(problemList);
+    }
+
     /*
     * 특정 퀴즈의 문제pk를 list로 넘겨주면
     * 그에 해당하는 problem들을 반환한다.

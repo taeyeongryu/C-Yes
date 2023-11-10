@@ -56,6 +56,24 @@ const SelectStudy = (props: SelectStudyProps) => {
     setModalMessage(null);
   };
 
+  const nextTen = () => {
+    if (questions.length - currentIndex > 10) {
+      setCurrentIndex((prevIndex) => prevIndex + 10);
+    } else {
+      setCurrentIndex(
+        (prevIndex) => prevIndex + (questions.length - currentIndex) - 1
+      );
+    }
+  };
+
+  const prevTen = () => {
+    if (currentIndex > 10) {
+      setCurrentIndex((prevIndex) => prevIndex - 10);
+    } else {
+      setCurrentIndex((prevIndex) => prevIndex - currentIndex);
+    }
+  };
+
   useEffect(() => {
     if (location.state && location.state.questions) {
       console.log("setQuestions: ", location.state.questions);
@@ -110,15 +128,11 @@ const SelectStudy = (props: SelectStudyProps) => {
       </div>
 
       <div className="bottom-next">
-        <div className="left-arrow-container">
-          <IconButton onClick={prevStudy} iconUrl="/icon/left-arrow.png" />
-        </div>
-        <div className="page-arrow-container">
-          {currentIndex + 1}/{questions.length}
-        </div>
-        <div className="right-arrow-container">
-          <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
-        </div>
+        <IconButton onClick={prevTen} iconUrl="/icon/left-ten.png" />
+        <IconButton onClick={prevStudy} iconUrl="/icon/left-arrow.png" />
+        {currentIndex + 1}/{questions.length}
+        <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
+        <IconButton onClick={nextTen} iconUrl="/icon/right-ten.png" />
       </div>
       {modalMessage && (
         <div className="modal-tf">

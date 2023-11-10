@@ -7,6 +7,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +21,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 @Service
@@ -23,6 +31,7 @@ public class SubmitService {
 
     private final RedisService redisService;
     private final StringRedisTemplate stringRedisTemplate;
+
 
     /**
      * 클라이언트의 답안 제출을 처리하는 메서드
@@ -36,7 +45,7 @@ public class SubmitService {
 
         // value : SubmitDto
         SubmitRedis submitRedis = message.ToSubmitRedis(LocalDateTime.parse(redisService.getDataFromRedis(getRedisKey(message))),LocalDateTime.now());
-
+        
         // redis에 답안 제출 정보 저장
         redisService.setSubmitDateRedis(key, submitRedis, Duration.ofMinutes(30));
 
