@@ -86,6 +86,17 @@ public class ProblemController {
         List<ProblemCategory> categoryList = List.of(ProblemCategory.DB, ProblemCategory.DESIGNPATTERN, ProblemCategory.DATASTRUCTURE, ProblemCategory.COMPUTERARCHITECTURE, ProblemCategory.ALGORITHM, ProblemCategory.NETWORK, ProblemCategory.OS);
         return ResponseEntity.status(HttpStatus.OK).body(categoryList);
     }
+
+    @Operation(summary = "category, type, size로 random problem을 조회하는 메서드")
+    @GetMapping("random")
+    public ResponseEntity<List<ProblemResponse>> findProblemRandom(
+            @RequestParam(name = "category") ProblemCategory category
+            ,@RequestParam(name = "type") ProblemType type
+            ,@RequestParam(name = "size") int size
+    ){
+        List<ProblemResponse> problemResponseList = problemService.findProblemByCategoryTypeRandom(category, type, size);
+        return ResponseEntity.status(HttpStatus.OK).body(problemResponseList);
+    }
 }
 
 
