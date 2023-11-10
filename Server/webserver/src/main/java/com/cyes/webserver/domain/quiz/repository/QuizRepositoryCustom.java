@@ -14,5 +14,5 @@ public interface QuizRepositoryCustom {
 
     Optional<List<Quiz>> findGroupQuiz(LocalDateTime nowDateTime);
 
-    Optional<List<Quiz>> findByTitle(String keyword);
+    Optional<List<Quiz>> findByTitle(String keyword, LocalDateTime nowDateTime);
 }
