@@ -5,3 +5,27 @@
     text-align: center;
     width: 100%;
 }
+
+.answer-result-title {
+    font-size: 20px;
+}
+
+.answer-result-answer {
+    font-size: 40px;
+    border: 1px;
+    border-color: cornflowerblue;
+}
+
+.answer-result-correct {
+    font-size: 20px;
+    color: lightgreen;
+}
+
+.answer-result-fail {
+    font-size: 20px;
+    color: palevioletred;
+}
+
+.answer-result-ratio {
+    font-size: 30px;
+}
