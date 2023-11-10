@@ -81,7 +81,16 @@ const GroupMain = (props: Props) => {
           <div className="quiz-text-container">빠른 퀴즈</div>
           <div className="fast-quiz-lineup-container">
             {quizzes.length === 0 && (
-              <div className="fast-quiz-box">퀴즈가 없습니다!</div>
+              <div
+                className="fast-quiz-box"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <span>퀴즈가 없습니다!</span>
+              </div>
             )}
             {quizzes.length > 0 && (
               <div className="fast-quiz-box">
