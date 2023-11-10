@@ -36,7 +36,7 @@ function App() {
           <Route path="/cs/torf" element={<TorfStudy />} />
 
           <Route path="/group" element={<GroupMain />} />
-          <Route path="/group/creat" element={<Group />} />
+          <Route path="/group/create" element={<Group />} />
 
           <Route path="/adminquiz/creat" element={<AdminQuizCreate />} />
           <Route path="/adminquiz/check" element={<AdminQuizCheck />} />
