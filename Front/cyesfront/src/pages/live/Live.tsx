@@ -15,7 +15,6 @@ const Live = (props: Props) => {
     const defaultQuiz = {
         quizId: -1,
         quizTitle: "예정된 퀴즈 일정이 없습니다",
-        quizType: "",
         quizStartDate: new Date(),
     };
 

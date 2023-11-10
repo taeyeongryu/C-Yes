@@ -28,13 +28,16 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
 
             if (diff > 3600) {
                 setRemainingTime(null); // 5시 이전
-                if (setJoinable) setJoinable(false);
             } else if (diff <= 0) {
                 setRemainingTime(null); // 6시 이후 (or you can handle this differently if needed)
-                if (setJoinable) setJoinable(false);
             } else {
                 setRemainingTime(diff); // 5시부터 6시 사이
+            }
+
+            if (0 <= diff && diff < 600) {
                 if (setJoinable) setJoinable(true);
+            } else {
+                if (setJoinable) setJoinable(false);
             }
         };
 

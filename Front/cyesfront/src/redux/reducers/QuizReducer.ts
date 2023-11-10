@@ -1,25 +1,23 @@
+import { Quiz } from "../ReduxStateInterface";
+
 interface QuizState {
-    quiz: {
-        quizId: number;
-        submit: Array<string>;
-        answer: Array<string>;
-    };
+    quiz: Quiz;
 }
 
 const initialQuizState: QuizState = {
     quiz: {
         quizId: -1,
-        submit: [],
-        answer: [],
+        quizTitle: "",
+        quizStartDate: new Date(),
     },
 };
 
 const quizReducer = (state = initialQuizState, action: any) => {
     switch (action.type) {
-        case "QUIZ_SAVEID":
+        case "QUIZ_SAVE":
             return {
                 ...state,
-                quiz: { ...action.payload, submit: [], answer: [] },
+                quiz: { ...action.payload },
             };
 
         default:
