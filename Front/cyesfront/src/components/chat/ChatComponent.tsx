@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ChatComponent.css";
-
-interface Message {
-    message: string;
-    memberId: number;
-}
+import { ChatMessage } from "../../api/websocket/MessageInterface";
 
 interface Props {
+    quizId: number;
     memberId: number;
-    messageList: Message[];
-    socketSend: (arg: string) => void;
+    memberNickname: string;
+    chatList: ChatMessage[];
+    socketSend: (chat: ChatMessage) => void;
 }
 
 const ChatComponent: React.FC<Props> = ({
+    quizId,
     memberId,
-    messageList,
+    memberNickname,
+    chatList,
     socketSend,
 }) => {
     const [chat, setChat] = useState<string>("");
@@ -25,9 +25,8 @@ const ChatComponent: React.FC<Props> = ({
     const chatScroll = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (chatScroll.current)
-            chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
-    }, [messageList]);
+        if (chatScroll.current) chatScroll.current.scrollTop = chatScroll.current.scrollHeight;
+    }, [chatList]);
 
     const onChatTyped = (e: React.ChangeEvent<HTMLInputElement>) => {
         setChat(e.target.value);
@@ -47,7 +46,12 @@ const ChatComponent: React.FC<Props> = ({
             return;
         }
 
-        socketSend(chat);
+        socketSend({
+            quizId,
+            type: "CHAT",
+            memberId,
+            message: memberNickname + ":" + chat,
+        });
         chatCounter.current++;
         setChat("");
 
@@ -69,12 +73,10 @@ const ChatComponent: React.FC<Props> = ({
     return (
         <div className="chatbox">
             <div className="chat-list-box" ref={chatScroll}>
-                {messageList.map((message, idx) => {
+                {chatList.map((message, idx) => {
                     return message.memberId === memberId ? (
                         <div key={idx} className="my-chat">
-                            {message.message.slice(
-                                message.message.indexOf(":") + 1
-                            )}
+                            {message.message.slice(message.message.indexOf(":") + 1)}
                         </div>
                     ) : (
                         <div key={idx} className="other-chat">
@@ -88,11 +90,7 @@ const ChatComponent: React.FC<Props> = ({
                     value={chat}
                     onChange={onChatTyped}
                     onKeyDown={handleKeyPress}
-                    placeholder={
-                        chatDisabled
-                            ? "잠시 기다려주세요"
-                            : "채팅을 입력해 주세요"
-                    }
+                    placeholder={chatDisabled ? "잠시 기다려주세요" : "채팅을 입력해 주세요"}
                 />
                 <button onClick={sendChat} disabled={chatDisabled}>
                     입력
