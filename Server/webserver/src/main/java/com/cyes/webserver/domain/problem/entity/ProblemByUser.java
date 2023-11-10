@@ -39,12 +39,18 @@ public class ProblemByUser {
     private String type;
 
     @Builder
-    public ProblemByUser(String id, String question, @Nullable String[] choices, String answer, String category, String type) {
+    public ProblemByUser(String id, String question, @Nullable String[] choices, String answer, ProblemCategory category, ProblemType type) {
         this.id = id;
         this.question = question;
         this.choices = choices;
         this.answer = answer;
-        this.category = category;
-        this.type = type;
+        this.category = String.valueOf(category);
+        this.type =String.valueOf(type);
+    }
+    public ProblemCategory getCategory(){
+        return ProblemCategory.valueOf(this.category);
+    }
+    public ProblemType getType(){
+        return ProblemType.valueOf(this.type);
     }
 }
