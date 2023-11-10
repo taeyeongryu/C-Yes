@@ -133,9 +133,10 @@ public class QuizController {
         return "확인";
     }
 
-    @Operation
+    @Operation(summary = "유저가 만드는 그룹퀴즈를 생성하는 메서드", description = "유저가 그룹 퀴즈를 만들 때 문제를 저장하고 그 문제로 퀴즈를 생성한다.")
     @PostMapping("/create/user")
     public ResponseEntity<QuizCreateResponse> createQuizByUser(QuizCreateRequestByUser quizCreateRequestByUser){
-        return null;
+        QuizCreateResponse quizByUser = quizService.createQuizByUser(quizCreateRequestByUser);
+        return ResponseEntity.status(HttpStatus.OK).body(quizByUser);
     }
 }

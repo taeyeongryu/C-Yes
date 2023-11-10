@@ -2,10 +2,9 @@ package com.cyes.webserver.domain.quiz.service;
 
 import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
-import com.cyes.webserver.domain.quiz.dto.GroupQuizInfoResponse;
-import com.cyes.webserver.domain.quiz.dto.QuizCreateRequestToServiceDto;
-import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
-import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
+import com.cyes.webserver.domain.problem.dto.request.ProblemSaveByUserRequest;
+import com.cyes.webserver.domain.problem.service.ProblemService;
+import com.cyes.webserver.domain.quiz.dto.*;
 import com.cyes.webserver.domain.quiz.entity.Quiz;
 import com.cyes.webserver.domain.quiz.repository.QuizRepository;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
@@ -32,6 +31,7 @@ public class QuizService {
     private final MemberRepository memberRepository;
     private final ScheduleReserveService scheduleReserveService;
     private final QuizProblemService quizProblemService;
+    private final ProblemService problemService;
 
 
     /* 
@@ -94,5 +94,32 @@ public class QuizService {
 
         // Entity -> Response Dto
         return quiz.toQuizCreateResponse();
+    }
+
+
+
+    /**
+     * 유저가 만드는 퀴즈 저장
+     * @param quizCreateRequestByUser
+     */
+    public QuizCreateResponse createQuizByUser(QuizCreateRequestByUser quizCreateRequestByUser) {
+        //유저찾기
+        Member member = memberRepository.findById(quizCreateRequestByUser.getMemberId())
+                .orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
+
+        //문제저장
+        List<ProblemSaveByUserRequest> problemByUserList = quizCreateRequestByUser.getProblemByUserList();
+
+        //문제 pk list
+        List<String> problemIdList = problemService.saveProblemByUserAll(problemByUserList);
+
+        //퀴즈저장
+        Quiz quizEntity = quizCreateRequestByUser.toQuizEntity(member);
+        quizRepository.save(quizEntity);
+
+        //퀴즈 문제 연관관계 저장
+        quizProblemService.createQuizProblemByQuiz(quizEntity, problemIdList);
+
+        return QuizCreateResponse.of(quizEntity);
     }
 }

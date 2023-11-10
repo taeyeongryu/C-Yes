@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.quiz.dto;
 
+import com.cyes.webserver.domain.quiz.entity.Quiz;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,12 @@ public class QuizCreateResponse {
         this.quizId = quizId;
         this.quizTitle = title;
         this.quizStartDate = quizStartDate;
+    }
+    public static QuizCreateResponse of(Quiz quiz){
+        return QuizCreateResponse.builder()
+                .quizId(quiz.getId())
+                .quizTitle(quiz.getTitle())
+                .quizStartDate(quiz.getStartDateTime())
+                .build();
     }
 }
