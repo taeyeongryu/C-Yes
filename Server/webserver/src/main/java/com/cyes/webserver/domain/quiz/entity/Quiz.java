@@ -8,10 +8,7 @@ import com.cyes.webserver.domain.quiz.dto.GroupQuizInfoResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizCreateResponse;
 import com.cyes.webserver.domain.quiz.dto.QuizInfoResponse;
 import com.cyes.webserver.domain.quizproblem.entity.QuizProblem;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,6 +19,7 @@ import java.util.List;
 @Getter
 @Table(name = "quiz")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Quiz extends BaseEntity {
 
     @Id
