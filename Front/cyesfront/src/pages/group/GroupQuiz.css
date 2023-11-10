@@ -4,4 +4,14 @@
 }
 .textarea {
     width: 250px;
+    height: 30px;
 }
+ 
+.group-button-content{
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+   
+  }

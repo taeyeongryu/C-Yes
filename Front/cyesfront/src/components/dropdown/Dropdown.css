@@ -1,6 +1,7 @@
 /* 드롭다운 컴포넌트 스타일 */
 .dropdown {
     width: 250px;
+    height: 35px;
     position: relative;
     display: inline-block;
     border: 1px solid grey;
