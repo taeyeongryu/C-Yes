@@ -54,6 +54,18 @@ public class QuizController {
     }
 
     /**
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> Stashed changes
+=======
+
+>>>>>>> Stashed changes
      * 그룹 퀴즈 제목 검색
      * @return List<GroupQuizInfoResponse>
      */
@@ -63,12 +75,12 @@ public class QuizController {
     public ResponseEntity<List<GroupQuizInfoResponse>> getGroupQuizInfoByTitle(@RequestBody GroupQuizInfoRequestByTitle groupQuizInfoRequestByTitle) {
         return ResponseEntity.status(HttpStatus.OK).body(quizService.searchByQuizTitle(groupQuizInfoRequestByTitle.getKeyword()));
     }
+
     /**
      * 라이브 퀴즈쇼 개설 API
      * @param quizCreateRequest
      * @return QuizCreateResponse
      */
-
     @Operation(summary = "퀴즈 개설", description = "라이브 퀴즈, 그룹 퀴즈를 개설하는 메서드이다.\n" +
     "QuizCreateRequest에는 quizTitle(퀴즈 이름), memberId(멤버 이름), quizStartDate(퀴즈 시작 시간, problemList(문제pk)를 담아서 보내야한다.")
     @PostMapping("/create")
