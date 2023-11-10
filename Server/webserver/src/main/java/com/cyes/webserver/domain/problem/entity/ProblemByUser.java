@@ -1,10 +1,7 @@
 package com.cyes.webserver.domain.problem.entity;
 
 import com.mongodb.lang.Nullable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -40,4 +37,14 @@ public class ProblemByUser {
     @Indexed
     @Field(name = "problem_type")
     private String type;
+
+    @Builder
+    public ProblemByUser(String id, String question, @Nullable String[] choices, String answer, String category, String type) {
+        this.id = id;
+        this.question = question;
+        this.choices = choices;
+        this.answer = answer;
+        this.category = category;
+        this.type = type;
+    }
 }
