@@ -20,8 +20,8 @@ const ComputerScience = (props: Props) => {
   const close = () => setIsModalOpen(false);
 
   return (
-    <div className="live-container">
-      <div className="content">
+    <div className="cs-container">
+      <div className="cs-content">
         <div className="cs-text-container">cs 학습</div>
         <div className="select-title-container">
           <SelectTitleModal
@@ -95,9 +95,6 @@ const ComputerScience = (props: Props) => {
               T or F
             </RoundCornerBtn>
           </div>
-
-          {/* <div>객관식</div>
-          <div>T or F</div> */}
         </div>
       </div>
       <BottomNav checkCS={true} checkLive={false} checkGroup={false} />
