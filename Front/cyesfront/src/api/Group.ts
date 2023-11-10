@@ -11,7 +11,7 @@ const groupApi = axios.create({
 export const getGroupQuiz = async (): Promise<any> => {
   try {
     const response = await groupApi.get("/quiz/group/info");
-    console.log("response", response);
+    console.log("all group response", response);
     return response.data;
   } catch (err) {
     console.error("getGroupQuiz error: ", err);
@@ -19,14 +19,17 @@ export const getGroupQuiz = async (): Promise<any> => {
   }
 };
 
-// 해당되는 타이틀을 가진 것만 검색
-export const getGroupQuizUseTitle = async (): Promise<any> => {
+// 특정 타이틀에 해당하는 그룹 퀴즈 정보를 검색하는 함수
+export const getGroupQuizUseTitle = async (keyword: string): Promise<any> => {
   try {
-    const response = await groupApi.get("/quiz/group/info");
-    console.log("response", response);
+    // API 요청 시 쿼리 파라미터로 keyword를 추가
+    const response = await groupApi.get("/quiz/group/info/searchByTitle", {
+      params: { keyword },
+    });
+    console.log("keyword response", response);
     return response.data;
   } catch (err) {
-    console.error("getGroupQuiz error: ", err);
+    console.error("getTitleGroupQuiz error: ", err);
     return null;
   }
 };
