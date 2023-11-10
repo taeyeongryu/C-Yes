@@ -1,0 +1,95 @@
+.group-main-container {
+  padding: 10% 10% 0% 10%;
+}
+
+.group-title-container {
+  font-size: 35px;
+  margin-bottom: 3%;
+}
+
+.group-description-container {
+  white-space: pre-line;
+  color: gray;
+}
+
+.group-search-container {
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 5%;
+  padding: 3%;
+
+  font-size: 20px;
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 3%; /* img와 input 사이의 간격 */
+}
+
+.group-search-container img {
+  width: 10%;
+  height: 10%;
+}
+
+.group-search-container input {
+  width: 80%;
+  height: 10%;
+  border: none; /* 테두리 제거 */
+  outline: none; /* 포커스 시 나타나는 윤곽선 제거 */
+  font-size: 16px; /* 글꼴 크기 조정 */
+}
+
+.fast-quiz-container {
+  margin-top: 10%;
+}
+
+.quiz-text-container {
+  font-size: 20px;
+}
+
+.fast-quiz-lineup-container {
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
+  gap: 15%;
+}
+
+.fast-quiz-box {
+  width: 100%;
+  height: 110px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 3%;
+  padding: 3%;
+}
+
+.quiz-box-title {
+  font-size: 16px;
+  margin-bottom: 10%;
+}
+
+.quiz-box-text {
+  margin-top: 3%;
+  color: gray;
+}
+
+.group-result-container {
+  margin-top: 10%;
+}
+
+.result-quiz-box {
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 3%;
+  padding: 3%;
+}
+.bottom-nav {
+  position: fixed; /* 고정 위치 설정 */
+  left: 0; /* 왼쪽 정렬 */
+  bottom: 0; /* 하단 정렬 */
+  width: 100%; /* 전체 너비 */
+  z-index: 1000; /* 다른 요소들 위에 오도록 z-index 설정 */
+}
