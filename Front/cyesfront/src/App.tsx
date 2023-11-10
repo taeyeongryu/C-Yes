@@ -16,48 +16,35 @@ import Group from "./pages/group/GroupQuiz";
 import AdminQuizCreate from "./pages/adminquiz/quizwordcreate";
 import AdminQuizCheck from "./pages/adminquiz/quizCheck";
 import AdminQuizInsert from "./pages/adminquiz/quizShortInsert";
+import GroupMain from "./pages/group/GroupMain";
 
 function App() {
-    return (
-        <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Navigate to="/login" />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route
-                        path="/login/kakao/callback"
-                        element={<LoginRedir />}
-                    />
-                    <Route path="/live" element={<Live />} />
-                    <Route path="/quiz" element={<Quiz />} />
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/login/kakao/callback" element={<LoginRedir />} />
+          <Route path="/live" element={<Live />} />
+          <Route path="/quiz" element={<Quiz />} />
 
-                    <Route path="/cs" element={<ComputerScience />} />
-                    <Route
-                        path="/adminquiz/create"
-                        element={<AdminQuizCreate />}
-                    />
-                    <Route path="/cs/card" element={<CardStudy />} />
-                    <Route path="/cs/select" element={<SelectStudy />} />
-                    <Route path="/cs/torf" element={<TorfStudy />} />
+          <Route path="/cs" element={<ComputerScience />} />
+          <Route path="/adminquiz/create" element={<AdminQuizCreate />} />
+          <Route path="/cs/card" element={<CardStudy />} />
+          <Route path="/cs/select" element={<SelectStudy />} />
+          <Route path="/cs/torf" element={<TorfStudy />} />
 
-                    <Route path="/group" element={<Group />} />
+          <Route path="/group" element={<GroupMain />} />
+          <Route path="/group/creat" element={<Group />} />
 
-                    <Route
-                        path="/adminquiz/creat"
-                        element={<AdminQuizCreate />}
-                    />
-                    <Route
-                        path="/adminquiz/check"
-                        element={<AdminQuizCheck />}
-                    />
-                    <Route
-                        path="/adminquiz/insert"
-                        element={<AdminQuizInsert />}
-                    />
-                </Routes>
-            </BrowserRouter>
-        </div>
-    );
+          <Route path="/adminquiz/creat" element={<AdminQuizCreate />} />
+          <Route path="/adminquiz/check" element={<AdminQuizCheck />} />
+          <Route path="/adminquiz/insert" element={<AdminQuizInsert />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;
