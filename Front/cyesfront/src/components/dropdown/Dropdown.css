@@ -4,7 +4,6 @@
     height: 35px;
     position: relative;
     display: inline-block;
-    border: 1px solid grey;
     border-radius: 4px;
   }
   
@@ -18,14 +17,14 @@
   }
   
   .dropdown-menu {
-    border: 1px solid grey;
+    /* border: 1px solid grey; */
     width: 250px;
     z-index: 1;
     position: absolute;
     top: 100%;
     left: 0;
     display: block;
-    background-color: #ffffff;
+    background-color: #d1d1d1;
     border-radius: 4px;
     margin-top: 4px;
   }

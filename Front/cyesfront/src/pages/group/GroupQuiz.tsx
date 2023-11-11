@@ -29,7 +29,12 @@ const GroupQuiz = (props: Props) => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const navigate = useNavigate();
 
-  const handleNextButtonClick = () => {
+  const CancelButtonClick = () => {
+    navigate("/group");
+
+    // history.push("/nextpage", quizInfo);
+  };
+  const NextButtonClick = () => {
     const quizInfo: QuizInfo = {
       quizName,
       quizType,
@@ -37,9 +42,18 @@ const GroupQuiz = (props: Props) => {
       quizNumber: number,
       quizStartTime: formatDate(selectedDate),
     };
-    navigate("/group");
-
-    // history.push("/nextpage", quizInfo);
+    if (number <= 0) {
+      alert("문제 갯수는 최소 1개이상 가능합니다.");
+      setNumber(1);
+    } else if (quizName == "") {
+      alert("퀴즈 제목을 작성하세요.");
+    } else if (quizType == "") {
+      alert("문제 유형을 선택하세요.");
+    } else if (quizSubject == "") {
+      alert("퀴즈 과목을 선택하세요.");
+    } else {
+      navigate("/group/create/detail", { state: quizInfo });
+    }
   };
 
   // API
@@ -84,9 +98,8 @@ const GroupQuiz = (props: Props) => {
     if (!isNaN(Number(input))) {
       setNumber(Number(input));
     }
-
-    if (Number(input) > 10) {
-      alert("문제 갯수는 최대 10개까지 가능합니다.");
+    if (Number(input) > 20) {
+      alert("문제 갯수는 최대 20개까지 가능합니다.");
       setNumber(10);
     } else {
       setNumber(Number(input));
@@ -134,7 +147,7 @@ const GroupQuiz = (props: Props) => {
               />
             </div>
           </div>
-          <div className="dropdown-content">
+          <div className="date-content">
             <div>시작 시간</div>
             <DatePicker
               selected={selectedDate}
@@ -142,18 +155,16 @@ const GroupQuiz = (props: Props) => {
               showTimeSelect
               dateFormat="yyyy-MM-dd HH:mm:ss"
               timeFormat="HH:mm:ss"
-              // customInput={<div style={customStyles.datePicker} />}
+              className="custom-datepicker"
             />
           </div>
 
           <br />
           <br />
           <div className="group-button-content">
-            <RoundCornerBtn>취소</RoundCornerBtn>
+            <RoundCornerBtn onClick={CancelButtonClick}>취소</RoundCornerBtn>
             <div className="box"></div>
-            <RoundCornerBtn onClick={handleNextButtonClick}>
-              다음
-            </RoundCornerBtn>
+            <RoundCornerBtn onClick={NextButtonClick}>다음</RoundCornerBtn>
           </div>
         </div>
       </div>
