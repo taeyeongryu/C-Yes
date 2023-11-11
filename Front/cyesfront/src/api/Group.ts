@@ -18,3 +18,15 @@ export const getGroupQuiz = async (): Promise<any> => {
     return null;
   }
 };
+
+// 해당되는 타이틀을 가진 것만 검색
+export const getGroupQuizUseTitle = async (): Promise<any> => {
+  try {
+    const response = await groupApi.get("/quiz/group/info");
+    console.log("response", response);
+    return response.data;
+  } catch (err) {
+    console.error("getGroupQuiz error: ", err);
+    return null;
+  }
+};

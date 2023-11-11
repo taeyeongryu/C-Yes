@@ -6,22 +6,19 @@ import RoundCornerBtn from "../../components/RoundCornerBtn";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getMainQuizInfo } from "../../api/QuizAPI";
-import { saveQuizId } from "../../redux/actions/QuizAction";
+import { saveQuiz } from "../../redux/actions/QuizAction";
+import { Quiz } from "../../redux/ReduxStateInterface";
 
 type Props = {};
 
-type Quiz = {
-    quizId: number;
-    quizTitle: string;
-    quizStartDate: Date;
-};
-
 const Live = (props: Props) => {
-    const [mainQuiz, setMainQuiz] = useState<Quiz>({
+    const defaultQuiz = {
         quizId: -1,
         quizTitle: "예정된 퀴즈 일정이 없습니다",
-        quizStartDate: new Date(),
-    });
+        quizStartDate: new Date().toISOString(),
+    };
+
+    const [mainQuiz, setMainQuiz] = useState<Quiz>(defaultQuiz);
 
     const [joinable, setJoinable] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -31,28 +28,23 @@ const Live = (props: Props) => {
 
     const getLiveInfo = async () => {
         const mainQuizInfo = await getMainQuizInfo();
+        console.log(mainQuizInfo);
 
-        if (mainQuizInfo.quizId == -1) {
-            setMainQuiz({
-                quizId: -1,
-                quizTitle: "예정된 퀴즈 일정이 없습니다",
-                quizStartDate: new Date(),
-            });
+        if (mainQuizInfo == null || mainQuizInfo.quizId == -1) {
+            setMainQuiz(defaultQuiz);
             return;
         }
 
-        setMainQuiz({
-            ...mainQuizInfo,
-            quizStartDate: new Date(mainQuizInfo.quizStartDate),
-        });
+        setMainQuiz(mainQuizInfo);
     };
 
     const enterRoom = () => {
         // 다른 페이지로 이동
-        dispatch(saveQuizId(mainQuiz.quizId));
+        dispatch(saveQuiz(mainQuiz));
         // navigate("/quiz");
-        const targetHour = mainQuiz.quizStartDate.getHours();
-        const targetMin = mainQuiz.quizStartDate.getMinutes();
+        const targetTime = new Date(mainQuiz.quizStartDate);
+        const targetHour = targetTime.getHours();
+        const targetMin = targetTime.getMinutes();
         navigate(`/quiz?targetHour=${targetHour}&targetMin=${targetMin}`);
     };
 
@@ -84,8 +76,8 @@ const Live = (props: Props) => {
                     <img src="/img/live_logo.png" alt=""></img>
                 </div>
                 <CountdownTimer
-                    targetHour={mainQuiz.quizStartDate.getHours()}
-                    targetMin={mainQuiz.quizStartDate.getMinutes()}
+                    targetHour={new Date(mainQuiz.quizStartDate).getHours()}
+                    targetMin={new Date(mainQuiz.quizStartDate).getMinutes()}
                     setJoinable={setJoinable}
                 />
                 <p style={{ fontSize: "26px" }}>{mainQuiz.quizTitle}</p>

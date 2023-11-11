@@ -13,7 +13,6 @@
 }
 
 .group-search-container {
-  width: 100%;
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -78,7 +77,6 @@
 }
 
 .result-quiz-box {
-  width: 100%;
   height: 200px;
   background-color: white;
   border-radius: 20px;
@@ -105,11 +103,4 @@
 }
 .search-box-text {
   color: gray;
-}
-.bottom-nav {
-  position: fixed; /* 고정 위치 설정 */
-  left: 0; /* 왼쪽 정렬 */
-  bottom: 0; /* 하단 정렬 */
-  width: 100%; /* 전체 너비 */
-  z-index: 1000; /* 다른 요소들 위에 오도록 z-index 설정 */
 }

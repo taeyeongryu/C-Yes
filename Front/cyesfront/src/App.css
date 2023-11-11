@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   display: flex;
@@ -11,21 +12,11 @@ html, body {
 }
 
 .App {
-  width: 360px;
+  width: 100vw;
   height: 800px;
-  overflow: false; 
-  background-color: #FFF9F1; /* 앱 배경색 */
+  overflow: false;
+  background-color: #fff9f1; /* 앱 배경색 */
   /* overflow-y: auto; */
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-
-/* 500px 이하의 스크린 사이즈에 대한 스타일 */
-@media (max-width: 500px) {
-  .App {
-    padding: 0; /* 모바일에서는 패딩을 제거하여 화면 가장자리까지 콘텐츠가 표시되도록 함 */
-    margin: 0; /* 마진을 제거 */
-    /* 필요한 경우 여기에 추가적인 모바일 스타일링을 적용할 수 있음 */
-  }
 }
