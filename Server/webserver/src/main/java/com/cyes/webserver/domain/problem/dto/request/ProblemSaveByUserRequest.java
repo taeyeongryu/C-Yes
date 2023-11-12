@@ -2,6 +2,8 @@ package com.cyes.webserver.domain.problem.dto.request;
 
 
 import com.cyes.webserver.domain.problem.entity.ProblemByUser;
+import com.cyes.webserver.domain.problem.entity.ProblemCategory;
+import com.cyes.webserver.domain.problem.entity.ProblemType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,17 +15,18 @@ public class ProblemSaveByUserRequest {
     private String question;
     private String[] choices;
     private String answer;
-    private String category;
-    private String type;
+    private ProblemCategory category;
+    private ProblemType type;
 
     @Builder
-    public ProblemSaveByUserRequest(String question, String[] choices, String answer, String category, String type) {
+    public ProblemSaveByUserRequest(String question, String[] choices, String answer, ProblemCategory category, ProblemType type) {
         this.question = question;
         this.choices = choices;
         this.answer = answer;
         this.category = category;
         this.type = type;
     }
+
     public ProblemByUser toDocument(){
         return ProblemByUser.builder()
                 .question(this.question)

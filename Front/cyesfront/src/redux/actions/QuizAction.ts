@@ -1,8 +1,10 @@
-export const saveQuizId = (quizId: number) => {
+import { Quiz } from "../ReduxStateInterface";
+
+export const saveQuiz = (quiz: Quiz) => {
     return {
-        type: "QUIZ_SAVEID",
+        type: "QUIZ_SAVE",
         payload: {
-            quizId,
+            ...quiz,
         },
     };
 };

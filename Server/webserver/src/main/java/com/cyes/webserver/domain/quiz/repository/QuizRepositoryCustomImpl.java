@@ -57,7 +57,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
         return Optional.ofNullable(jpaQueryFactory
                 .select(quiz)
                 .from(quiz)
-                .where(quiz.title.contains(keyword).and(isTimeAfter(nowDateTime,quiz)))
+                .where(isUser(quiz).and(quiz.title.contains(keyword).and(isTimeAfter(nowDateTime,quiz))))
                 .fetch());
     }
 
