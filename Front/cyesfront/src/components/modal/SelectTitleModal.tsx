@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./SelectTitleModal.css";
 import { getCsCategory } from "../../api/CsAPI";
 import { getProblems } from "../../api/QuestionAPI";
+import { transCategory } from "../TransCategory";
 
 interface SelectTitleModalProps {
   isOpen: boolean;
@@ -111,7 +112,7 @@ const SelectTitleModal: React.FC<SelectTitleModalProps> = ({
               }`}
               onClick={() => handleCategorySelect(category)}
             >
-              {category}
+              {transCategory(category)}
             </div>
           ))}
         </div>

@@ -4,15 +4,13 @@ import com.cyes.webserver.domain.member.entity.Member;
 import com.cyes.webserver.domain.problem.dto.request.ProblemSaveByUserRequest;
 import com.cyes.webserver.domain.problem.entity.ProblemByUser;
 import com.cyes.webserver.domain.quiz.entity.Quiz;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuizCreateRequestByUser {
     private Long memberId;

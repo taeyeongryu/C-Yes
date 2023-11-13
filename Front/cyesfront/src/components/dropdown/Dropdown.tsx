@@ -3,9 +3,10 @@ import "./Dropdown.css";
 
 interface DropdownProps {
   items: string[];
+  onChange: (selectedItem: string) => void; // 새로운 props 추가
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ items }) => {
+const Dropdown: React.FC<DropdownProps> = ({ items, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(""); // 새로운 state 추가
 
@@ -15,6 +16,7 @@ const Dropdown: React.FC<DropdownProps> = ({ items }) => {
 
   const selectItem = (item: string) => {
     setSelectedItem(item); // 항목을 선택하면 상태 업데이트
+    onChange(item); // 선택한 항목을 상위 컴포넌트로 전달
     setIsOpen(false); // 선택 후 드롭다운 닫기
   };
 
