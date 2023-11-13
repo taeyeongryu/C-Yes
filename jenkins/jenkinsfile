@@ -31,16 +31,12 @@ stages {
 
                         result=$( docker container ls -a --filter "name=cyes_back" -q )
                         if [ -n "$result" ]; then
-                                docker stop $result
-                                docker rm $result
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" 
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back" 
                             
                             else
                                 echo "No such containers"
                             fi
-
-                        ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" 
-
-                        ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back" 
                            
    '''
                         
