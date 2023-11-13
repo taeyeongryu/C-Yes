@@ -33,3 +33,5 @@ export const createGroupQuiz = async (Quiz : QuestionContent | null) => {
             console.log("api에러 !! : ",err); 
             return null;
         });
+        return data;
+      }
