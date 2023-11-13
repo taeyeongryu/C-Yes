@@ -30,7 +30,7 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
         return Optional.ofNullable(jpaQueryFactory
                 .select(quiz)
                 .from(quiz)
-                .where(isTimeBetween(nowDateTime, quiz, todayEnd))
+                .where(isAdmin(quiz).and(isTimeBetween(nowDateTime, quiz, todayEnd)))
                 .orderBy(quiz.startDateTime.asc())
                 .fetchFirst());
     }
@@ -63,6 +63,10 @@ public class QuizRepositoryCustomImpl implements QuizRepositoryCustom {
 
     private static BooleanExpression isUser(QQuiz quiz) {
         return quiz.member.memberAuthority.eq(MemberAuthority.USER);
+    }
+
+    private static BooleanExpression isAdmin(QQuiz quiz) {
+        return quiz.member.memberAuthority.eq(MemberAuthority.ADMIN);
     }
 
     private static BooleanExpression isTimeBetween(LocalDateTime nowDateTime, QQuiz quiz, LocalDateTime todayEnd) {
