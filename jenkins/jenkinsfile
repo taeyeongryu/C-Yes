@@ -7,10 +7,10 @@ stages {
                     steps {
                         dir('/'){
 
-                            sh '''
-                            echo 'MSA START'
+                            //sh '''
+                           // echo 'MSA START'
                              
-                            rm docker-springboot.tar // 젠킨스 서버에 tar 있으면 삭제
+                            //rm docker-springboot.tar // 젠킨스 서버에 tar 있으면 삭제
                            // docker save -o spring-boot.tar docker-springboot:0.0.1  //spring-boot.tar 있으면 삭제 그리고 만들기
 
                             // 1. 원격서버에 spring-boot.tar이 있으면 삭제
