@@ -1,0 +1,9 @@
+.checkbox-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.detail-select-content{
+    width: 200px;
+}
