@@ -13,9 +13,18 @@ interface QuizInfo {
   quizStartDate: string;
 }
 
+interface SearchQuizInfo {
+  quizId: number;
+  quizTitle: string;
+  quizStartDate: string;
+  category: string;
+  type: string;
+  problemCnt: number;
+}
+
 const GroupMain = (props: Props) => {
   const [quizzes, setQuizzes] = useState<QuizInfo[]>([]);
-  const [searchQuiz, setSearchQuiz] = useState<QuizInfo[]>([]);
+  const [searchQuiz, setSearchQuiz] = useState<SearchQuizInfo[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // 검색어를 저장할 상태
   const navigate = useNavigate();
 
@@ -32,24 +41,21 @@ const GroupMain = (props: Props) => {
   ) => {
     if (e.key === "Enter") {
       console.log("enter눌림", searchTerm);
-      // 엔터 키를 누르면
-      // const data = await getGroupQuizUseTitle(searchTerm); // API 호출 (검색어 인자 추가)
-      const data = await getGroupQuizUseTitle();
-      if (data) {
-        setSearchQuiz(data); // 상태 업데이트
-      }
+      fetchSearchQuiz();
     }
   };
 
   const fetchQuizData = async () => {
     const data = await getGroupQuiz(); // API 호출
+    console.log("allQuiz: ", data);
     if (data) {
       setQuizzes(data);
     }
   };
 
   const fetchSearchQuiz = async () => {
-    const data = await getGroupQuizUseTitle(); // API 호출
+    const data = await getGroupQuizUseTitle(searchTerm); // API 호출
+    console.log("searchData: ", data);
     if (data) {
       setSearchQuiz(data);
     }
@@ -81,7 +87,16 @@ const GroupMain = (props: Props) => {
           <div className="quiz-text-container">빠른 퀴즈</div>
           <div className="fast-quiz-lineup-container">
             {quizzes.length === 0 && (
-              <div className="fast-quiz-box">퀴즈가 없습니다!</div>
+              <div
+                className="fast-quiz-box"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <span>퀴즈가 없습니다!</span>
+              </div>
             )}
             {quizzes.length > 0 && (
               <div className="fast-quiz-box">
@@ -116,7 +131,7 @@ const GroupMain = (props: Props) => {
               {searchQuiz.length > 0 ? (
                 searchQuiz.map((quiz, index) => (
                   <div key={index} className="each-result-quiz-box">
-                    <div className="search-box-title">{quiz.quizTitle}</div>
+                    <div className="search-box-title">{quiz.category}</div>
                     <div className="search-box-text">
                       시작 시간: {new Date(quiz.quizStartDate).toLocaleString()}
                     </div>
