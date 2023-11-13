@@ -6,7 +6,7 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3306/cyesdb?autoReconnect=true&serverTimezone=Asia/Seoul&useUnicode=true&characterEncoding=utf8
         username: root
-        password: ssafy
+        password: root
     jpa:
         hibernate:
             ddl-auto: create

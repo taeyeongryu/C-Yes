@@ -21,7 +21,6 @@ public class ScheduleReserveService {
     private final StringRedisTemplate stringRedisTemplate;
 
 
-
     /**
      *
      * expire scheduler redis에 prefix + quizID를 한 키값을 저장해 작업을 예약한다.

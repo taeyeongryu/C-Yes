@@ -44,10 +44,8 @@ public class ResultService {
         // 해당 퀴즈로 제출된 답안 List를 Redis에서 가져온다.
         List<SubmitRedis> list = submitService.getSubmitList(quizId.toString());
 
-
         //채점을 완료해서 순서를 매긴 값의 리스트 이다.
         List<GradingResult> gradingResultList = getGradingResultList(list, problemResponseList);
-
 
         //채점해서 졍렬한 결과를 상위 n명만 골라서 nickname, 맞은 갯수 넘겨준다.
         List<GradingResultPresentResponse> resultPresentResponseList = gradingPresent(gradingResultList, 3);
@@ -60,10 +58,8 @@ public class ResultService {
                 .type(SessionMessage.MessageType.RESULT)
                 .build();
 
-
         //Redis에 publish
         redisTemplate.convertAndSend(channelTopic.getTopic(), resultMessage);
-
 
         //Redis에 publish 한 뒤
         //AnswerList로 바꿔서 MongoDB에 flush
@@ -82,7 +78,6 @@ public class ResultService {
 
             //memberId
             Long memberId = answer.getMemberId();
-
 
             //문제 번호
             Integer problemNumber = answer.getProblemOrder();
