@@ -32,20 +32,20 @@ stages {
                         result=$( docker container ls -a --filter "name=cyes_back" -q )
                         if [ -n "$result" ]; then
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" 
-                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back" 
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back"
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi cyes_back" // spring 이미지 삭제 
                             
                             else
                                 echo "No such containers"
                             fi
                            
-   '''
+  
                         
 
                             
-                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi cyes_back" // spring 이미지 삭제
-
-                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i spring-boot.tar" // tar load 하기
-                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5000:5000 -p 1026:5000 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" docker-springboot:0.0.1" // spring 이미지 run 하기
+                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i spring-boot.tar" // tar load 하기
+                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5000:5000 -p 1026:5000 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" docker-springboot:0.0.1" 
+                    '''
                         } 
                             
                         }
