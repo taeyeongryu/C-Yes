@@ -48,7 +48,7 @@ public class StartService {
         String key = TOTAL_PARTICIPANT+quizId;
 
         String totalNumber = stringRedisTemplate.opsForValue().get(key);
-        stringRedisTemplate.expire(key, Duration.ofMinutes(5));
+        stringRedisTemplate.expire(key, Duration.ofMinutes(30));
 
         return Integer.parseInt(totalNumber);
     }
