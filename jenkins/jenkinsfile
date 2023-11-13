@@ -3,6 +3,8 @@ pipeline {
     stages {
       //백엔드
             stage('BE build') {
+                echo "들어가자마자 pwd"
+                pwd
                 steps {
                     dir('Server/webserver'){
                         sh '''
@@ -15,6 +17,8 @@ pipeline {
                 }
             }
             stage('BE Dockerimage build') {
+                echo "백엔드 build 들어가기 전 pwd"
+                pwd
                 steps {
                     dir('Server/webserver'){
                         sh '''
@@ -24,7 +28,11 @@ pipeline {
                     }
                 }
             }
+            
+            
             stage('BE Deploy') {
+                echo "백엔드 괄호 나와서 pwd"
+                pwd
                 steps {
                     dir('Server/webserver'){
 
