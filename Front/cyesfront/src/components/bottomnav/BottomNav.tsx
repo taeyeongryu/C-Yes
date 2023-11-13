@@ -37,8 +37,8 @@ const BottomNav: React.FC<BottomNavProps> = ({
     <div className="bottom-nav-container">
       <NavButton
         isSelected={selected === "cs공부"}
-        selectedImg="img/select_pencil.png"
-        defaultImg="img/pencil.png"
+        selectedImg="/img/select_pencil.png"
+        defaultImg="/img/pencil.png"
         altText=""
         routePath="/cs"
         onClick={() => handleClick("cs공부")}
@@ -46,8 +46,8 @@ const BottomNav: React.FC<BottomNavProps> = ({
       />
       <NavButton
         isSelected={selected === "라이브"}
-        selectedImg="img/select_live.png"
-        defaultImg="img/live.png"
+        selectedImg="/img/select_live.png"
+        defaultImg="/img/live.png"
         altText=""
         routePath="/live"
         onClick={() => handleClick("라이브")}
@@ -55,8 +55,8 @@ const BottomNav: React.FC<BottomNavProps> = ({
       />
       <NavButton
         isSelected={selected === "그룹"}
-        selectedImg="img/select_people.png"
-        defaultImg="img/people.png"
+        selectedImg="/img/select_people.png"
+        defaultImg="/img/people.png"
         altText=""
         routePath="/group"
         onClick={() => handleClick("그룹")}
