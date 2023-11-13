@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.data.redis.core.RedisHash;
 
 
 @Data
