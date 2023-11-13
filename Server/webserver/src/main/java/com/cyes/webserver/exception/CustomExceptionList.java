@@ -26,9 +26,8 @@ public enum CustomExceptionList {
     REDIS_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E013", "제출된 답안 정보가 없습니다."),
     SUBMIT_TIME_ERROR(HttpStatus.BAD_REQUEST, "E014", "답안 제출시간은 문제 출제시간보다 같거나 빠를 수 없습니다."),
     BINDING_ERROR(HttpStatus.BAD_REQUEST, "E015", "요청에 정확한 값을 입력해야 합니다."),
-    QUIZPROBLEM_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "E015", "퀴즈에 문제가 존재하지 않습니다.");
-
-
+    QUIZPROBLEM_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "E016", "퀴즈에 문제가 존재하지 않습니다."),
+    ADMIN_DOES_NOT_CREATE_GROUP_QUIZ(HttpStatus.BAD_REQUEST, "E017", "관리자는 그룹퀴즈를 만들 수 없습니다.");
 
 
     private final HttpStatus status;
