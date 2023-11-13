@@ -8,7 +8,7 @@ stages {
                         dir('/'){
                             
                             sh '''
-                        rm docker-springboot.tar // 젠킨스 서버에 tar 있으면 삭제
+                        rm docker-springboot.tar
                         '''                       
                            
                              
