@@ -66,7 +66,7 @@ const GroupQuizDetail = (props: Props) => {
     switch (quizType) {
       case "객관식":
         return "MULTIPLECHOICE";
-      case "TF퀴즈":
+      case "TF 퀴즈":
         return "TRUEORFALSE";
       case "단답형":
         return "SHORTANSWER";
@@ -92,7 +92,7 @@ const GroupQuizDetail = (props: Props) => {
     setQuestions(newQuestions);
     //setCurrentChoices(currentChoices);
 
-    console.log("보낼 퀴즈 list: ", questions);
+    // console.log("보낼 퀴즈 list: ", questions);
 
     setCurrentQuestion("");
     setCurrentAnswer("");
@@ -117,12 +117,13 @@ const GroupQuizDetail = (props: Props) => {
 
     setQuestions(newQuestions);
 
-    console.log("보낼 퀴즈 list: ", newQuestions);
+    console.log("최종 퀴즈 list: ", newQuestions);
+
     const resultQuestions = {
       memberId: 20,
-      quizTitle: "수빈 cs 퀴즈",
-      startDateTime: "2023-11-11T06:49:22",
-      problemByUserList: questions,
+      quizTitle: quizInfo.quizName,
+      startDateTime: quizInfo.quizStartTime,
+      problemByUserList: newQuestions,
     };
 
     console.log("보내기:", resultQuestions);
