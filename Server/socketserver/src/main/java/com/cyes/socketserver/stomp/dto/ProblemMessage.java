@@ -1,5 +1,6 @@
 package com.cyes.socketserver.stomp.dto;
 
+import com.cyes.socketserver.stomp.ProblemType;
 import lombok.*;
 
 import java.util.List;
@@ -11,8 +12,9 @@ import java.util.List;
 public class ProblemMessage extends SessionMessage{
     String question;
     Integer order;
-    Integer answerLength;
-    List<String> selections;
+    String answerLength;
+    String[] selections;
+    ProblemType problemType;
 
     public enum QuestionType {
         SINGLE, FOUR, OX
@@ -20,12 +22,13 @@ public class ProblemMessage extends SessionMessage{
 
 
     @Builder
-    public ProblemMessage(Long quizId, MessageType type, String question, Integer order, Integer answerLength, List<String> selections) {
+    public ProblemMessage(Long quizId, MessageType type, String question, Integer order, String answerLength, String[] selections, ProblemType problemType) {
         super(quizId, type);
         this.question = question;
         this.order = order;
         this.answerLength = answerLength;
         this.selections = selections;
+        this.problemType = problemType;
     }
 
 }

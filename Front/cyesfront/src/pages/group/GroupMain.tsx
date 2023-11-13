@@ -4,16 +4,11 @@ import "./GroupMain.css";
 import BottomNav from "../../components/bottomnav/BottomNav";
 import { getGroupQuiz, getGroupQuizUseTitle } from "../../api/Group";
 import FloatingButton from "../../components/FloatingButton";
+import { transCategory } from "../../components/TransCategory";
 
 type Props = {};
 
 interface QuizInfo {
-  quizId: number;
-  quizTitle: string;
-  quizStartDate: string;
-}
-
-interface SearchQuizInfo {
   quizId: number;
   quizTitle: string;
   quizStartDate: string;
@@ -24,7 +19,7 @@ interface SearchQuizInfo {
 
 const GroupMain = (props: Props) => {
   const [quizzes, setQuizzes] = useState<QuizInfo[]>([]);
-  const [searchQuiz, setSearchQuiz] = useState<SearchQuizInfo[]>([]);
+  const [searchQuiz, setSearchQuiz] = useState<QuizInfo[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // 검색어를 저장할 상태
   const navigate = useNavigate();
 
@@ -59,6 +54,36 @@ const GroupMain = (props: Props) => {
     if (data) {
       setSearchQuiz(data);
     }
+  };
+
+  const transrateTypeText = (text: string): string => {
+    if (text === "SHORTANSWER") {
+      return "단답형";
+    } else if (text === "TRUEORFALSE") {
+      return "O/X";
+    } else if (text === "MULTIPLECHOICE") {
+      return "객관식";
+    } else return "";
+  };
+
+  const convertDataFormat = (quizDate: string): string => {
+    const formattedDate = new Date(quizDate);
+
+    // 'yy.MM.dd HH:mm' 형식으로 날짜와 시간을 변환
+    return formattedDate.toLocaleString("ko-KR", {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // 24시간 형식
+    });
+  };
+
+  const moveToGroupQuiz = (quizTitle: string, quizId: number) => {
+    console.log("title: ", quizTitle);
+    console.log("id: ", quizId);
+    navigate("/quiz", { state: { quizTitle, quizId } });
   };
 
   useEffect(() => {
@@ -99,29 +124,47 @@ const GroupMain = (props: Props) => {
               </div>
             )}
             {quizzes.length > 0 && (
-              <div className="fast-quiz-box">
+              <div
+                className="fast-quiz-box"
+                onClick={() =>
+                  moveToGroupQuiz(quizzes[0].quizTitle, quizzes[0].quizId)
+                }
+              >
                 <div className="quiz-box-title">{quizzes[0].quizTitle}</div>
-                <div className="quiz-box-text">{quizzes[0].quizTitle}</div>
                 <div className="quiz-box-text">
-                  문제수: {quizzes[0].quizTitle}
+                  유형: {transrateTypeText(quizzes[0].type)}
                 </div>
                 <div className="quiz-box-text">
-                  출제자: {quizzes[0].quizTitle}
+                  문제수: {quizzes[0].problemCnt}
                 </div>
-                <div className="quiz-box-text">{quizzes[0].quizTitle}</div>
+                <div className="quiz-box-text">
+                  {convertDataFormat(quizzes[0].quizStartDate)}
+                </div>
+                <div className="quiz-box-text">
+                  # {transCategory(quizzes[0].category)}
+                </div>
               </div>
             )}
             {quizzes.length > 1 && (
-              <div className="fast-quiz-box">
+              <div
+                className="fast-quiz-box"
+                onClick={() =>
+                  moveToGroupQuiz(quizzes[1].quizTitle, quizzes[1].quizId)
+                }
+              >
                 <div className="quiz-box-title">{quizzes[1].quizTitle}</div>
-                <div className="quiz-box-text">{quizzes[1].quizTitle}</div>
                 <div className="quiz-box-text">
-                  문제수: {quizzes[1].quizTitle}
+                  유형: {transrateTypeText(quizzes[1].type)}
                 </div>
                 <div className="quiz-box-text">
-                  출제자: {quizzes[1].quizTitle}
+                  문제수: {quizzes[1].problemCnt}
                 </div>
-                <div className="quiz-box-text">{quizzes[1].quizTitle}</div>
+                <div className="quiz-box-text">
+                  {convertDataFormat(quizzes[1].quizStartDate)}
+                </div>
+                <div className="quiz-box-text">
+                  # {transCategory(quizzes[1].category)}
+                </div>
               </div>
             )}
           </div>
@@ -130,10 +173,20 @@ const GroupMain = (props: Props) => {
             <div className="result-quiz-box">
               {searchQuiz.length > 0 ? (
                 searchQuiz.map((quiz, index) => (
-                  <div key={index} className="each-result-quiz-box">
-                    <div className="search-box-title">{quiz.category}</div>
+                  <div
+                    key={index}
+                    className="each-result-quiz-box"
+                    onClick={() => moveToGroupQuiz(quiz.quizTitle, quiz.quizId)}
+                  >
+                    <div className="search-box-title">
+                      {quiz.quizTitle} (No. {quiz.quizId})
+                    </div>
                     <div className="search-box-text">
-                      시작 시간: {new Date(quiz.quizStartDate).toLocaleString()}
+                      {transrateTypeText(quiz.type)} / {quiz.problemCnt} 문제 /{" "}
+                      {transCategory(quiz.category)}
+                    </div>
+                    <div className="search-box-text">
+                      {convertDataFormat(quiz.quizStartDate)}
                     </div>
                   </div>
                 ))
