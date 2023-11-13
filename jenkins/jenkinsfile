@@ -11,19 +11,19 @@ stages {
                             echo 'MSA START'
                              
                             rm docker-springboot.tar // 젠킨스 서버에 tar 있으면 삭제
-                            docker save -o spring-boot.tar docker-springboot:0.0.1  //spring-boot.tar 있으면 삭제 그리고 만들기
+                           // docker save -o spring-boot.tar docker-springboot:0.0.1  //spring-boot.tar 있으면 삭제 그리고 만들기
 
                             // 1. 원격서버에 spring-boot.tar이 있으면 삭제
-                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "rm docker-springboot.tar" // 원격서버에서 docker-springboot.tar 삭제하기
+                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "rm docker-springboot.tar" // 원격서버에서 docker-springboot.tar 삭제하기
 
                             // 2. 원격서버에 spring 컨테이너 실행중이면 멈추고 삭제, 이미지 있으면 삭제, 다 했으면 복사하기
-                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" // 컨테이너 stop
-                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back" // 컨테이너 삭제
-                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi cyes_back" // spring 이미지 삭제
-                            scp -i /jenkins_key /docker-springboot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu // 컨테이너 원격에 복사하기
+                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" // 컨테이너 stop
+                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back" // 컨테이너 삭제
+                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi cyes_back" // spring 이미지 삭제
+                            //scp -i /jenkins_key /docker-springboot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu // 컨테이너 원격에 복사하기
 
-                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i docker-springboot.tar" // tar load 하기
-                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5000:5000 -p 1026:5000 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" docker-springboot:0.0.1" // spring 이미지 run 하기
+                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i docker-springboot.tar" // tar load 하기
+                            //ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5000:5000 -p 1026:5000 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" docker-springboot:0.0.1" // spring 이미지 run 하기
                         } // dir
                 
                         }
