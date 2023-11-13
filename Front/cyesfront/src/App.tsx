@@ -12,6 +12,7 @@ import SelectStudy from "./pages/cs/types/SelectStudy";
 import TorfStudy from "./pages/cs/types/TorfStudy";
 
 import Group from "./pages/group/GroupQuiz";
+import GroupDetail from "./pages/group/GroupQuizDetail";
 
 import AdminQuizCreate from "./pages/adminquiz/quizwordcreate";
 import AdminQuizCheck from "./pages/adminquiz/quizCheck";
@@ -37,6 +38,7 @@ function App() {
 
           <Route path="/group" element={<GroupMain />} />
           <Route path="/group/create" element={<Group />} />
+          <Route path="/group/create/detail" element={<GroupDetail />} />
 
           <Route path="/adminquiz/creat" element={<AdminQuizCreate />} />
           <Route path="/adminquiz/check" element={<AdminQuizCheck />} />
