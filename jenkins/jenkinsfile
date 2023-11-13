@@ -33,7 +33,7 @@ stages {
                         if [ -n "$result" ]; then
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" 
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back"
-                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi cyes_back" // spring 이미지 삭제 
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi cyes_back" 
                             
                             else
                                 echo "No such containers"
