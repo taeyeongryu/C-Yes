@@ -25,6 +25,7 @@ public class QuizProblemRepositoryCustomImpl implements QuizProblemRepositoryCus
                 .select(qQuizProblem.problemId)
                 .from(qQuizProblem)
                 .where(qQuizProblem.quiz.id.eq(quizId))
+                .orderBy(qQuizProblem.problemOrder.asc())
                 .fetch();
     }
 }

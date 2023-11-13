@@ -47,14 +47,14 @@ class QuizProblemRepositoryTest {
 
         String problemId1 = "문제1Id";
         String problemId2 = "문제2Id";
-        QuizProblem quizProblem1 = QuizProblem.builder().quiz(quiz1).problemId(problemId1).problemOrder(1).build();
         QuizProblem quizProblem2 = QuizProblem.builder().quiz(quiz1).problemId(problemId2).problemOrder(2).build();
+        QuizProblem quizProblem1 = QuizProblem.builder().quiz(quiz1).problemId(problemId1).problemOrder(1).build();
         quizProblemRepository.saveAll(List.of(quizProblem1, quizProblem2));
 
         // when
         List<String> quizProblems = quizProblemRepository.findQuizProblems(quiz1.getId());
 
         // then
-        assertThat(quizProblems).hasSize(2).containsExactlyInAnyOrder(problemId1, problemId2);
+        assertThat(quizProblems).hasSize(2).containsExactly(problemId1, problemId2);
     }
 }
