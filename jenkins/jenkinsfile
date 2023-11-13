@@ -1,6 +1,17 @@
 pipeline {
     agent any
+
 stages {
+    
+    stage('test'){
+       script {
+                    sh '''
+                        ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "pwd"
+                    '''
+                        }
+
+    }
+    
 
     stage('where one') {
              steps {
