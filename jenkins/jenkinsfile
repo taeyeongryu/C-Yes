@@ -4,13 +4,15 @@ pipeline {
 stages {
     
     stage('test'){
-       script {
+        steps{
+                     script {
                     sh '''
                         ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "pwd"
                     '''
                         }
 
-    }
+        }
+          }
     
 
     stage('where one') {
