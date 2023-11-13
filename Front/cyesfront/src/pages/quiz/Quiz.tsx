@@ -16,14 +16,15 @@ import QuizWebSocket from "../../api/websocket/QuizWebSocket";
 import SubmitSelection from "./SubmitSelection";
 import SubmitOX from "./SubmitOX";
 import AnswerResultComponent from "./AnswerResultComponent";
+import { useLocation } from "react-router-dom";
 
 const Quiz: React.FC = () => {
+    const location = useLocation();
     // 웹소켓
     const [socket, setSocket] = useState<QuizWebSocket>();
 
     // redux 에서 가져오기
-    const quizState = useSelector((state: any) => state.quiz.quiz);
-    const quizId = quizState.quizId;
+    const quizId = location.state.quizId;
     const memberState = useSelector((state: any) => state.member.member);
     const memberId = memberState.memberId;
     const memberNickname = memberState.memberNickname;
