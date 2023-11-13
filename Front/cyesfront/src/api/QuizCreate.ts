@@ -22,16 +22,14 @@ interface QuestionContent {
   problemByUserList: Question[];
 }
 
-export const createGroupQuiz = async (Quiz: QuestionContent | null) => {
-  const data = await groupQuizApi
-    .post(`/quiz/create/user`, { Quiz })
-    .then((resp) => {
-      return resp.data;
-    })
-    .catch((err) => {
-      console.log(err);
-      return null;
-    });
-
-  return data;
-};
+  
+export const createGroupQuiz = async (Quiz : QuestionContent | null) => {
+    const data = await groupQuizApi
+        .post(`/quiz/create/user`,Quiz)
+        .then((resp) => {
+            return resp.data;
+        })
+        .catch((err) => {
+            console.log("api에러 !! : ",err); 
+            return null;
+        });
