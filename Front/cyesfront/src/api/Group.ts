@@ -19,12 +19,12 @@ export const getGroupQuiz = async (): Promise<any> => {
   }
 };
 
-// 특정 타이틀에 해당하는 그룹 퀴즈 정보를 검색하는 함수
+// 특정 타이틀에 해당하는 그룹 퀴즈 정보를 검색하는 함수 (POST 요청으로 변경)
 export const getGroupQuizUseTitle = async (keyword: string): Promise<any> => {
   try {
-    // API 요청 시 쿼리 파라미터로 keyword를 추가
-    const response = await groupApi.get("/quiz/group/info/searchByTitle", {
-      params: { keyword },
+    // POST 요청으로 변경하고, 요청 본문에 keyword를 포함시킴
+    const response = await groupApi.post("/quiz/group/info/searchByTitle", {
+      keyword,
     });
     console.log("keyword response", response);
     return response.data;
