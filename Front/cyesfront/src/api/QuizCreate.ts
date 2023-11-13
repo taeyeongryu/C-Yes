@@ -6,6 +6,7 @@ const groupQuizApi = axios.create({
     headers: { "content-type": "application/json" },
     timeout: 3000,
 });
+
 interface Question {
     question: string;
     answer: string;
@@ -18,8 +19,8 @@ interface Question {
     memberId: number;
     quizTitle: string;
     startDateTime: string;
-    problemByUserList: Array<Question | QuestionContent>; // 여기를 수정
-  }
+    problemByUserList: Question[];
+}
 
   
 export const createGroupQuiz = async (Quiz : QuestionContent | null) => {

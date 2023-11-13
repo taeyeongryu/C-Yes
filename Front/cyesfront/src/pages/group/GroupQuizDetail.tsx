@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import IconButton from "../../components/button/IconButton";
 import Checkbox from "../../components/Checkbox";
 import "../group/GroupQuizDetail.css";
+import BottomNav from "../../components/bottomnav/BottomNav";
 import { createGroupQuiz } from "../../api/QuizCreate";
 
 type Props = {};
@@ -21,21 +22,6 @@ interface QuestionContent {
   question: string;
   type: string;
 }
-
-// interface QuestionContent {
-//   memberId: number;
-//   quizTitle: string;
-//   startDateTime: string;
-//   problemByUserList: [
-//     {
-//       question: string;
-//       answer: string;
-//       choices: string[];
-//       category: string;
-//       type: string;
-//     }
-//   ];
-// }
 
 const GroupQuizDetail = (props: Props) => {
   const location = useLocation();
@@ -117,7 +103,21 @@ const GroupQuizDetail = (props: Props) => {
 
   const handleSubmitButtonClick = async () => {
     setSubmitted(true);
-    console.log("보낼 퀴즈 list: ", questions);
+
+    const newQuestions = [
+      ...questions,
+      {
+        answer: currentAnswer,
+        choices: currentChoices, // 선택지가 있다면 해당 부분을 업데이트
+        category: quizInfo.quizSubject, // 문제 설명이 있다면 해당 부분을 업데이트
+        question: currentQuestion,
+        type: determineQuestionType(quizInfo.quizType),
+      },
+    ];
+
+    setQuestions(newQuestions);
+
+    console.log("보낼 퀴즈 list: ", newQuestions);
     const resultQuestions = {
       memberId: 20,
       quizTitle: "수빈 cs 퀴즈",
@@ -246,6 +246,7 @@ const GroupQuizDetail = (props: Props) => {
           </div>
         </div>
       </div>
+      <BottomNav checkCS={false} checkLive={false} checkGroup={true} />
     </div>
   );
 };
