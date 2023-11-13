@@ -12,7 +12,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 
-@RedisHash("Submit")
 @Data
 @Getter
 @ToString

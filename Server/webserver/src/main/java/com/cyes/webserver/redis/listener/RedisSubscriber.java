@@ -36,7 +36,7 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             //message.getBody()를 하면 byte형식 배열이 반환된다.
-            String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
+            String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
 
             SessionMessage roomMessage = objectMapper.readValue(publishMessage, SessionMessage.class);
 
