@@ -197,21 +197,25 @@ class ProblemServiceTest {
         // given
         MultipleChoiceProblemSaveRequest multipleChoice1 = MultipleChoiceProblemSaveRequest.builder().question("question1").answer("answer1").choices(new String[]{"choice1", "choice2", "choice3", "choice4"}).description("description1").problemCategory(ProblemCategory.DB).build();
         Problem problem1 = problemRepository.save(Problem.createMultipleChoice(multipleChoice1));
-        MultipleChoiceProblemSaveRequest multipleChoice2 = MultipleChoiceProblemSaveRequest.builder().question("question1").answer("answer1").choices(new String[]{"choice1", "choice2", "choice3", "choice4"}).description("description1").problemCategory(ProblemCategory.DB).build();
+        MultipleChoiceProblemSaveRequest multipleChoice2 = MultipleChoiceProblemSaveRequest.builder().question("question2").answer("answer2").choices(new String[]{"choice1", "choice2", "choice3", "choice4"}).description("description2").problemCategory(ProblemCategory.DB).build();
         Problem problem2 = problemRepository.save(Problem.createMultipleChoice(multipleChoice2));
+        MultipleChoiceProblemSaveRequest multipleChoice3 = MultipleChoiceProblemSaveRequest.builder().question("question3").answer("answer3").choices(new String[]{"choice1", "choice2", "choice3", "choice4"}).description("description3").problemCategory(ProblemCategory.DB).build();
+        Problem problem3 = problemRepository.save(Problem.createMultipleChoice(multipleChoice3));
 
 
-        List<String> idList = List.of(problem1.getId(),problem2.getId());
+        List<String> idList = List.of(problem1.getId(),problem2.getId(),problem3.getId());
         // when
         List<ProblemResponse> allProblemByQuiz = problemService.findAllProblemByQuiz(idList);
 
         // then
 
-        assertThat(allProblemByQuiz).hasSize(2)
+        assertThat(allProblemByQuiz).hasSize(3)
                 .extracting("id", "question", "choices", "answer", "category", "type")
-                .containsExactlyInAnyOrder(
+                .containsExactly(
                         Tuple.tuple(problem1.getId(), problem1.getQuestion(), problem1.getChoices(), problem1.getAnswer(), problem1.getCategory(), problem1.getType())
-                        , Tuple.tuple(problem2.getId(), problem2.getQuestion(), problem2.getChoices(), problem2.getAnswer(), problem2.getCategory(), problem2.getType()));
+                        , Tuple.tuple(problem2.getId(), problem2.getQuestion(), problem2.getChoices(), problem2.getAnswer(), problem2.getCategory(), problem2.getType())
+                        , Tuple.tuple(problem3.getId(), problem3.getQuestion(), problem3.getChoices(), problem3.getAnswer(), problem3.getCategory(), problem3.getType())
+                );
 
     }
     @Test
