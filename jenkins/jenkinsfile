@@ -18,14 +18,15 @@ stages {
                     } else {
                         echo "${fileName} does not exist. Skipping deletion."
                     }
-
-                           docker save -o spring-boot.tar docker-springboot:0.0.1  //spring-boot.tar 있으면 삭제 그리고 만들기
                         
-                        scp -i /jenkins_key /docker-springboot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu // 컨테이너 원격에 복사하기
 
-                }                     
+
+                }              
+                sh '''       
+                        docker save -o spring-boot.tar docker-springboot:0.0.1  //spring-boot.tar 있으면 삭제 그리고 만들기
+                        scp -i /jenkins_key /docker-springboot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu // 컨테이너 원격에 복사하기
                            
-   
+   '''
                         
 
                             // 1. 원격서버에 spring-boot.tar이 있으면 삭제
