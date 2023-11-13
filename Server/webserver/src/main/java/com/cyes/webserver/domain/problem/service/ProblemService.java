@@ -18,8 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -154,7 +154,14 @@ public class ProblemService {
     * */
      public List<ProblemResponse> findAllProblemByQuiz(List<String> problemIdList){
          Iterable<Problem> findProblems = problemRepository.findAllById(problemIdList);
-         List<ProblemResponse> problemResponseList = toProblemResponseList(findProblems);
+         Map<String, Problem> map = new HashMap<>();
+         for (Problem findProblem : findProblems) {
+             map.put(findProblem.getId(), findProblem);
+         }
+
+         List<ProblemResponse> problemResponseList = toProblemResponseList(
+                 problemIdList.stream().map(map::get).collect(Collectors.toList())
+         );
          return problemResponseList;
      }
 
