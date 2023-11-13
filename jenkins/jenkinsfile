@@ -8,7 +8,7 @@ stages {
                         dir('/'){
                             
                           script {
-                    def fileName = 'docker-springboot.tar'
+                    def fileName = 'spring-boot.tar'
 
                     // 파일이 존재하는지 확인
                     if (fileExists(fileName)) {
