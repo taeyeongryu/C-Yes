@@ -29,7 +29,7 @@ stages {
                         
                         scp -i /jenkins_key /spring-boot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
 
-                        result=$( docker container ls -a --filter "name=cyes_back" -q )
+                        result=$(ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker container ls -a --filter 'name=cyes_back' -q")
                         if [ -n "$result" ]; then
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back" 
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back"
