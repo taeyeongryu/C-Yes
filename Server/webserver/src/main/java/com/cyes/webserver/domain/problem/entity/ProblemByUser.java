@@ -1,5 +1,6 @@
 package com.cyes.webserver.domain.problem.entity;
 
+import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.mongodb.lang.Nullable;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -52,5 +53,17 @@ public class ProblemByUser {
     }
     public ProblemType getType(){
         return ProblemType.valueOf(this.type);
+    }
+
+    public ProblemResponse toProblemResponse(int problemOrder){
+        return ProblemResponse.builder()
+                .id(this.id)
+                .question(this.question)
+                .choices(this.choices)
+                .answer(this.answer)
+                .problemOrder(problemOrder)
+                .category(ProblemCategory.valueOf(this.category))
+                .type(ProblemType.valueOf(this.type))
+                .build();
     }
 }

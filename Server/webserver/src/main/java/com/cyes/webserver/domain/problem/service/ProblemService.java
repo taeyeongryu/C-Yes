@@ -165,6 +165,23 @@ public class ProblemService {
          return problemResponseList;
      }
 
+    /*
+     * 특정 유저 퀴즈의 문제pk를 list로 넘겨주면
+     * 그에 해당하는 problem들을 반환한다.
+     * */
+    public List<ProblemResponse> findAllProblemByUserByQuiz(List<String> problemIdList){
+        Iterable<ProblemByUser> findProblems = problemByUserRepository.findAllById(problemIdList);
+        Map<String, ProblemByUser> map = new HashMap<>();
+        for (ProblemByUser findProblem : findProblems) {
+            map.put(findProblem.getId(), findProblem);
+        }
+
+        List<ProblemResponse> problemResponseList = toProblemByUserResponseList(
+                problemIdList.stream().map(map::get).collect(Collectors.toList())
+        );
+        return problemResponseList;
+    }
+
 
     //문제를 삭제한다.
     @Transactional
@@ -178,6 +195,15 @@ public class ProblemService {
         List<ProblemResponse> list = new ArrayList<>();
         int problemOrder = 1;
         for (Problem problem : problemList) {
+            list.add(problem.toProblemResponse(problemOrder++));
+        }
+        return list;
+    }
+
+    private List<ProblemResponse> toProblemByUserResponseList(Iterable<ProblemByUser> problemList){
+        List<ProblemResponse> list = new ArrayList<>();
+        int problemOrder = 1;
+        for (ProblemByUser problem : problemList) {
             list.add(problem.toProblemResponse(problemOrder++));
         }
         return list;

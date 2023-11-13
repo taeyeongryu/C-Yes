@@ -1,13 +1,9 @@
 package com.cyes.webserver.domain.quiz.service;
 
 import com.cyes.webserver.domain.member.entity.Member;
-import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.request.ProblemSaveByUserRequest;
-import com.cyes.webserver.domain.problem.entity.Problem;
 import com.cyes.webserver.domain.problem.entity.ProblemByUser;
-import com.cyes.webserver.domain.problem.entity.ProblemCategory;
-import com.cyes.webserver.domain.problem.entity.ProblemType;
 import com.cyes.webserver.domain.problem.repository.ProblemByUserRepository;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
 import com.cyes.webserver.domain.problem.service.ProblemService;
@@ -171,6 +167,8 @@ public class QuizService {
 
         //퀴즈 문제 연관관계 저장
         quizProblemService.createQuizProblemByQuiz(quizEntity, problemIdList);
+
+        scheduleReserveService.saveUserQuiz(quizEntity.getId(), quizEntity.getStartDateTime());
 
         return QuizCreateResponse.of(quizEntity);
     }
