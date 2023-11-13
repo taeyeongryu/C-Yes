@@ -19,7 +19,13 @@ code {
 }
 
 @font-face {
-  font-family: "Multicolore Pro";
-  font-weight: normal;
-  src: url("./font/Multicolore Pro.ttf") format("truetype");
+  font-family: "Kanit-Regular";
+  font-weight: 400;
+  src: url("./font/Kanit-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Kanit-Ligth";
+  font-weight: 300;
+  src: url("./font/Kanit-Light.ttf") format("truetype");
 }

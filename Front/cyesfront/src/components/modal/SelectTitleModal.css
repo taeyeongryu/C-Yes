@@ -60,7 +60,7 @@ p {
   text-align: center;
   cursor: pointer;
   user-select: none; /* 텍스트 선택 방지 */
-  font-family: "Multicolore Pro", sans-serif;
+  font-size: 20px;
 }
 
 /* 스크롤바 스타일링을 위한 코드 추가 */
