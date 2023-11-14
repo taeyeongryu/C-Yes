@@ -194,7 +194,7 @@ stages {
                             fi
                             scp -i /jenkins_key /cyes_front.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i cyes_front.tar"
-                            docker run -d -p 127.0.0.1:9510:80 --name cyes_front cyes_front:0.0.1
+                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:9510:80 --name cyes_front cyes_front:0.0.1"
                     '''
                         }
 
