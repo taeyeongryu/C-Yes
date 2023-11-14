@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.List;
@@ -39,9 +40,12 @@ public class StartService {
      * @param quizId (퀴즈id)
      * @return List<problemResponse> 퀴즈 정보
      */
+    @Transactional(readOnly = true)
     public List<ProblemResponse> startSession(Long quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
         Member member = quiz.getMember();
+        System.out.println("member = " + member);
+
         // 퀴즈 문제 pk 조회
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
         // (문제, 정답) 리스트 조회
