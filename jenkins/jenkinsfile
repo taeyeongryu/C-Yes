@@ -51,16 +51,6 @@ stages {
                         }
                     }
 
-    stage('where one') {
-             steps {
-                 // 현재 위치를 파악하는 부분
-                 sh """
-                 echo "first come"
-                     pwd
-                 """
-             }
-         } // stage
-
     
       //백엔드
             stage('BE build') {
@@ -77,15 +67,6 @@ stages {
                     }
                 }
             }
-
-            stage('where two') {
-             steps {
-                 // 현재 위치를 파악하는 부분
-                 sh """
-                 echo "seconde come"
-                     pwd
-                 """
-             }
          } // stage
 
             stage('BE Dockerimage build') {
