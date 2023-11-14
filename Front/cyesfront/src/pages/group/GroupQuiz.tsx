@@ -11,165 +11,179 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {};
 type QuizInfo = {
-  quizName: string;
-  quizType: string;
-  quizSubject: string;
-  quizNumber: number;
-  quizStartTime: string;
+    quizName: string;
+    quizType: string;
+    quizSubject: string;
+    quizNumber: number;
+    quizStartTime: string;
 };
 
 const GroupQuiz = (props: Props) => {
-  const types = ["TF 퀴즈", "객관식", "단답형"];
-  const [categories, setCategories] = useState<string[]>([]);
+    const types = ["TF 퀴즈", "객관식", "단답형"];
+    const [categories, setCategories] = useState<string[]>([]);
 
-  const [quizName, setQuizName] = useState<string>("");
-  const [quizType, setQuizType] = useState("");
-  const [quizSubject, setQuizSubject] = useState("");
-  const [number, setNumber] = useState<number>(0);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const navigate = useNavigate();
+    const [quizName, setQuizName] = useState<string>("");
+    const [quizType, setQuizType] = useState("");
+    const [quizSubject, setQuizSubject] = useState("");
+    const [number, setNumber] = useState<number>(0);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+    const navigate = useNavigate();
 
-  const CancelButtonClick = () => {
-    navigate("/group");
+    const CancelButtonClick = () => {
+        navigate("/group");
 
-    // history.push("/nextpage", quizInfo);
-  };
-  const NextButtonClick = () => {
-    const quizInfo: QuizInfo = {
-      quizName,
-      quizType,
-      quizSubject,
-      quizNumber: number,
-      quizStartTime: formatDate(selectedDate),
+        // history.push("/nextpage", quizInfo);
     };
-    if (number <= 0) {
-      alert("문제 갯수는 최소 1개이상 가능합니다.");
-      setNumber(1);
-    } else if (quizName == "") {
-      alert("퀴즈 제목을 작성하세요.");
-    } else if (quizType == "") {
-      alert("문제 유형을 선택하세요.");
-    } else if (quizSubject == "") {
-      alert("퀴즈 과목을 선택하세요.");
-    } else {
-      navigate("/group/create/detail", { state: quizInfo });
-    }
-  };
+    const NextButtonClick = () => {
+        const quizInfo: QuizInfo = {
+            quizName,
+            quizType,
+            quizSubject,
+            quizNumber: number,
+            quizStartTime: formatDate(selectedDate),
+        };
+        if (number <= 0) {
+            alert("문제 갯수는 최소 1개이상 가능합니다.");
+            setNumber(1);
+        } else if (quizName == "") {
+            alert("퀴즈 제목을 작성하세요.");
+        } else if (quizType == "") {
+            alert("문제 유형을 선택하세요.");
+        } else if (quizSubject == "") {
+            alert("퀴즈 과목을 선택하세요.");
+        } else {
+            navigate("/group/create/detail", { state: quizInfo });
+        }
+    };
 
-  // API
-  const fetchCategories = async () => {
-    const data = await getCsCategory(); // API 호출
-    if (data) {
-      setCategories(data);
-    }
-  };
+    // API
+    const fetchCategories = async () => {
+        const data = await getCsCategory(); // API 호출
+        if (data) {
+            setCategories(data);
+        }
+    };
 
-  // useEffect
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+    // useEffect
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-  };
+    const handleDateChange = (date: Date | null) => {
+        setSelectedDate(date);
+    };
 
-  const formatDate = (date: Date | null) => {
-    if (date) {
-      return date.toISOString();
-    }
-    return "";
-  };
+    const formatDate = (date: Date | null) => {
+        if (date) {
+            const offset = 1000 * 60 * 60 * 9;
+            const koreaNow = new Date(date.getTime() + offset);
+            koreaNow.setSeconds(0, 0);
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const input = event.target.value;
-    setQuizName(input);
-  };
-  const handleTypeChange = (selectedValue: string) => {
-    setQuizType(selectedValue);
-  };
+            return koreaNow.toISOString();
+        }
+        return "";
+    };
 
-  const handleSubjectChange = (selectedValue: string) => {
-    setQuizSubject(selectedValue);
-  };
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const input = event.target.value;
+        setQuizName(input);
+    };
+    const handleTypeChange = (selectedValue: string) => {
+        setQuizType(selectedValue);
+    };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const input = event.target.value;
+    const handleSubjectChange = (selectedValue: string) => {
+        setQuizSubject(selectedValue);
+    };
 
-    if (!isNaN(Number(input))) {
-      setNumber(Number(input));
-    }
-    if (Number(input) > 20) {
-      alert("문제 갯수는 최대 20개까지 가능합니다.");
-      setNumber(10);
-    } else {
-      setNumber(Number(input));
-    }
-  };
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const input = event.target.value;
 
-  return (
-    <div className="live-container">
-      <div className="content">
-        <div className="group-content">
-          <div className="group-title">그룹 퀴즈 생성 페이지</div>
+        if (!isNaN(Number(input))) {
+            setNumber(Number(input));
+        }
+        if (Number(input) > 20) {
+            alert("문제 갯수는 최대 20개까지 가능합니다.");
+            setNumber(10);
+        } else {
+            setNumber(Number(input));
+        }
+    };
+
+    return (
+        <div className="live-container">
+            <div className="content">
+                <div className="group-content">
+                    <div className="group-title">그룹 퀴즈 생성 페이지</div>
+                </div>
+                <div>
+                    <div className="dropdown-content">
+                        <div>퀴즈이름</div>
+                        <div>
+                            <input
+                                className="textarea"
+                                value={quizName}
+                                onChange={handleTitleChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="dropdown-content">
+                        <div>문제유형</div>
+                        <div>
+                            <Dropdown
+                                items={types}
+                                onChange={handleTypeChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="dropdown-content">
+                        <div>퀴즈과목</div>
+                        <div>
+                            <Dropdown
+                                items={categories}
+                                onChange={handleSubjectChange}
+                            />
+                        </div>
+                    </div>
+                    <div className="dropdown-content">
+                        <div>문제 갯수</div>
+                        <div>
+                            <input
+                                className="textarea"
+                                value={number}
+                                onChange={handleInputChange}
+                                type="number"
+                            />
+                        </div>
+                    </div>
+                    <div className="date-content">
+                        <div>시작 시간</div>
+                        <DatePicker
+                            selected={selectedDate}
+                            onChange={handleDateChange}
+                            showTimeSelect
+                            dateFormat="yyyy-MM-dd HH:mm"
+                            timeFormat="HH:mm:ss"
+                            className="custom-datepicker"
+                        />
+                    </div>
+
+                    <br />
+                    <br />
+                    <div className="group-button-content">
+                        <RoundCornerBtn onClick={CancelButtonClick}>
+                            취소
+                        </RoundCornerBtn>
+                        <div className="box"></div>
+                        <RoundCornerBtn onClick={NextButtonClick}>
+                            다음
+                        </RoundCornerBtn>
+                    </div>
+                </div>
+            </div>
+            <BottomNav checkCS={false} checkLive={false} checkGroup={true} />
         </div>
-        <div>
-          <div className="dropdown-content">
-            <div>퀴즈이름</div>
-            <div>
-              <input
-                className="textarea"
-                value={quizName}
-                onChange={handleTitleChange}
-              />
-            </div>
-          </div>
-          <div className="dropdown-content">
-            <div>문제유형</div>
-            <div>
-              <Dropdown items={types} onChange={handleTypeChange} />
-            </div>
-          </div>
-
-          <div className="dropdown-content">
-            <div>퀴즈과목</div>
-            <div>
-              <Dropdown items={categories} onChange={handleSubjectChange} />
-            </div>
-          </div>
-          <div className="dropdown-content">
-            <div>문제 갯수</div>
-            <div>
-              <input
-                className="textarea"
-                value={number}
-                onChange={handleInputChange}
-                type="number"
-              />
-            </div>
-          </div>
-          <div className="date-content">
-            <div>시작 시간</div>
-            <DatePicker
-              selected={selectedDate}
-              onChange={handleDateChange}
-              showTimeSelect
-              dateFormat="yyyy-MM-dd HH:mm:ss"
-              timeFormat="HH:mm:ss"
-              className="custom-datepicker"
-            />
-          </div>
-
-          <br />
-          <br />
-          <div className="group-button-content">
-            <RoundCornerBtn onClick={CancelButtonClick}>취소</RoundCornerBtn>
-            <div className="box"></div>
-            <RoundCornerBtn onClick={NextButtonClick}>다음</RoundCornerBtn>
-          </div>
-        </div>
-      </div>
-      <BottomNav checkCS={false} checkLive={false} checkGroup={true} />
-    </div>
-  );
+    );
 };
 export default GroupQuiz;
