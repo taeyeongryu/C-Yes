@@ -8,4 +8,6 @@ public class KeyGenerator {
 
     public static final String SCHEDULE_PREFIX = "ScheduledQuizSession_";
 
+    public static final String SCHEDULE_USER_PREFIX = "ScheduledUserQuizSession_";
+
 }

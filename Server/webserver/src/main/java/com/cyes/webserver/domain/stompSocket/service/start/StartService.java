@@ -1,9 +1,15 @@
 package com.cyes.webserver.domain.stompSocket.service.start;
 
+import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.domain.problem.dto.response.ProblemResponse;
 import com.cyes.webserver.domain.problem.service.ProblemService;
+import com.cyes.webserver.domain.quiz.entity.Quiz;
+import com.cyes.webserver.domain.quiz.repository.QuizRepository;
 import com.cyes.webserver.domain.quizproblem.repository.QuizProblemRepository;
 import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
+import com.cyes.webserver.exception.CustomException;
+import com.cyes.webserver.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,6 +28,7 @@ import static com.cyes.webserver.redis.KeyGenerator.TOTAL_PARTICIPANT;
 public class StartService {
 
     private final QuizProblemRepository quizProblemRepository;
+    private final QuizRepository quizRepository;
     private final ProblemService problemService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
@@ -33,11 +40,18 @@ public class StartService {
      * @return List<problemResponse> 퀴즈 정보
      */
     public List<ProblemResponse> startSession(Long quizId) {
-
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
+        Member member = quiz.getMember();
         // 퀴즈 문제 pk 조회
         List<String> list = quizProblemRepository.findQuizProblems(quizId);
         // (문제, 정답) 리스트 조회
-        List<ProblemResponse> problemAnswerList = problemService.findAllProblemByQuiz(list);
+        List<ProblemResponse> problemAnswerList;
+
+        if (member.getMemberAuthority().equals(MemberAuthority.ADMIN)) {
+            problemAnswerList = problemService.findAllProblemByQuiz(list);
+        } else {
+            problemAnswerList = problemService.findAllProblemByUserByQuiz(list);
+        }
         // 클라이언트한테 시작 신호 보내기
         redisTemplate.convertAndSend(channelTopic.getTopic(), new SessionMessage(quizId, SessionMessage.MessageType.START));
 

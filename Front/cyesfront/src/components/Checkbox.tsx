@@ -1,4 +1,5 @@
 import React from "react";
+import "./Checkbox.css";
 
 interface CheckboxProps {
   label: string;
@@ -8,7 +9,7 @@ interface CheckboxProps {
 
 const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange }) => {
   return (
-    <div>
+    <div className="custom-checkbox">
       <label>
         <input type="checkbox" checked={checked} onChange={onChange} />
         {label}

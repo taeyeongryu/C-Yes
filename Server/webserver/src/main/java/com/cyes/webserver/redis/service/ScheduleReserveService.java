@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static com.cyes.webserver.redis.KeyGenerator.SCHEDULE_PREFIX;
+import static com.cyes.webserver.redis.KeyGenerator.SCHEDULE_USER_PREFIX;
 
 @Service
 @Slf4j
@@ -39,6 +40,30 @@ public class ScheduleReserveService {
         }
 
         String quizIdStr = SCHEDULE_PREFIX + quizId;
+        op.set(quizIdStr, "");
+
+        Duration expireDuration = Duration.between(LocalDateTime.now(), expireTime);
+
+        stringRedisTemplate.expire(quizIdStr, expireDuration);
+    }
+
+    /**
+     *
+     * expire scheduler redis에 유저가 생성한 퀴즈에 대하여 prefix + quizID를 한 키값을 저장해 작업을 예약한다.
+     *
+     * @param quizId 스케줄링 할 퀴즈의 ID
+     * @param expireTime 퀴즈 시작 시간 (키 만료 시간)
+     */
+    public void saveUserQuiz(Long quizId, LocalDateTime expireTime) {
+
+        ValueOperations<String, String> op = stringRedisTemplate.opsForValue();
+
+        // 입력 된 시간이 현재 시간보다 이전이면 예외처리
+        if (expireTime.isBefore(LocalDateTime.now())) {
+            throw new CustomException(CustomExceptionList.SCHEDULE_START_TIME_TOO_EARLY_ERROR);
+        }
+
+        String quizIdStr = SCHEDULE_USER_PREFIX + quizId;
         op.set(quizIdStr, "");
 
         Duration expireDuration = Duration.between(LocalDateTime.now(), expireTime);
