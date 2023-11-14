@@ -2,27 +2,17 @@ package com.cyes.webserver.domain.quiz.controller;
 
 import com.cyes.webserver.domain.quiz.dto.*;
 import com.cyes.webserver.domain.quiz.service.QuizService;
-import com.cyes.webserver.domain.stompSocket.dto.SubmitRedis;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Properties;
 
 @Slf4j
 @RestController
@@ -43,7 +33,7 @@ public class QuizController {
     @GetMapping("/live/info")
     private ResponseEntity<QuizInfoResponse> getLiveQuizInfo() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchQuiz(LocalDateTime.now()));
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchLiveQuiz(LocalDateTime.now()));
     }
 
     /**
@@ -67,7 +57,7 @@ public class QuizController {
             "keyword를 json형식으로 요청해야한다.")
     @PostMapping("/group/info/searchByTitle")
     public ResponseEntity<List<GroupQuizInfoResponse>> getGroupQuizInfoByTitle(@RequestBody GroupQuizInfoRequestByTitle groupQuizInfoRequestByTitle) {
-        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchByQuizTitle(groupQuizInfoRequestByTitle.getKeyword()));
+        return ResponseEntity.status(HttpStatus.OK).body(quizService.searchGroupByQuizTitle(groupQuizInfoRequestByTitle.getKeyword()));
     }
 
     /**
@@ -90,7 +80,15 @@ public class QuizController {
         return ResponseEntity.status(HttpStatus.OK).body(quizCreateResponse);
     }
 
-//
+    @Operation(summary = "유저가 만드는 그룹퀴즈를 생성하는 메서드", description = "유저가 그룹 퀴즈를 만들 때 문제를 저장하고 그 문제로 퀴즈를 생성한다.")
+    @PostMapping("/create/user")
+    public ResponseEntity<QuizCreateResponse> createQuizByUser(@RequestBody QuizCreateRequestByUser quizCreateRequestByUser){
+        log.info("quizCreateRequestByUser : {}",quizCreateRequestByUser);
+        QuizCreateResponse quizByUser = quizService.createQuizByUser(quizCreateRequestByUser);
+        return ResponseEntity.status(HttpStatus.OK).body(quizByUser);
+    }
+
+    //
 //    @Operation(summary = "카프카 테스트", description = "테스트를 위해 임시로 만든 메서드이다.")
 //    @GetMapping("/test")
 //    private String testKafka() throws JsonProcessingException {
@@ -112,13 +110,5 @@ public class QuizController {
 //        return "확인";
 //    }
 
-
-    @Operation(summary = "유저가 만드는 그룹퀴즈를 생성하는 메서드", description = "유저가 그룹 퀴즈를 만들 때 문제를 저장하고 그 문제로 퀴즈를 생성한다.")
-    @PostMapping("/create/user")
-    public ResponseEntity<QuizCreateResponse> createQuizByUser(@RequestBody QuizCreateRequestByUser quizCreateRequestByUser){
-        log.info("quizCreateRequestByUser : {}",quizCreateRequestByUser);
-        QuizCreateResponse quizByUser = quizService.createQuizByUser(quizCreateRequestByUser);
-        return ResponseEntity.status(HttpStatus.OK).body(quizByUser);
-    }
 }
 

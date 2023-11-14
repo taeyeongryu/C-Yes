@@ -65,9 +65,9 @@ class QuizServiceTest {
         LocalDateTime now3 = LocalDateTime.of(2023, 11, 5, 22, 19);
 
         //when
-        QuizInfoResponse quizInfoResponse1 = quizService.searchQuiz(now1);
-        QuizInfoResponse quizInfoResponse2 = quizService.searchQuiz(now2);
-        QuizInfoResponse quizInfoResponse3 = quizService.searchQuiz(now3);
+        QuizInfoResponse quizInfoResponse1 = quizService.searchLiveQuiz(now1);
+        QuizInfoResponse quizInfoResponse2 = quizService.searchLiveQuiz(now2);
+        QuizInfoResponse quizInfoResponse3 = quizService.searchLiveQuiz(now3);
 
         //then
         assertThat(quizInfoResponse1).extracting("quizId", "quizTitle", "quizStartDate")

@@ -5,7 +5,8 @@ import Checkbox from "../../components/Checkbox";
 import "../group/GroupQuizDetail.css";
 import BottomNav from "../../components/bottomnav/BottomNav";
 import { createGroupQuiz } from "../../api/QuizCreate";
-
+import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 type Props = {};
 type QuizInfo = {
   quizName: string;
@@ -30,6 +31,7 @@ const GroupQuizDetail = (props: Props) => {
   const [questions, setQuestions] = useState<QuestionContent[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<string>("");
   const [currentAnswer, setCurrentAnswer] = useState<string>("");
+  const [currentIdx, setCurrentIdx] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [currentChoices, setCurrentChoices] = useState<string[]>([]);
 
@@ -45,9 +47,8 @@ const GroupQuizDetail = (props: Props) => {
   };
 
   const handleChioceAnswerChange = (index: number) => {
-    // 업데이트된 정답 배열을 상태에 반영
-    const stringIndex = index.toString();
-    setCurrentAnswer(stringIndex);
+    setCurrentAnswer(currentChoices[index]);
+    setCurrentIdx(index.toString());
   };
 
   const handleChoiceChange = (index: number, value: string) => {
@@ -75,7 +76,17 @@ const GroupQuizDetail = (props: Props) => {
     }
   }
 
+  const memberId = useSelector((state: any) => state.member.member.memberId);
+
   const handleNextButtonClick = () => {
+    if (currentQuestion == "") {
+      alert("문제를 작성하세요.");
+    } else if (currentAnswer == "") {
+      alert("정답을 작성하세요.");
+    }
+
+    if (quizInfo.quizType === "객관식") {
+    }
     // 현재 입력한 문제와 정답을 배열에 추가
     const newQuestions = [
       ...questions,
@@ -120,7 +131,8 @@ const GroupQuizDetail = (props: Props) => {
     console.log("최종 퀴즈 list: ", newQuestions);
 
     const resultQuestions = {
-      memberId: 20,
+      memberId: memberId,
+
       quizTitle: quizInfo.quizName,
       startDateTime: quizInfo.quizStartTime,
       problemByUserList: newQuestions,
@@ -128,6 +140,8 @@ const GroupQuizDetail = (props: Props) => {
 
     console.log("보내기:", resultQuestions);
     const result = await createGroupQuiz(resultQuestions);
+
+    console.log("결과: ", result);
 
     if (result) {
       console.log("퀴즈가 성공적으로 생성되었습니다.", result);
@@ -141,6 +155,7 @@ const GroupQuizDetail = (props: Props) => {
 
   useEffect(() => {
     console.log(quizInfo);
+    console.log("store에 저장된 내 id: ", memberId);
   }, []);
   useEffect(() => {
     console.log(questions);
@@ -155,12 +170,14 @@ const GroupQuizDetail = (props: Props) => {
 
         <div>
           <div>
-            <div>주제 : {quizInfo.quizSubject}</div>
-            <div className="dropdown-content">
-              <div>문제</div>
+            <div className="question-detail-content">
+              주제 : {quizInfo.quizSubject}
+            </div>
+            <div>문제</div>
+            <div className="question-detail-content">
               <div>
                 <input
-                  className="textarea"
+                  className="tf-textarea"
                   value={currentQuestion}
                   onChange={handleTitleChange}
                 />
@@ -173,35 +190,31 @@ const GroupQuizDetail = (props: Props) => {
                   <Checkbox
                     label="T"
                     checked={currentAnswer.includes("T")}
-                    onChange={() => handleTFChange("T")}
+                    onChange={() => handleTFChange("TRUE")}
                   />
                   <Checkbox
                     label="F"
                     checked={currentAnswer.includes("F")}
-                    onChange={() => handleTFChange("F")}
+                    onChange={() => handleTFChange("FALSE")}
                   />
                 </div>
               </div>
             )}
             {quizInfo.quizType === "객관식" && (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                }}
-              >
+              <div>
                 {[0, 1, 2, 3].map((index) => (
                   <div
                     key={index}
                     className="detail-select-content"
-                    style={{ flexBasis: "30%" }}
+                    style={{
+                      margin: "5px", // 선택지 사이의 간격을 조정
+                    }}
                   >
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <label>
                         <input
                           type="checkbox"
-                          checked={currentAnswer.includes(index.toString())}
+                          checked={currentIdx.includes(index.toString())}
                           onChange={() => handleChioceAnswerChange(index)}
                         />
                         <span>{`선택지 ${index + 1}`}</span>
@@ -209,7 +222,7 @@ const GroupQuizDetail = (props: Props) => {
                     </div>
                     <div>
                       <input
-                        className="textarea"
+                        className="select-textarea"
                         value={currentChoices[index] || ""}
                         onChange={(e) =>
                           handleChoiceChange(index, e.target.value)
@@ -226,7 +239,7 @@ const GroupQuizDetail = (props: Props) => {
                 <div>정답</div>
                 <div>
                   <input
-                    className="textarea"
+                    className="tf-textarea"
                     value={currentAnswer}
                     onChange={handleShortAnswerChange}
                   />

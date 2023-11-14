@@ -1,13 +1,9 @@
 package com.cyes.webserver.domain.quiz.service;
 
 import com.cyes.webserver.domain.member.entity.Member;
-import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.request.ProblemSaveByUserRequest;
-import com.cyes.webserver.domain.problem.entity.Problem;
 import com.cyes.webserver.domain.problem.entity.ProblemByUser;
-import com.cyes.webserver.domain.problem.entity.ProblemCategory;
-import com.cyes.webserver.domain.problem.entity.ProblemType;
 import com.cyes.webserver.domain.problem.repository.ProblemByUserRepository;
 import com.cyes.webserver.domain.problem.repository.ProblemRepository;
 import com.cyes.webserver.domain.problem.service.ProblemService;
@@ -45,10 +41,12 @@ public class QuizService {
     private final ProblemByUserRepository problemByUserRepository;
 
 
-    /* 
-    퀴즈 정보 조회
+    /**
+     * 퀴즈 정보 조회
+     * @param now
+     * @return QuizInfoResponse
      */
-    public QuizInfoResponse searchQuiz(LocalDateTime now) {
+    public QuizInfoResponse searchLiveQuiz(LocalDateTime now) {
 
         // 가장 최근에 생성된 라이브 퀴즈쇼 조회
         Quiz quiz = quizRepository.findLiveQuiz(now).orElse(null);
@@ -67,32 +65,6 @@ public class QuizService {
         // Entity -> Dto
 
         return quizInfoResponse;
-    }
-
-    /**
-     * keyword로 퀴즈를 검색한다.
-     *
-     * @param keyword
-     * @return List<GroupQuizInfoResponse>
-     */
-    public List<GroupQuizInfoResponse> searchByQuizTitle(String keyword) {
-
-        // keyword를 제목으로 포함하고, 퀴즈리스트 조회
-        List<Quiz> quizList = quizRepository.findByTitle(keyword, LocalDateTime.now()).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
-
-        // Entity -> Dto
-        List<GroupQuizInfoResponse> responseList = new ArrayList<>();
-        for (Quiz quiz : quizList) {
-
-            // 그 퀴즈의 문제 하나를 본다. (퀴즈 유형, 문제 과목 검색을 위해서)
-            QuizProblem quizProblem = quiz.getQuizProblemList().get(0);
-            int problemCnt = quiz.getQuizProblemList().size();
-
-            ProblemByUser problemByUser = problemByUserRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
-            responseList.add(quiz.toGroupQuizInfoResponse(problemByUser.getCategory(), problemByUser.getType(), problemCnt));
-
-        }
-        return responseList;
     }
 
     /**
@@ -124,10 +96,39 @@ public class QuizService {
 
     }
 
-    /*
-    퀴즈 개설
+    /**
+     * 제목으로 그룹 퀴즈를 검색한다.
+     *
+     * @param keyword
+     * @return List<GroupQuizInfoResponse>
      */
-    public QuizCreateResponse createQuiz(QuizCreateRequestToServiceDto dto) throws JsonProcessingException {
+    public List<GroupQuizInfoResponse> searchGroupByQuizTitle(String keyword) {
+
+        // keyword를 제목으로 포함하고, 퀴즈리스트 조회
+        List<Quiz> quizList = quizRepository.findByTitle(keyword, LocalDateTime.now()).orElseThrow(() -> new CustomException(CustomExceptionList.QUIZ_NOT_FOUND_ERROR));
+
+        // Entity -> Dto
+        List<GroupQuizInfoResponse> responseList = new ArrayList<>();
+        for (Quiz quiz : quizList) {
+
+            // 그 퀴즈의 문제 하나를 본다. (퀴즈 유형, 문제 과목 검색을 위해서)
+            QuizProblem quizProblem = quiz.getQuizProblemList().get(0);
+            int problemCnt = quiz.getQuizProblemList().size();
+
+            ProblemByUser problemByUser = problemByUserRepository.findById(quizProblem.getProblemId()).orElseThrow(() -> new CustomException(CustomExceptionList.PROBLEM_NOT_FOUND_ERROR));
+            responseList.add(quiz.toGroupQuizInfoResponse(problemByUser.getCategory(), problemByUser.getType(), problemCnt));
+
+        }
+        return responseList;
+    }
+
+
+    /**
+     * 라이브 퀴즈 개설
+     * @param dto
+     * @return
+     */
+    public QuizCreateResponse createQuiz(QuizCreateRequestToServiceDto dto) {
 
         Member member = memberRepository.findById(dto.getMemberId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
@@ -138,10 +139,10 @@ public class QuizService {
         // Insert Quiz
         quizRepository.save(quiz);
 
-        //Insert QuizProblem
+        // Insert QuizProblem
         quizProblemService.createQuizProblemByQuiz(quiz, dto.getProblemList());
-
-
+        
+        // Redis에 퀴즈 시작 트리거 저장
         scheduleReserveService.saveQuiz(quiz.getId(), quiz.getStartDateTime());
 
         // Entity -> Response Dto
@@ -171,6 +172,8 @@ public class QuizService {
 
         //퀴즈 문제 연관관계 저장
         quizProblemService.createQuizProblemByQuiz(quizEntity, problemIdList);
+
+        scheduleReserveService.saveUserQuiz(quizEntity.getId(), quizEntity.getStartDateTime());
 
         return QuizCreateResponse.of(quizEntity);
     }

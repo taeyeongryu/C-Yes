@@ -45,7 +45,9 @@ const Live = (props: Props) => {
         const targetTime = new Date(mainQuiz.quizStartDate);
         const targetHour = targetTime.getHours();
         const targetMin = targetTime.getMinutes();
-        navigate(`/quiz?targetHour=${targetHour}&targetMin=${targetMin}`);
+        navigate(`/quiz?targetHour=${targetHour}&targetMin=${targetMin}`, {
+            state: { quizId: mainQuiz.quizId, quizTitle: mainQuiz.quizTitle },
+        });
     };
 
     useEffect(() => {
