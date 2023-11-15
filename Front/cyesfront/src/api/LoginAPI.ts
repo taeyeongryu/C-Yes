@@ -13,7 +13,7 @@ export const requestKakaoLoginInfo = async (
     authorizationCode: string | null
 ) => {
     const data = await loginApi
-        .post(`/oauth/login/kakao`, {
+        .post(`/api/oauth/login/kakao`, {
             authorizationCode,
         })
         .then((resp) => {
