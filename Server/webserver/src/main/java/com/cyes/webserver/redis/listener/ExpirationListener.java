@@ -10,6 +10,8 @@ import org.springframework.data.redis.listener.KeyExpirationEventMessageListener
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
+import static com.cyes.webserver.redis.KeyGenerator.SCHEDULE_USER_PREFIX;
+
 /**
  * Redis의 Key가 만료될 때, 발생하는 이벤트를 핸들링하는 컴포넌트
  */
@@ -47,19 +49,22 @@ public class ExpirationListener extends KeyExpirationEventMessageListener {
 
         System.out.println(key);
 
-        if (!key.contains(SCHEDULE_PREFIX)) return;
+        String quizId;
 
-        String quizId = key.replace(SCHEDULE_PREFIX, "");
+        if (key.contains(SCHEDULE_PREFIX))
+            quizId = key.replace(SCHEDULE_PREFIX, "");
+        else if(key.contains(SCHEDULE_USER_PREFIX))
+            quizId = key.replace(SCHEDULE_USER_PREFIX, "");
+        else
+            return;
+
 
         try {
             scheduledTaskFactory.quizProcedureTask(Long.parseLong(quizId));
         } catch (InterruptedException e) {
-
             throw new CustomException(CustomExceptionList.SCHEDULE_CREATE_FAIL_ERROR);
-
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
-
         }
     }
 }
