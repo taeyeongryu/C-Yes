@@ -1,12 +1,12 @@
-package com.cyes.webserver.domain.stompSocket.service.enter;
+package com.cyes.socketserver.stomp.service.enter;
 
-import com.cyes.webserver.domain.stompSocket.dto.SessionMessage;
+import com.cyes.socketserver.stomp.dto.SessionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import static com.cyes.webserver.redis.KeyGenerator.TOTAL_PARTICIPANT;
+import static com.cyes.socketserver.KeyGenerator.TOTAL_PARTICIPANT;
 
 @Service
 @Slf4j

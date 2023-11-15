@@ -41,6 +41,7 @@ public class ScheduledTaskFactory {
         Thread.sleep(1000);
 
         for (ProblemResponse problem : problems) {
+            log.info(problem.getQuestion());
             problemService.sendProblem(quizId, problem);
             Thread.sleep(solvableTime);
 

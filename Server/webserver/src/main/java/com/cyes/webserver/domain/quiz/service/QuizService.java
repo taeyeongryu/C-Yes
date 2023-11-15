@@ -160,6 +160,10 @@ public class QuizService {
         Member member = memberRepository.findById(quizCreateRequestByUser.getMemberId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
 
+        if(member.getMemberAuthority()==MemberAuthority.ADMIN){
+            throw new CustomException(CustomExceptionList.ADMIN_DOES_NOT_CREATE_GROUP_QUIZ);
+        }
+
         //문제저장
         List<ProblemSaveByUserRequest> problemByUserList = quizCreateRequestByUser.getProblemByUserList();
 
