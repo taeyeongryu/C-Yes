@@ -10,7 +10,7 @@ const groupApi = axios.create({
 // 문제를 가져오는 새로운 함수를 정의합니다.
 export const getGroupQuiz = async (): Promise<any> => {
   try {
-    const response = await groupApi.get("/quiz/group/info");
+    const response = await groupApi.get("/api/quiz/group/info");
     console.log("all group response", response);
     return response.data;
   } catch (err) {
@@ -23,7 +23,7 @@ export const getGroupQuiz = async (): Promise<any> => {
 export const getGroupQuizUseTitle = async (keyword: string): Promise<any> => {
   try {
     // POST 요청으로 변경하고, 요청 본문에 keyword를 포함시킴
-    const response = await groupApi.post("/quiz/group/info/searchByTitle", {
+    const response = await groupApi.post("/api/quiz/group/info/searchByTitle", {
       keyword,
     });
     console.log("keyword response", response);

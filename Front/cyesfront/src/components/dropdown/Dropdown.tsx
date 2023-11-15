@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Dropdown.css";
+import { transCategory } from "../TransCategory";
 
 interface DropdownProps {
   items: string[];
@@ -33,7 +34,7 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onChange }) => {
               className="dropdown-item"
               onClick={() => selectItem(item)}
             >
-              {item}
+              {transCategory(item)}
             </div>
           ))}
         </div>

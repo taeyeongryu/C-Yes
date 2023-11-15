@@ -7,13 +7,13 @@ body {
   /* align-items: center; */
   width: 100vw;
   height: 100vh; /* 화면 전체 높이 */
-  background-color: black; /* 선택적인 배경색 */
+  background-color: #fff9f1; /* 선택적인 배경색 */
   /* overflow: hidden;   */
 }
 
 .App {
   width: 100vw;
-  height: 800px;
+  height: 100vh;
   overflow: false;
   background-color: #fff9f1; /* 앱 배경색 */
   /* overflow-y: auto; */
