@@ -16,7 +16,7 @@ export const getProblems = async (
   sort: string
 ): Promise<any> => {
   try {
-    const response = await questionApi.get("/problem", {
+    const response = await questionApi.get("/api/problem", {
       params: {
         problemCategory: category,
         problemType: type,

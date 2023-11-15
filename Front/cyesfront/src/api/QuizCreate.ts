@@ -25,7 +25,7 @@ interface QuestionContent {
   
 export const createGroupQuiz = async (Quiz : QuestionContent | null) => {
     const data = await groupQuizApi
-        .post(`/quiz/create/user`,Quiz)
+        .post(`/api/quiz/create/user`,Quiz)
         .then((resp) => {
             return resp.data;
         })

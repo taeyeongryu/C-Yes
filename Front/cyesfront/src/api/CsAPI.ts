@@ -8,7 +8,7 @@ const csApi = axios.create({
 
 export const getCsCategory = async () => {
   const data = await csApi
-    .get(`/problem/category`)
+    .get(`/api/problem/category`)
     .then((resp) => {
       return resp.data;
     })

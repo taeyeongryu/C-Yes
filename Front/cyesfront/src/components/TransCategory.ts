@@ -14,6 +14,6 @@ export const transCategory = (inputStr: string): string => {
   } else if (inputStr === "COMPUTERARCHITECTURE") {
     return "컴퓨터구조";
   } else {
-    return "";
+    return inputStr;
   }
 };
