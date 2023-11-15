@@ -190,23 +190,6 @@ stages {
 
                 }
 
-                    // websocket  파일이 존재하는 지 확인
-
-                        script {
-                    def fileName = 'socket-boot.tar'
-
-                    // 파일이 존재하는지 확인
-                    if (fileExists(fileName)) {
-                        echo "Deleting ${fileName}"
-                        // 파일 삭제
-                        sh "rm ${fileName}"
-                    } else {
-                        echo "${fileName} does not exist. Skipping deletion."
-                    }
-
-                }
-
-
                 sh '''
 
                         docker save -o spring-boot.tar docker-springboot:0.0.1
