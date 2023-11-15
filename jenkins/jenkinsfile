@@ -4,8 +4,8 @@ pipeline {
 stages {
 
 
-      //백엔드
-            stage('BE build') {
+      // webserver 백엔드
+            stage('webserver BE build') {
 
                 steps {
 
@@ -21,7 +21,7 @@ stages {
             }
 
 
-            stage('BE Dockerimage build') {
+            stage('webserver Dockerimage build') {
 
                 steps {
 
@@ -35,7 +35,7 @@ stages {
             }
 
 
-            stage('BE Deploy') {
+            stage('webserver BE Deploy') {
 
                 steps {
 
@@ -45,6 +45,63 @@ stages {
                         echo 'Deploy'
 
                         result=$( docker container ls -a --filter "name=cyes_back" -q )
+                        if [ -n "$result" ]; then
+                                docker stop $result
+                                docker rm $result
+
+                            else
+                                echo "No such containers"
+                            fi
+                        
+                                echo "gogo"
+
+                        docker images -f "dangling=true" -q | xargs -r docker rmi
+                        '''
+                    }
+                }
+            }
+
+            // socketserver 백엔드
+            stage('socketserver BE build') {
+
+                steps {
+
+                    dir('Server/socketserver'){
+                        sh '''
+                        pwd
+                        echo 'springboot build'
+                        chmod +x gradlew
+                        ./gradlew clean build -x test
+                        '''
+                    }
+                }
+            }
+
+
+            stage('socketserver Dockerimage build') {
+
+                steps {
+
+                    dir('Server/socketserver'){
+                        sh '''
+                        echo 'Dockerimage build'
+                        docker build -t socket-springboot:0.0.1 .
+                        '''
+                    }
+                }
+            }
+
+
+            stage('socketserver BE Deploy') {
+
+                steps {
+
+                    dir('Server/socketserver'){
+
+                        sh '''
+                        echo 'Deploy'
+
+                        result=$( docker container ls -a --filter "name=cyes_socket" -q )
                         if [ -n "$result" ]; then
                                 docker stop $result
                                 docker rm $result
@@ -113,9 +170,11 @@ stages {
             }
 
 
-              stage('MSA Container backend') {
+              stage('MSA webserver backend') {
                     steps {
                         dir('/'){
+
+                    // webserver 파일이 존재하는 지 확인
 
                           script {
                     def fileName = 'spring-boot.tar'
@@ -129,12 +188,27 @@ stages {
                         echo "${fileName} does not exist. Skipping deletion."
                     }
 
+                }
 
+                    // websocket  파일이 존재하는 지 확인
+
+                        script {
+                    def fileName = 'socket-boot.tar'
+
+                    // 파일이 존재하는지 확인
+                    if (fileExists(fileName)) {
+                        echo "Deleting ${fileName}"
+                        // 파일 삭제
+                        sh "rm ${fileName}"
+                    } else {
+                        echo "${fileName} does not exist. Skipping deletion."
+                    }
 
                 }
 
 
                 sh '''
+
                         docker save -o spring-boot.tar docker-springboot:0.0.1
 
                         result=$(ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker container ls -a --filter 'name=cyes_back' -q")
@@ -152,6 +226,53 @@ stages {
 
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i spring-boot.tar"
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5000:5000 -p 1026:5000 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" docker-springboot:0.0.1"
+                    '''
+                        }
+
+                        }
+                    }
+
+
+                stage('MSA socketserver backend') {
+                    steps {
+                        dir('/'){
+                    
+                    // websocket  파일이 존재하는 지 확인
+
+                        script {
+                    def fileName = 'socket-boot.tar'
+
+                    // 파일이 존재하는지 확인
+                    if (fileExists(fileName)) {
+                        echo "Deleting ${fileName}"
+                        // 파일 삭제
+                        sh "rm ${fileName}"
+                    } else {
+                        echo "${fileName} does not exist. Skipping deletion."
+                    }
+
+                }
+
+
+                sh '''
+
+                        docker save -o socket-boot.tar socket-springboot:0.0.1
+
+                        result=$(ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker container ls -a --filter 'name=cyes_socket' -q")
+                        if [ -n "$result" ]; then
+
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "rm socket-boot.tar"
+                                scp -i /jenkins_key /socket-boot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_socket"
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_socket"
+                                ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi socket-springboot:0.0.1"
+
+                            else
+                                echo "No such containers"
+                            fi
+
+                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i socket-boot.tar"
+                            ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5001:5001 -p 1027:5001 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" socket-springboot:0.0.1"
                     '''
                         }
 
