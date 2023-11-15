@@ -1,6 +1,7 @@
 package com.cyes.webserver.domain.quiz.service;
 
 import com.cyes.webserver.domain.member.entity.Member;
+import com.cyes.webserver.domain.member.enums.MemberAuthority;
 import com.cyes.webserver.domain.member.repository.MemberRepository;
 import com.cyes.webserver.domain.problem.dto.request.ProblemSaveByUserRequest;
 import com.cyes.webserver.domain.problem.entity.ProblemByUser;
@@ -16,7 +17,6 @@ import com.cyes.webserver.domain.quizproblem.service.QuizProblemService;
 import com.cyes.webserver.exception.CustomException;
 import com.cyes.webserver.exception.CustomExceptionList;
 import com.cyes.webserver.redis.service.ScheduleReserveService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -160,7 +160,7 @@ public class QuizService {
         Member member = memberRepository.findById(quizCreateRequestByUser.getMemberId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR));
 
-        if(member.getMemberAuthority()==MemberAuthority.ADMIN){
+        if(member.getMemberAuthority() == MemberAuthority.ADMIN){
             throw new CustomException(CustomExceptionList.ADMIN_DOES_NOT_CREATE_GROUP_QUIZ);
         }
 
