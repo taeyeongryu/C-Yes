@@ -9,7 +9,7 @@ const quizApi = axios.create({
 
 export const getMainQuizInfo = async () => {
     const data = await quizApi
-        .get(`/quiz/live/info`)
+        .get(`/api/quiz/live/info`)
         .then((resp) => {
             return resp.data;
         })

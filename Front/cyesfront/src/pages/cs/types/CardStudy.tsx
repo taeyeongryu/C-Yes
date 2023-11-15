@@ -88,7 +88,9 @@ const CardStudy = (props: Props) => {
       <div className="bottom-next">
         <IconButton onClick={prevTen} iconUrl="/icon/left-ten.png" />
         <IconButton onClick={prevStudy} iconUrl="/icon/left-arrow.png" />
-        {currentIndex + 1}/{questions.length}
+        {questions[currentIndex]
+          ? `${currentIndex + 1}/${questions.length}`
+          : "0/0"}
         <IconButton onClick={nextStudy} iconUrl="/icon/right-arrow.png" />
         <IconButton onClick={nextTen} iconUrl="/icon/right-ten.png" />
       </div>
