@@ -43,7 +43,7 @@ public class Member extends BaseEntity {// 생성일,수정일,삭제일 상속
     @Enumerated(EnumType.STRING)
     private OAuthProvider oAuthProvider;
 
-    @Column(name = "nickname_initialized", nullable = false)
+    @Column(name = "nickname_initialized", nullable = true)
     @ColumnDefault("0")
     private Boolean nicknameInitialized;
 
