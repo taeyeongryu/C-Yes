@@ -22,7 +22,10 @@ const ComputerScience = (props: Props) => {
   return (
     <div className="cs-container">
       <div className="cs-content">
-        <div className="cs-text-container">cs 학습</div>
+        <div className="cs-background">
+          <div className="cs-text-container">cs 학습</div>
+        </div>
+
         <div className="select-title-container">
           <SelectTitleModal
             isOpen={isModalOpen}
