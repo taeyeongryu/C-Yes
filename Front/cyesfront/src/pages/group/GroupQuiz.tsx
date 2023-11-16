@@ -127,6 +127,7 @@ const GroupQuiz = (props: Props) => {
                 className="textarea"
                 value={quizName}
                 onChange={handleTitleChange}
+                maxLength={6}
               />
             </div>
           </div>
