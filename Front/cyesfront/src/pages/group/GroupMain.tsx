@@ -108,7 +108,7 @@ const GroupMain = (props: Props) => {
       <div className="group-main-container">
         <div className="group-center">
           <div className="group-background">
-            <div className="group-title-container">그룹1퀴즈</div>
+            <div className="group-title-container">그룹퀴즈</div>
           </div>
         </div>
 
