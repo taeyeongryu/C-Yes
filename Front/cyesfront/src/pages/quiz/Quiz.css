@@ -145,3 +145,11 @@
     background-position: center; /* 이미지를 중앙 정렬 */
     background-repeat: no-repeat; /* 이미지 반복 없음 */
 }
+
+.con-layer{
+    z-index: 99999;
+}
+.confetti-explosion {
+    position: absolute;
+    z-index: 2; /* 모달의 z-index보다 큰 값으로 설정 */
+  }
