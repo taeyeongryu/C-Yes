@@ -1,6 +1,7 @@
 # 🏆 C'YES - 실시간 CS 퀴즈 서비스
 
-CHPO UCC(YOUTUBE) : [https://chpo.kr](https://chpo.kr/)
+C'YES UCC(YOUTUBE) : 
+![Imgur](https://i.imgur.com/fTIckoF.png)
 
 <br>
 <br>
