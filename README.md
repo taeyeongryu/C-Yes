@@ -64,8 +64,7 @@
 ## 문제 은행
    ![ezgif.com-crop__3_](/uploads/68b674d94a18afdcf64859cb9d4dd765/ezgif.com-crop__3_.gif)![ezgif.com-crop__4_](/uploads/1436a18e4a2947ea6859a02e4e31305d/ezgif.com-crop__4_.gif)![ezgif.com-crop__5_](/uploads/98edb74f349bace53bd05903dad7c20f/ezgif.com-crop__5_.gif)
 ## 그룹 퀴즈
-
-                                                                            |
+![ezgif.com-crop__13_](/uploads/dd7d2f0f6eab7c3b69e94961a88c9f23/ezgif.com-crop__13_.gif)![ezgif.com-crop__11_](/uploads/2137c704956c99829067602a524096aa/ezgif.com-crop__11_.gif)![ezgif.com-crop__12_](/uploads/55356bd5148472e838d343bb19363c69/ezgif.com-crop__12_.gif)
 
 
 
@@ -247,7 +246,7 @@ socket-server
 - [API 명세서](https://opalescent-appliance-551.notion.site/API-c9cdccd9338e409698efd89e495d1052?pvs=4)
 - [ERD](https://www.erdcloud.com/d/aReBoHxvGA84SdeaT)
 - [와이어프레임](https://www.figma.com/file/EHttBkzorg0ZYZp0YbVavo/%EA%B2%BD%EC%B6%95%EB%B9%84-c-yes?type=design&node-id=303-2&mode=design)
-- [시스템 아키텍처]()
+- [시스템 아키텍처](https://www.canva.com/design/DAF0VGnfH20/yiLXKm1KIPTV1KpNKnaTkw/edit)
 
 
 
