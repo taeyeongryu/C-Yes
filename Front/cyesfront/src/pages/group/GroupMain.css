@@ -5,6 +5,8 @@
 .group-title-container {
   font-size: 35px;
   margin-bottom: 3%;
+
+  text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 .group-description-container {
@@ -72,6 +74,10 @@
   margin-top: 3%;
   color: gray;
 }
+.quiz-box-text-sharp {
+  margin-top: 3%;
+  color: #8FB5FF;
+}
 
 .group-result-container {
   margin-top: 10%;
@@ -103,4 +109,28 @@
 }
 .search-box-text {
   color: gray;
+}
+
+.group-background {
+  /* margin-left: 13%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10px;
+  width: 220px;
+  height: 80px;
+
+
+  background-image: url("/public/img/back-blue.png"); /* 이미지 경로 지정 */
+  background-size: cover; /* 이미지를 커버하는 크기로 확대/축소 */
+  background-position: center; /* 이미지를 중앙 정렬 */
+  background-repeat: no-repeat; /* 이미지 반복 없음 */
+  z-index: 1;
+}
+
+.group-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

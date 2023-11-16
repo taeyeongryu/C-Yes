@@ -12,6 +12,7 @@
   align-items: center;
   flex-direction: column;
   flex-grow: 1; /* 컨텐츠가 live-container 내에서 남은 공간을 모두 차지하도록 함 */
+  margin-bottom: 15%;
 }
 
 .button-container {
@@ -27,9 +28,19 @@
 }
 
 .cs-text-container {
-  font-size: 35px;
-  width: 100%; /* 전체 너비를 가짐 */
-  text-align: left;
-  margin-top: -30%;
-  padding-bottom: 15%;
+  font-size: 36px;
+  
+}
+
+.cs-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  width: 220px;
+  height: 80px;
+  background-image: url("/public/img/back-orange.png"); /* 이미지 경로 지정 */
+  background-size: cover; /* 이미지를 커버하는 크기로 확대/축소 */
+  background-position: center; /* 이미지를 중앙 정렬 */
+  background-repeat: no-repeat; /* 이미지 반복 없음 */
 }
