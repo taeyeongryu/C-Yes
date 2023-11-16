@@ -24,7 +24,7 @@ const Dropdown: React.FC<DropdownProps> = ({ items, onChange }) => {
   return (
     <div className="dropdown">
       <div className="dropdown-toggle" onClick={toggleDropdown}>
-        {selectedItem || "선택하세요"}
+        {transCategory(selectedItem) || "선택하세요"}
       </div>
       {isOpen && (
         <div className="dropdown-menu">
