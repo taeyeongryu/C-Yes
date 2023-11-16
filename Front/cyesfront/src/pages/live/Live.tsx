@@ -19,7 +19,10 @@ const Live = (props: Props) => {
   };
 
   const [mainQuiz, setMainQuiz] = useState<Quiz>(defaultQuiz);
-
+  const [targetTime, setTargetTime] = useState({
+    hour: new Date().getHours(),
+    minute: new Date().getMinutes(),
+  });
   const [joinable, setJoinable] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,10 +31,10 @@ const Live = (props: Props) => {
 
   const getLiveInfo = async () => {
     const mainQuizInfo = await getMainQuizInfo();
-    console.log(mainQuizInfo);
+    console.log("info", mainQuizInfo);
 
     if (mainQuizInfo == null || mainQuizInfo.quizId == -1) {
-      setMainQuiz(defaultQuiz);
+      setMainQuiz({ ...defaultQuiz, quizStartDate: new Date().toISOString() });
       return;
     }
 
@@ -49,6 +52,15 @@ const Live = (props: Props) => {
       state: { quizId: mainQuiz.quizId, quizTitle: mainQuiz.quizTitle },
     });
   };
+
+  useEffect(() => {
+    // mainQuiz가 변경될 때마다 targetTime 업데이트
+    const quizStartDate = new Date(mainQuiz.quizStartDate);
+    setTargetTime({
+      hour: quizStartDate.getHours(),
+      minute: quizStartDate.getMinutes(),
+    });
+  }, [mainQuiz]);
 
   useEffect(() => {
     // 첫 번째 정보 가져오기 시도.
@@ -81,8 +93,9 @@ const Live = (props: Props) => {
           />
         </div>
         <CountdownTimer
-          targetHour={new Date(mainQuiz.quizStartDate).getHours()}
-          targetMin={new Date(mainQuiz.quizStartDate).getMinutes()}
+          targetHour={targetTime.hour}
+          targetMin={targetTime.minute}
+          quizTitle={mainQuiz.quizTitle}
           setJoinable={setJoinable}
         />
         <p style={{ fontSize: "26px" }}>{mainQuiz.quizTitle}</p>
