@@ -57,13 +57,12 @@
 
 
 ## 실시간 퀴즈
+![ezgif.com-crop__6_](/uploads/ab502756b3186bcb97a14581c0a6c811/ezgif.com-crop__6_.gif)![ezgif.com-crop__7_](/uploads/d6adb725f5a8adf3562ffe8e069eff29/ezgif.com-crop__7_.gif)![ezgif.com-crop__8_](/uploads/2c5085bdb377a7fc5b70f87566a42851/ezgif.com-crop__8_.gif)
+ 
 
-                                                                                         |
 
 ## 문제 은행
-
-                                                                         |
-
+   ![ezgif.com-crop__3_](/uploads/68b674d94a18afdcf64859cb9d4dd765/ezgif.com-crop__3_.gif)![ezgif.com-crop__4_](/uploads/1436a18e4a2947ea6859a02e4e31305d/ezgif.com-crop__4_.gif)![ezgif.com-crop__5_](/uploads/98edb74f349bace53bd05903dad7c20f/ezgif.com-crop__5_.gif)
 ## 그룹 퀴즈
 
                                                                             |
@@ -146,52 +145,97 @@
 
 ### Backend
 
-```markdown
-backend
-|-- 📂domain
-|   |-- 📂algorithm
-|   |-- 📂analysis
-|   |-- 📂github
-|   |-- 📂job
-|   |-- 📂user
-|   |-- 📂util
-|   └-- 📂entity
-└-- 📂global
-    |-- 📂auth
-        |-- 📂auth
-        └-- 📂config
-        └-- 📂exception
-        └-- 📂oauth 
-        └-- 📂response 
+```
+webserver
+📦src
+ ┣ 📂main
+ ┃ ┣ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂cyes
+ ┃ ┃ ┃ ┃ ┗ 📂webserver
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂common
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂domain
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂adminQuiz
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂Answer
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂member
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂problem
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂quiz
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂quizproblem
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂quizrank
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂rank
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂answer
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂end
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂problem
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂result
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂start
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂submit
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂interceptor
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂redis
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂utils
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂jwt
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂oauth
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂enums
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂request
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂response
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂token
+ ┃ ┗ 📂resources
+ ┗ 
+ 
+socket-server
+📦src
+ ┣ 📂main
+ ┃ ┗ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂cyes
+ ┃ ┃ ┃ ┃ ┗ 📂socketserver
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂stomp
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂chat
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂enter
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂submit
+ ┗ 📂test
 
-chpo-test
-└-- 📂domain
-    |-- 📂algorithm
-    |-- 📂analysis
-    |-- 📂github
-    |-- 📂job
-    |-- 📂user
-    |-- 📂util
-    └-- 📂entity 
 ```
 
 ### FrontEnd
 
-```markdown
-frontend
-|-- 📂components
-|   |-- 📂common
-|   |-- 📂jobrank
-|   |-- 📂login
-|   |-- 📂proflie
-|   └-- 📂rank
-└-- 📂pages
-└-- 📂public
-└-- 📂redux
-└-- 📂styles
-└-- 📂utils
-    └-- 📂api 
-
+```
+📦src
+ ┣ 📂api
+ ┃ ┣ 📂websocket
+ ┣ 📂components
+ ┃ ┣ 📂bottomnav
+ ┃ ┣ 📂button
+ ┃ ┣ 📂chat
+ ┃ ┣ 📂dropdown
+ ┃ ┣ 📂modal
+ ┣ 📂font
+ ┣ 📂pages
+ ┃ ┣ 📂adminquiz
+ ┃ ┣ 📂cs
+ ┃ ┃ ┣ 📂types
+ ┃ ┣ 📂group
+ ┃ ┣ 📂live
+ ┃ ┣ 📂login
+ ┃ ┗ 📂quiz
+ ┣ 📂redux
+ ┃ ┣ 📂actions
+ ┃ ┣ 📂reducers
+ ┣ 📂types
+ ┣ 📜.env
+ ┣ 📜App.css
+ ┣ 📜App.test.tsx
+ ┣ 📜App.tsx
+ ┣ 📜index.css
+ ┣ 📜index.tsx
+ ┣ 📜logo.svg
+ ┣ 📜react-app-env.d.ts
+ ┣ 📜reportWebVitals.ts
+ ┗ 📜setupTests.ts
 ```
 
 <br>
@@ -215,7 +259,7 @@ frontend
 
 | 우승빈            | 배수빈 | 우수인   | 유혜빈  | 유태영  | 조준희  |
 | ----------------- | -------- | -------- | ------- | ------- | ------- |
-| <img src="" width="100"> |<img src="https://github.com/ssafy-is-free/free-project/assets/76441040/602edccd-2ad6-4c57-b983-0a8344a0e3a9" width="100">  | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/84af1b89-9a8d-4b8b-b197-4e8b8ded6425" width="100"> | <img src="" width="100"> | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/cb25a44e-d63d-4bcc-855d-7558b8051088" width="100">  | <img src="" width="100">  |
+| <img src="/uploads/8ad736c6a77bab0a28256ad4e24c43f6/승빈.jpg" width="130" height="180">|<img src="/uploads/45a418b2a453fc594f9dbea09881a0e0/수빈.jpg" width="130" height="180">|<img src="/uploads/0f822718f1b8f228d7878bafcf47629b/수인.jpg" width="130" height="180">|<img src="/uploads/74c2481cd9cf916373a4a54d00956703/웃는_내사진.jpg" width="130" height="180">|<img src="/uploads/c2639bd2635da0f0a2823c3c789af50c/태영.jpg" width="130" height="180">|<img src="/uploads/8a50e78f63c67b73107bf6677bc9da2e/준희.jpg" width="130" height="180">|
 | Leader & Backend | Frontend | Frontend | Infra | Backend | Backend |
 
 <br>
