@@ -15,33 +15,9 @@ stages {
                         echo 'springboot build'
                         chmod +x gradlew
                         ./gradlew clean build -x test
-                        '''
-                    }
-                }
-            }
-
-
-            stage('webserver Dockerimage build') {
-
-                steps {
-
-                    dir('Server/webserver'){
-                        sh '''
                         echo 'Dockerimage build'
                         docker build -t docker-springboot:0.0.1 .
-                        '''
-                    }
-                }
-            }
 
-
-            stage('webserver BE Deploy') {
-
-                steps {
-
-                    dir('Server/webserver'){
-
-                        sh '''
                         echo 'Deploy'
 
                         result=$( docker container ls -a --filter "name=cyes_back" -q )
@@ -52,7 +28,7 @@ stages {
                             else
                                 echo "No such containers"
                             fi
-                        
+
                                 echo "gogo"
 
                         docker images -f "dangling=true" -q | xargs -r docker rmi
@@ -60,6 +36,7 @@ stages {
                     }
                 }
             }
+
 
             // socketserver 백엔드
             stage('socketserver BE build') {
@@ -109,7 +86,7 @@ stages {
                             else
                                 echo "No such containers"
                             fi
-                        
+
                                 echo "gogo"
 
                         docker images -f "dangling=true" -q | xargs -r docker rmi
@@ -130,25 +107,10 @@ stages {
 
                             npm install
                             CI=false npm run build
-                        '''
-                    }
-                }
-            }
-            stage('FE Dockerimage build') {
-                steps {
-                    dir('Front/cyesfront'){
-                        sh '''
+
                             echo 'Dockerimage build'
                             docker build --no-cache -t cyes_front:0.0.1 .
-                        '''
-                    }
-                }
-            }
-            stage('FE Deploy') {
-                steps {
-                    dir('Front/cyesfront'){
 
-                        sh '''
                             echo 'FE Deploy'
 
                         result=$( docker container ls -a --filter "name=cyes_front" -q )
@@ -160,7 +122,7 @@ stages {
                                 echo "No such containers"
                             fi
 
-                        
+
 
                         echo "gogo"
                         docker images -f "dangling=true" -q | xargs -r docker rmi
@@ -198,7 +160,6 @@ stages {
                         if [ -n "$result" ]; then
 
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "rm spring-boot.tar"
-                                scp -i /jenkins_key /spring-boot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_back"
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_back"
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi docker-springboot:0.0.1"
@@ -206,7 +167,7 @@ stages {
                             else
                                 echo "No such containers"
                             fi
-
+                            scp -i /jenkins_key /spring-boot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i spring-boot.tar"
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5000:5000 -p 1026:5000 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" docker-springboot:0.0.1"
                     '''
@@ -219,7 +180,7 @@ stages {
                 stage('MSA socketserver backend') {
                     steps {
                         dir('/'){
-                    
+
                     // websocket  파일이 존재하는 지 확인
 
                         script {
@@ -241,11 +202,12 @@ stages {
 
                         docker save -o socket-boot.tar socket-springboot:0.0.1
 
+                        ls -a
+
                         result=$(ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker container ls -a --filter 'name=cyes_socket' -q")
                         if [ -n "$result" ]; then
 
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "rm socket-boot.tar"
-                                scp -i /jenkins_key /socket-boot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker stop cyes_socket"
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rm cyes_socket"
                                 ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker rmi socket-springboot:0.0.1"
@@ -253,7 +215,8 @@ stages {
                             else
                                 echo "No such containers"
                             fi
-
+                            
+                            scp -i /jenkins_key /socket-boot.tar ubuntu@k9b103a.p.ssafy.io:/home/ubuntu
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker load -i socket-boot.tar"
                             ssh -i /jenkins_key ubuntu@k9b103a.p.ssafy.io "docker run -d -p 127.0.0.1:5001:5001 -p 1027:5001 --name cyes_back -e JAVA_OPTS="-Duser.timezone=Asia/Seoul" socket-springboot:0.0.1"
                     '''
