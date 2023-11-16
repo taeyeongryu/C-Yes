@@ -2,14 +2,9 @@
 
 ![Imgur](https://i.imgur.com/fTIckoF.png)
 
-<br>
+#### 🎬 C'YES UCC(YOUTUBE) :  
 
-C'YES UCC(YOUTUBE) : 
-
-<br>
-<br>
-
-# 목차
+# 📌목차
 - [프로젝트 진행 기간](#🎞-프로젝트-진행-기간)
 - [개요](#✨-개요)
 - [주요 기능](#💻-주요-기능)
@@ -20,20 +15,14 @@ C'YES UCC(YOUTUBE) :
 - [팀원 역할 분배](#👩‍💻-팀원-역할-분배)
 
 <br>
-<br>
 
 # 🎞 프로젝트 진행 기간
 
-2023.10.10(월) ~ 2023.11.17(금) (39일간 진행)
+#### - 2023.10.10(화) ~ 2023.11.17(금) (39일간 진행)
 
-SSAFY 9기 2학기 자율프로젝트
-
-<br>
-<br>
+#### - SSAFY 9기 2학기 자율프로젝트
 
 # ✨ 개요
-
-
 
 
 <br>
@@ -42,18 +31,25 @@ SSAFY 9기 2학기 자율프로젝트
 
 # 💻 주요 기능
 
-### 실시간 퀴즈 서비스
-- 공지된 시간전까지만 실시간 퀴즈에 참여할 수 있다.
-
-
-### 문제은행 서비스
-
-
-### 그룹퀴즈 서비스
-
-
+### 0️⃣ 실시간 퀴즈 서비스
+#### - 공지된 시간전까지만 실시간 퀴즈에 참여할 수 있다.
+#### - 실시간 퀴즈가 시작되면 출제된 퀴즈를 풀 수 있다.
+#### - 문제마다 20초씩 주어지며, 각각의 문제가 끝날때마다 정답을 맞춘 인원과 전체 인원이 나온다.
+#### - 모든 문제가 끝나고 나면 3등까지 순위표가 나타나고 퀴즈는 끝이 난다.
 
 <br>
+
+### 1️⃣ 문제은행 서비스
+#### - 스스로 문제들을 학습할 수 있는 페이지이다.
+#### - 문제 유형은 카드학습, 객관식, O/X로 구성되어있다.
+#### - 문제 카테고리는 데이터베이스, 자료구조, 디자인 패턴, 컴퓨터구조, 알고리즘, 네트워크 운영체제가 있다.
+
+<br>
+
+### 2️⃣ 그룹퀴즈 서비스
+#### - 실시간 퀴즈 방식과 비슷하지만 원하는 사람들만 모아서 그룹퀴즈를 진행할 수 있다.
+#### - 또한, 퀴즈방을 자유롭게 열어서 검색을 통해 퀴즈방에 입장할 수 있다.
+
 <br>
 
 # 🖼 서비스 화면
@@ -87,13 +83,15 @@ SSAFY 9기 2학기 자율프로젝트
 <br>
 
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/fastapi-009688?style=for-the-badge&logo=fastapi&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
-- Java : Oracle OpenJDK 11.0.17
-- SpringBoot 2.7.9
-- Spring Data Jpa 2.7.9
-- Spring Boot Actuator
-- Junit 5.8.2
+- Java : Oracle OpenJDK 11
+- SpringBoot 2.7.17
+- Spring Data Jpa 
+- queryDSL 5.0.0
+- Junit 4.13.1
 - Gradle 7.6.1
 - MySQL 서버 : latest
+- MongoDB 4.4.25
+- Redis 7.2.3
 
 <br>
 
@@ -202,10 +200,9 @@ frontend
 
 # 📋 프로젝트 산출물
 
-- [요구사항 명세서]()
-- [API 명세서]()
-- [ERD]()
-- [와이어프레임]()
+- [API 명세서](https://opalescent-appliance-551.notion.site/API-c9cdccd9338e409698efd89e495d1052?pvs=4)
+- [ERD](https://www.erdcloud.com/d/aReBoHxvGA84SdeaT)
+- [와이어프레임](https://www.figma.com/file/EHttBkzorg0ZYZp0YbVavo/%EA%B2%BD%EC%B6%95%EB%B9%84-c-yes?type=design&node-id=303-2&mode=design)
 - [시스템 아키텍처]()
 
 
