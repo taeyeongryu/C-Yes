@@ -214,7 +214,7 @@ frontend
 
 | 우승빈            | 배수빈 | 우수인   | 유혜빈  | 유태영  | 조준희  |
 | ----------------- | -------- | -------- | ------- | ------- | ------- |
-| <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/0bca5a29-15fd-478b-8ecf-cdc371c644ed" width="100"> |<img src="https://github.com/ssafy-is-free/free-project/assets/76441040/602edccd-2ad6-4c57-b983-0a8344a0e3a9" width="100">  | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/84af1b89-9a8d-4b8b-b197-4e8b8ded6425" width="100"> | <img src="https://user-images.githubusercontent.com/109879750/219442808-96f0f7db-cf4d-46d4-9310-0e0f448ccec7.png" width="100"> | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/cb25a44e-d63d-4bcc-855d-7558b8051088" width="100">  | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/0c16e0c4-651d-4fd7-90b7-28317af9fbb5" width="100">  |
+| <img src="" width="100"> |<img src="https://github.com/ssafy-is-free/free-project/assets/76441040/602edccd-2ad6-4c57-b983-0a8344a0e3a9" width="100">  | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/84af1b89-9a8d-4b8b-b197-4e8b8ded6425" width="100"> | <img src="" width="100"> | <img src="https://github.com/ssafy-is-free/free-project/assets/76441040/cb25a44e-d63d-4bcc-855d-7558b8051088" width="100">  | <img src="" width="100">  |
 | Leader & Backend | Frontend | Frontend | Infra | Backend | Backend |
 
 <br>
