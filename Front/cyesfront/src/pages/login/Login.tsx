@@ -5,23 +5,16 @@ const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 &redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
 
 const Login = () => {
-    const handleKakaoLogin = () => {
-        window.location.href = KAKAO_AUTH_URI;
-    };
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URI;
+  };
 
-    return (
-        <div className="login-container">
-            <img
-                className="logo-img"
-                src="/img/cyes_logo_img.png"
-                alt="logo img"
-            />
-            <button
-                onClick={handleKakaoLogin}
-                className="login-button kakao-login"
-            />
-        </div>
-    );
+  return (
+    <div className="login-container">
+      <img className="logo-img" src="/img/cyes_logo_img.png" alt="logo img" />
+      <button onClick={handleKakaoLogin} className="login-button kakao-login" />
+    </div>
+  );
 };
 
 export default Login;

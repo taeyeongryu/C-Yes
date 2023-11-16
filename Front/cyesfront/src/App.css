@@ -6,7 +6,7 @@ body {
   justify-content: center;
   /* align-items: center; */
   width: 100vw;
-  height: 100vh; /* 화면 전체 높이 */
+  height: 150vh; /* 화면 전체 높이 */
   background-color: #fff9f1; /* 선택적인 배경색 */
   /* overflow: hidden;   */
 }
