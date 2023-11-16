@@ -161,7 +161,7 @@ const GroupMain = (props: Props) => {
                 <div className="quiz-box-text">
                   {convertDataFormat(quizzes[0].quizStartDate)}
                 </div>
-                <div className="quiz-box-text">
+                <div className="quiz-box-text-sharp">
                   # {transCategory(quizzes[0].category)}
                 </div>
               </div>
@@ -187,7 +187,7 @@ const GroupMain = (props: Props) => {
                 <div className="quiz-box-text">
                   {convertDataFormat(quizzes[1].quizStartDate)}
                 </div>
-                <div className="quiz-box-text">
+                <div className="quiz-box-text-sharp">
                   # {transCategory(quizzes[1].category)}
                 </div>
               </div>
