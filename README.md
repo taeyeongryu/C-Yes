@@ -2,7 +2,6 @@
 
 ![Imgur](https://i.imgur.com/fTIckoF.png)
 
-#### 🎬 C'YES UCC(YOUTUBE) :  
 
 # 📌목차
 - [프로젝트 진행 기간](#🎞-프로젝트-진행-기간)
@@ -18,7 +17,7 @@
 
 # 🎞 프로젝트 진행 기간
 
-#### - 2023.10.10(화) ~ 2023.11.17(금) (39일간 진행)
+#### - 2023.10.09(화) ~ 2023.11.17(금) (39일간 진행)
 
 #### - SSAFY 9기 2학기 자율프로젝트
 
@@ -27,8 +26,6 @@
 ### - 따라서 언제 어디서나 친구와 함께하는 C-YES를 통해 문제를 해결하고자한다.
 
 <br>
-<br>
-
 
 # 💻 주요 기능
 
@@ -69,12 +66,6 @@
 
 
 
-
-
-
-<br>
-<br>
-
 # 🛠 주요 기술
 
 
@@ -97,9 +88,9 @@
 **FrontEnd**
 <br>
 
-<img src="https://img.shields.io/badge/nextjs-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black">&nbsp;<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">&nbsp;
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black">&nbsp;<img src="https://img.shields.io/badge/Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styledcomponents&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">&nbsp;<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">&nbsp;
 
-- Next 13.3.0
+
 - React 18.2.0
 - Node.js 16.16.0
 - TypeScript 5.0.4
@@ -125,6 +116,7 @@
 - SSL
 - Grafana latest
 - Prometheus 2.44.0
+- netdata
 
 <br>
 
