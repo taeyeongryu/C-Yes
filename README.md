@@ -4,14 +4,14 @@
 
 
 # 📌목차
-- [프로젝트 진행 기간](#🎞-프로젝트-진행-기간)
-- [개요](#✨-개요)
-- [주요 기능](#💻-주요-기능)
-- [서비스 화면](#🖼-서비스-화면)
-- [주요 기술](#🛠-주요-기술)
-- [프로젝트 파일 구조](#🗂-프로젝트-파일-구조)
-- [프로젝트 산출물](#📋-프로젝트-산출물)
-- [팀원 역할 분배](#👩‍💻-팀원-역할-분배)
+- [프로젝트 진행 기간](#-프로젝트-진행-기간)
+- [개요](#-개요)
+- [주요 기능](#-주요-기능)
+- [서비스 화면](#-서비스-화면)
+- [주요 기술](#-주요-기술)
+- [프로젝트 파일 구조](#-프로젝트-파일-구조)
+- [프로젝트 산출물](#-프로젝트-산출물)
+- [팀원 역할 분배](#-팀원-역할-분배)
 
 <br>
 
@@ -54,16 +54,17 @@
 
 
 
-## 실시간 퀴즈
-![ezgif.com-crop__6_](/uploads/ab502756b3186bcb97a14581c0a6c811/ezgif.com-crop__6_.gif)![ezgif.com-crop__7_](/uploads/d6adb725f5a8adf3562ffe8e069eff29/ezgif.com-crop__7_.gif)![ezgif.com-crop__8_](/uploads/2c5085bdb377a7fc5b70f87566a42851/ezgif.com-crop__8_.gif)
- 
+## ✅ 실시간 퀴즈
+![ezgif com-crop (3)](https://github.com/handaldog/C-YES/assets/96431408/370c7467-21f2-4057-9852-c5024506d723)![ezgif com-crop (4)](https://github.com/handaldog/C-YES/assets/96431408/60de9407-04e3-4e56-9ace-560ed8fcddf8)![ezgif com-crop (5)](https://github.com/handaldog/C-YES/assets/96431408/9bf6d804-8422-4ef3-b2ce-d222984c9a44)
 
+## ✅ 문제 은행
+![ezgif com-crop (6)](https://github.com/handaldog/C-YES/assets/96431408/e5a73e42-165c-4056-a95d-fa68dbbbd4e0)![ezgif com-crop (7)](https://github.com/handaldog/C-YES/assets/96431408/dd934ae9-2b93-4b3b-9a1b-6edea8fbc6d0)![ezgif com-crop (8)](https://github.com/handaldog/C-YES/assets/96431408/76c8b271-12c8-4220-9168-2d36ebb3dfaa)
 
-## 문제 은행
-   ![ezgif.com-crop__3_](/uploads/68b674d94a18afdcf64859cb9d4dd765/ezgif.com-crop__3_.gif)![ezgif.com-crop__4_](/uploads/1436a18e4a2947ea6859a02e4e31305d/ezgif.com-crop__4_.gif)![ezgif.com-crop__5_](/uploads/98edb74f349bace53bd05903dad7c20f/ezgif.com-crop__5_.gif)
-## 그룹 퀴즈
-![ezgif.com-crop__13_](/uploads/dd7d2f0f6eab7c3b69e94961a88c9f23/ezgif.com-crop__13_.gif)![ezgif.com-crop__11_](/uploads/2137c704956c99829067602a524096aa/ezgif.com-crop__11_.gif)![ezgif.com-crop__12_](/uploads/55356bd5148472e838d343bb19363c69/ezgif.com-crop__12_.gif)
+## ✅ 그룹 퀴즈
+![ezgif com-crop (13)](https://github.com/handaldog/C-YES/assets/96431408/50322041-4dd0-479b-8bf4-5b02c71231a6)![ezgif com-crop (11)](https://github.com/handaldog/C-YES/assets/96431408/6fd13c9e-80a4-4f74-81e5-3043798acf42)![ezgif com-crop (12)](https://github.com/handaldog/C-YES/assets/96431408/f5260849-ad26-4b6d-9adb-9c264c553dc7)
 
+## ✅ 관리자 문제 페이지
+<img src="https://github.com/handaldog/C-YES/assets/96431408/8056225b-4fc0-42d7-99d4-4788fb7a0332" width="200" height="400">![ezgif com-crop (20)](https://github.com/handaldog/C-YES/assets/96431408/dd23edd2-8c74-4cc6-92ac-a87205535386)![ezgif com-crop (21)](https://github.com/handaldog/C-YES/assets/96431408/07d82308-4bf4-4160-98fd-0b4538a36640)![ezgif com-crop (22)](https://github.com/handaldog/C-YES/assets/96431408/62ea5f55-ce18-4471-84cb-a405055e0250)
 
 
 # 🛠 주요 기술
@@ -251,8 +252,8 @@ socket-server
 
 | 우승빈            | 배수빈 | 우수인   | 유혜빈  | 유태영  | 조준희  |
 | ----------------- | -------- | -------- | ------- | ------- | ------- |
-| <img src="/uploads/8ad736c6a77bab0a28256ad4e24c43f6/승빈.jpg" width="130" height="180">|<img src="/uploads/45a418b2a453fc594f9dbea09881a0e0/수빈.jpg" width="130" height="180">|<img src="/uploads/0f822718f1b8f228d7878bafcf47629b/수인.jpg" width="130" height="180">|<img src="/uploads/74c2481cd9cf916373a4a54d00956703/웃는_내사진.jpg" width="130" height="180">|<img src="/uploads/c2639bd2635da0f0a2823c3c789af50c/태영.jpg" width="130" height="180">|<img src="/uploads/8a50e78f63c67b73107bf6677bc9da2e/준희.jpg" width="130" height="180">|
-| Leader & Backend | Frontend | Frontend | Infra | Backend | Backend |
+| <img src="https://github.com/handaldog/C-YES/assets/96431408/973a0781-2e83-40e0-a0df-e07f8a72a3e7" width="130" height="180">|<img src="https://github.com/handaldog/C-YES/assets/96431408/7402e39d-0b01-41d4-86fe-87076775e417" width="130" height="180">|<img src="https://github.com/handaldog/C-YES/assets/96431408/34b2c650-8e5e-49a6-94b1-080e61429578" width="130" height="180">|<img src="https://github.com/handaldog/C-YES/assets/96431408/efaaad7e-09b2-48d6-a790-88af70e42965" width="130" height="180">|<img src="https://github.com/handaldog/C-YES/assets/96431408/d3efc9c8-3a18-4713-bab2-37bec4561c67" width="130" height="180">|<img src="https://github.com/handaldog/C-YES/assets/96431408/c0e8b853-369c-4e5c-b370-757761c804e3" width="130" height="180">|
+| Leader & Backend | Frontend | Frontend&Infra | Infra & Backend | Backend | Backend |
 
 <br>
 <br>
