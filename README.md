@@ -237,7 +237,6 @@ socket-server
 
 # 📋 프로젝트 산출물
 
-- [API 명세서](https://opalescent-appliance-551.notion.site/API-c9cdccd9338e409698efd89e495d1052?pvs=4)
 - [ERD](https://www.erdcloud.com/d/aReBoHxvGA84SdeaT)
 - [와이어프레임](https://www.figma.com/file/EHttBkzorg0ZYZp0YbVavo/%EA%B2%BD%EC%B6%95%EB%B9%84-c-yes?type=design&node-id=303-2&mode=design)
 - [시스템 아키텍처](https://www.canva.com/design/DAF0VGnfH20/yiLXKm1KIPTV1KpNKnaTkw/edit)
