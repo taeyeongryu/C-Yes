@@ -54,10 +54,10 @@
 
 
 
-## ✅ 실시간 퀴즈
+## ✅ 문제 은행
 ![ezgif com-crop (3)](https://github.com/handaldog/C-YES/assets/96431408/370c7467-21f2-4057-9852-c5024506d723)![ezgif com-crop (4)](https://github.com/handaldog/C-YES/assets/96431408/60de9407-04e3-4e56-9ace-560ed8fcddf8)![ezgif com-crop (5)](https://github.com/handaldog/C-YES/assets/96431408/9bf6d804-8422-4ef3-b2ce-d222984c9a44)
 
-## ✅ 문제 은행
+## ✅ 실시간 퀴즈
 ![ezgif com-crop (6)](https://github.com/handaldog/C-YES/assets/96431408/e5a73e42-165c-4056-a95d-fa68dbbbd4e0)![ezgif com-crop (7)](https://github.com/handaldog/C-YES/assets/96431408/dd934ae9-2b93-4b3b-9a1b-6edea8fbc6d0)![ezgif com-crop (8)](https://github.com/handaldog/C-YES/assets/96431408/76c8b271-12c8-4220-9168-2d36ebb3dfaa)
 
 ## ✅ 그룹 퀴즈
